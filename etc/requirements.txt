@@ -1,0 +1,10 @@
+geographiclib==1.49
+geopy==1.18.1
+importlib-resources==1.0.2
+numpy==1.16.1
+pendulum==2.0.4
+pkg-resources==0.0.0
+python-dateutil==2.8.0
+pytzdata==2018.9
+six==1.12.0
+timezonefinder==3.4.2
