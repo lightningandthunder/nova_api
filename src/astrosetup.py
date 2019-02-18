@@ -11,7 +11,7 @@ from timezonefinder import TimezoneFinder
 # https://pendulum.eustace.io/docs/#installation
 import pendulum
 
-# depencies for pendulum
+# dependencies for pendulum
 from datetime import datetime, timedelta
 
 # for leap year checks
@@ -187,7 +187,7 @@ py_calculate_houses.restype = None
 def get_sign(longitude):
     """Determine astrological sign from unsigned longitude"""
 
-    zodiac = ["Ari", "Tau", "Gem", "Can", "Leo", "Vir", 
+    zodiac = ["Ari", "Tau", "Gem", "Can", "Leo", "Vir",
               "Lib", "Sco", "Sag", "Cap", "Aqu", "Pis"]
     key = int(longitude/30)
     return zodiac[key]
