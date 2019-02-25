@@ -110,77 +110,11 @@ class Natal:
         self.type = "Natal"
 
 
-#### DLL-level functions, wrapped for use by Python
 
-# sets the filepath of the ephemeris for the DLL functions
-py_set_ephemeris_path = dll.swe_set_ephe_path
-py_set_ephemeris_path.argtypes = [c_char_p]
-py_set_ephemeris_path.restype = None
-
-py_set_sidereal_mode = dll.swe_set_sid_mode
-py_set_sidereal_mode.argtypes = (c_int32, c_double, c_double)
-py_set_sidereal_mode.restype = None
-
-# Convert local time, with timezone, to UTC
-# Arg order: (in-year, in-month, in-day, in-hour, in-min, in-sec,
-# in-timezone, out-year, out-month, out-day, out-hour, out-min, out-sec)
-py_local_time_to_UTC = dll.swe_utc_time_zone
-py_local_time_to_UTC.argtypes = [c_int32, c_int32, c_int32, c_int32, 
-                                 c_int32, c_double, c_double, 
-                                 POINTER(c_int32), POINTER(c_int32), 
-                                 POINTER(c_int32), POINTER(c_int32), 
-                                 POINTER(c_int32), POINTER(c_double)]
-py_local_time_to_UTC.restype = None
-
-# Calculates julian day number (in universal time) from:
-# year, month, day, fractional hour, calendar flag (should be 1)
-py_get_julian_day = dll.swe_julday
-py_get_julian_day.argtypes = [c_int, c_int, c_int, c_double, c_int]
-py_get_julian_day.restype = c_double
-
-# Calculates year, month, day, fractional hour from Julian Day
-# Arg order: Julian day, calendar flag (1), year, month, day, fractional hour
-py_reverse_julian_day = dll.swe_revjul
-py_reverse_julian_day.argtypes = [c_double, c_int, POINTER(c_int), POINTER(c_int), 
-                                  POINTER(c_int), POINTER(c_double)]
-py_reverse_julian_day.restype = None
-
-# Accepts the Julian Day Number in Universal Time, 
-# and returns sidereal time at the Greenwich Meridian.
-# Must be converted to local sidereal time for mundane calculations.
-py_get_sidereal_time_UTC = dll.swe_sidtime
-py_get_sidereal_time_UTC.argtypes = [c_double]
-py_get_sidereal_time_UTC.restype = c_double
-
-# Calculates planetary positions from:
-# Julian Day (universal time), body #, zodiacal flag, 
-# pointer to array of 6 doubles to write in, string to write errors to)
-py_calculate_planets_UT = dll.swe_calc_ut
-py_calculate_planets_UT.argtypes = [c_double, c_int, c_int32, 
-                                    POINTER(c_double), c_char_p]
-py_calculate_planets_UT.restype = None
-
-# Calculates ayanamsa from: Julian Day in UT, sidereal flag, 
-# pointer to double to write ayanamsa in, pointer to error string.
-# Returns either the ephemeris flag (a positive int), or ERR (-1)
-py_get_ayanamsa_UT = dll.swe_get_ayanamsa_ex_ut
-py_get_ayanamsa_UT.argtypes = [c_double, c_int32, 
-                               POINTER(c_double), c_char_p]
-py_get_ayanamsa_UT.restype = c_int32
-
-
-# Calculates Ascendant, MC, and house cusps.
-# The arguments are Julian Day in UT, the ephemeris flag (sidereal),
-# Geolatitude, geolongitude, int house system ('C'), double array cusps, double array AscMc (etc)
-# swe_houses_ex() returns an int, but the documention doesn't specify what it is, so we retype to None
-py_calculate_houses = dll.swe_houses_ex
-py_calculate_houses.argtypes = [c_double, c_int32, c_double, c_double, 
-                                c_int, POINTER(c_double), POINTER(c_double)]
-py_calculate_houses.restype = None
 
 
 #### Python-level functions
-
+# Removed
 
 # The get_ functions are helper functions to acquire values within a larger function call
 
