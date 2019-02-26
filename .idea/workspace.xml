@@ -2,90 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="abfc1491-3d37-4b35-83cd-e89d68c9b3e8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ChartData.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/.flaskenv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/calcs.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/SwissephLib.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/dll_tools.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/swe/ephemeris/seas_18.se1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/swe/ephemeris/sefstars.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/swe/ephemeris/semo_18.se1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/swe/ephemeris/sepl_18.se1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/swe/swedll32.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/swe/swedll32.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/swe/swedll64.dll" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/swe/swedll64.lib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/dll_tools/test_swissephFunctions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ChartData.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ChartData.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/astrosetup.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/astrosetup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/PerlSwissEph-2.07.tar.gz" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/PerlSwissEph-2.07.tar.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/libswe.a" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/libswe.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/libswe.so" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/libswe.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/sedeltat.txt.inactive" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/sedeltat.txt.inactive" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/sefstars.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/sefstars.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/seleapsec.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/seleapsec.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/seorbel.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/seorbel.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swecl.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swecl.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swecl.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swecl.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swedate.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swedate.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swedate.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swedate.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swedate.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swedate.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swedll.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swedll.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swehel.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swehel.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swehel.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swehel.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swehouse.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swehouse.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swehouse.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swehouse.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swehouse.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swehouse.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swejpl.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swejpl.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swejpl.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swejpl.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swejpl.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swejpl.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swemini.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swemini.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swemmoon.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swemmoon.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swemmoon.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swemmoon.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swemplan.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swemplan.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swemplan.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swemplan.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swemptab.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swemptab.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swenut2000a.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swenut2000a.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/sweodef.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/sweodef.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swepcalc.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swepcalc.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swepcalc.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swepcalc.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swepcalc.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swepcalc.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swepdate.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swepdate.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swepdate.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swepdate.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/sweph.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/sweph.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/sweph.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/sweph.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/sweph.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/sweph.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swephexp.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swephexp.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swephlib.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swephlib.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swephlib.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swephlib.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swephlib.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swephlib.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swetest" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swetest" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swetest.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swetest.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/swe/swetest.o" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/swetest.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Lib/site-packages/pip-19.0.2.dist-info/LICENSE.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Lib/site-packages/pip-19.0.2.dist-info/METADATA" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Lib/site-packages/pip-19.0.2.dist-info/RECORD" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Lib/site-packages/pip-19.0.2.dist-info/WHEEL" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Lib/site-packages/pip-19.0.2.dist-info/entry_points.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Lib/site-packages/pip-19.0.2.dist-info/top_level.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Lib/site-packages/pip/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv_windows/Lib/site-packages/pip/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Lib/site-packages/pip/_internal/wheel.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv_windows/Lib/site-packages/pip/_internal/wheel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Lib/site-packages/pip/_vendor/urllib3/packages/ordered_dict.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Scripts/pip-script.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Scripts/pip.exe" beforeDir="false" afterPath="$PROJECT_DIR$/venv_windows/Scripts/pip.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Scripts/pip3-script.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Scripts/pip3.7-script.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Scripts/pip3.7.exe" beforeDir="false" afterPath="$PROJECT_DIR$/venv_windows/Scripts/pip3.7.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv_windows/Scripts/pip3.exe" beforeDir="false" afterPath="$PROJECT_DIR$/venv_windows/Scripts/pip3.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/SwissephLib.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/SwissephLib.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -98,8 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ChartData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="29" column="95" selection-start-line="29" selection-start-column="95" selection-end-line="29" selection-end-column="95" />
+            <state relative-caret-position="306">
+              <caret line="240" column="36" lean-forward="true" selection-start-line="240" selection-start-column="36" selection-end-line="240" selection-end-column="36" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -108,10 +29,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/dll_tools/SwissephLib.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="23" column="53" selection-start-line="23" selection-start-column="53" selection-end-line="23" selection-end-column="53" />
+              <folding>
+                <element signature="e#0#86#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/astrosetup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="801" column="15" lean-forward="true" selection-start-line="780" selection-end-line="801" selection-end-column="15" />
+            <state relative-caret-position="-586">
+              <caret line="899" column="21" selection-start-line="899" selection-start-column="4" selection-end-line="899" selection-end-column="21" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -155,19 +97,19 @@
         <option value="$PROJECT_DIR$/src/dll_tools/__init__.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/dll_tools_test.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/test_swissephFunctions.py" />
-        <option value="$PROJECT_DIR$/src/astrosetup.py" />
-        <option value="$PROJECT_DIR$/src/settings.py" />
-        <option value="$PROJECT_DIR$/src/dll_tools/SwissephLib.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/dll_tools.py" />
+        <option value="$PROJECT_DIR$/src/astrosetup.py" />
+        <option value="$PROJECT_DIR$/src/dll_tools/SwissephLib.py" />
+        <option value="$PROJECT_DIR$/src/settings.py" />
         <option value="$PROJECT_DIR$/src/ChartData.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="4271" />
-    <option name="y" value="-57" />
-    <option name="width" value="293" />
-    <option name="height" value="137" />
+    <option name="x" value="3384" />
+    <option name="y" value="-23" />
+    <option name="width" value="1166" />
+    <option name="height" value="662" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -175,7 +117,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -203,6 +144,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -422,9 +364,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tests/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tests/__init__.py" />
     <entry file="file://$PROJECT_DIR$/src/dll_tools/swe_lib.py" />
     <entry file="file://$PROJECT_DIR$/src/dll_tools/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
@@ -443,29 +383,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/dll_tools_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/dll_tools_test.py" />
     <entry file="file://$PROJECT_DIR$/src/dll_tools/test_swissephFunctions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="10" column="45" lean-forward="true" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/astrosetup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="801" column="15" lean-forward="true" selection-start-line="780" selection-end-line="801" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -480,23 +404,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/SwissephLib.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#0#86#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="20" column="23" lean-forward="true" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/ctypes/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="107">
@@ -504,10 +411,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/SwissephLib.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="23" column="53" selection-start-line="23" selection-start-column="53" selection-end-line="23" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#86#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/astrosetup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-586">
+          <caret line="899" column="21" selection-start-line="899" selection-start-column="4" selection-end-line="899" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ChartData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="29" column="95" selection-start-line="29" selection-start-column="95" selection-end-line="29" selection-end-column="95" />
+        <state relative-caret-position="306">
+          <caret line="240" column="36" lean-forward="true" selection-start-line="240" selection-start-column="36" selection-end-line="240" selection-end-column="36" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

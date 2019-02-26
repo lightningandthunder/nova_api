@@ -956,6 +956,7 @@ def calculate_natal_data(classname):
                                     obliquity_array, 
                                     errorstring)
 
+    #
     for key in classname.mundane_positions.keys():
         calculate_mundane_positions(classname.planet_dictionary[key][1], 
                                      classname.planet_dictionary[key][0], 

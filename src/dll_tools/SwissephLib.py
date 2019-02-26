@@ -2,6 +2,8 @@ from ctypes import c_char_p, c_int, c_int32, c_double, POINTER, windll, CDLL, Wi
 import os
 import platform
 
+import settings
+
 """
 Wraps Swiss Ephemeris library functions.
 """
@@ -9,7 +11,8 @@ Wraps Swiss Ephemeris library functions.
 
 
 class SwissephLib:
-    def __init__(self, ephemeris_path):
+    def __init__(self):
+        self.ephemeris_path = self._get_ephemeris_path
         self.swe_lib = self._load_library()
 
         # Wrap Swiss Ephemeris functions and expose as object methods
@@ -24,14 +27,15 @@ class SwissephLib:
         self.calculate_houses = self._wrap_calculate_houses(self.swe_lib)
         self.close = self._wrap_close(self.swe_lib)
 
-        self.ephemeris_path = str(ephemeris_path)
-
     def __enter__(self):
         self.ephemeris_path = self._format_ephemeris_path(self.ephemeris_path)
         return self
 
     def __exit__(self, type, value, traceback):
         self.close()
+
+    def _get_ephemeris_path(self):
+        return settings.EPHEMERIS_PATH
 
     def _format_ephemeris_path(self, path):
         e_path = path.encode('utf-8')
