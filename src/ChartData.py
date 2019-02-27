@@ -1,23 +1,18 @@
 import os
 import struct
 from ctypes import c_double, create_string_buffer
-from math import sin, cos, tan, asin, acos, atan, degrees, radians
+from math import sin, cos, tan, asin, acos, atan, degrees, radians, fabs
 import pendulum
 from logging import getLogger
 
 import settings
-from dll_tools.swissephlib import SwissephLib
-from dll_tools.dll_tools import get_ephe_path
+from src.dll_tools.swissephlib import SwissephLib
 
 logger = getLogger(__name__)
 
 
 class ChartData:
     def __init__(self, name, local_datetime, utc_datetime, geo_longitude, geo_latitude):
-        if (type(local_datetime) != pendulum.datetime.Datetime
-                or type(utc_datetime) != pendulum.datetime.Datetime):
-            raise TypeError("Must initialize with Pendulum datetime instances")
-
         self.name = name
         self.local_datetime = local_datetime
         self.utc_datetime = utc_datetime
@@ -31,29 +26,32 @@ class ChartData:
 
         # Ecliptical longitude, celestial latitude, distance,
         # Speed in long, speed in lat, speed in dist
-        self.planets_ecliptic = settings.PLANET_DICT
+        self.planets_ecliptic = settings.PLANET_DICT.copy()
 
         # House placement, decimal longitude (out of 360*)
-        self.planets_mundane = settings.PLANET_DICT
+        self.planets_mundane = settings.PLANET_DICT.copy()
 
         # Decimal longitude (out of 360*)
-        self.planets_right_ascension = settings.PLANET_DICT
+        self.planets_right_ascension = settings.PLANET_DICT.copy()
 
         self.cusps_longitude = None
         self.angles_longitude = None
 
+        self._populate_ecliptic_values()
+        self._populate_ramc()
+        self._populate_mundane_values()
         # TODO: all of the calculation and population as part of __init__
 
     def get_ecliptical_coords(self):
         coords = dict()
-        for planet, array in self.planets_ecliptic:
-            coords[planet] = array[0]
+        for planet in self.planets_ecliptic.keys():
+            coords[planet] = self.planets_ecliptic[planet][0]
         return coords
 
     def get_mundane_coords(self):
         coords = dict()
-        for planet, array in self.planets_mundane:
-            coords[planet] = array[1]
+        for planet in self.planets_mundane.keys():
+            coords[planet] = self.planets_mundane[planet][1]
         return coords
 
     def get_right_ascension_coords(self):
@@ -71,8 +69,8 @@ class ChartData:
         """Calculate local sidereal time for date, time, location of event"""
 
         year, month, day = dt.year, dt.month, dt.day
-        decimal_hour = self._convert_hms_to_decimal(dt.hour, dt.min, dt.sec)
-        with SwissephLib('') as s:
+        decimal_hour = self._convert_hms_to_decimal(dt.hour, dt.minute, dt.second)
+        with SwissephLib() as s:
             julian_day_0_GMT = s.get_julian_day(year, month, day, 0, 1)
 
         universal_time = (decimal_hour - dt.offset_hours)
@@ -81,7 +79,7 @@ class ChartData:
         greenwich_sidereal_time = (6.697374558
                                    + (2400.051336 * sidereal_time_at_midnight_julian_day)
                                    + (0.000024862
-                                      * (math.pow(sidereal_time_at_midnight_julian_day, 2)))
+                                      * (pow(sidereal_time_at_midnight_julian_day, 2)))
                                    + (universal_time * 1.0027379093))
         local_sidereal_time = ((greenwich_sidereal_time
                                 + (decimal_longitude / 15)) % 24)
@@ -96,8 +94,8 @@ class ChartData:
 
     def _convert_decimal_to_dms(self, decimal):
         degree = int(decimal)
-        minute = int(math.fabs((decimal - degree) * 60))
-        second = int((math.fabs((decimal - degree) * 60) - int(math.fabs((decimal - degree) * 60))) * 60)
+        minute = int(fabs((decimal - degree) * 60))
+        second = int((fabs((decimal - degree) * 60) - int(fabs((decimal - degree) * 60))) * 60)
         return degree, minute, second
 
     def _calculate_prime_vertical_longitude(self, planet_longitude, planet_latitude,
@@ -107,51 +105,52 @@ class ChartData:
 
         # Variable names reference the original angularity spreadsheet posted on Solunars.com.
         # Most do not have official names and are intermediary values used elsewhere.
-        calc_ax = (math.cos(math.radians(planet_longitude
-                                         + (360 - (330 + decimal_svp)))))
+        calc_ax = (cos(radians(planet_longitude
+                               + (360 - (330 + decimal_svp)))))
 
-        precessed_declination = (math.degrees(math.asin
-                                              (math.sin(math.radians(planet_latitude))
-                                               * math.cos(math.radians(obliquity))
-                                               + math.cos(math.radians(planet_latitude))
-                                               * math.sin(math.radians(obliquity))
-                                               * math.sin(math.radians(planet_longitude
-                                                                       + (360 - (330 + decimal_svp)))))))
+        precessed_declination = (degrees(asin
+                                         (sin(radians(planet_latitude))
+                                          * cos(radians(obliquity))
+                                          + cos(radians(planet_latitude))
+                                          * sin(radians(obliquity))
+                                          * sin(radians(planet_longitude
+                                                        + (360 - (330 + decimal_svp)))))))
 
-        calc_ay = (math.sin(math.radians((planet_longitude
-                                          + (360 - (330 + decimal_svp)))))
-                   * math.cos(math.radians(obliquity))
-                   - math.tan(math.radians(planet_latitude))
-                   * math.sin(math.radians(obliquity)))
+        calc_ay = (sin(radians((planet_longitude
+                                + (360 - (330 + decimal_svp)))))
+                   * cos(radians(obliquity))
+                   - tan(radians(planet_latitude))
+                   * sin(radians(obliquity)))
 
-        calc_ayx_deg = math.degrees(math.atan(calc_ay / calc_ax))
+        calc_ayx_deg = degrees(atan(calc_ay / calc_ax))
 
         if calc_ax < 0:
             precessed_right_ascension = calc_ayx_deg + 180
-        elif calc_ay < 0:
-            precessed_right_ascension = calc_ayx_deg + 360
         else:
-            precessed_right_ascension = calc_ayx_deg
+            if calc_ay < 0:
+                precessed_right_ascension = calc_ayx_deg + 360
+            else:
+                precessed_right_ascension = calc_ayx_deg
 
         hour_angle_degree = ramc - precessed_right_ascension
 
-        calc_cz = (math.degrees(math.atan(1
-                                          / (math.cos(math.radians(decimal_geolat))
-                                             / math.tan(math.radians(hour_angle_degree))
-                                             + math.sin(math.radians(decimal_geolat))
-                                             * math.tan(math.radians(precessed_declination))
-                                             / math.sin(math.radians(hour_angle_degree))))))
+        calc_cz = (degrees(atan(1
+                                / (cos(radians(decimal_geolat))
+                                   / tan(radians(hour_angle_degree))
+                                   + sin(radians(decimal_geolat))
+                                   * tan(radians(precessed_declination))
+                                   / sin(radians(hour_angle_degree))))))
 
-        calc_cx = (math.cos(math.radians(decimal_geolat))
-                   * math.cos(math.radians(hour_angle_degree))
-                   + math.sin(math.radians(decimal_geolat))
-                   * math.tan(math.radians(precessed_declination)))
+        calc_cx = (cos(radians(decimal_geolat))
+                   * cos(radians(hour_angle_degree))
+                   + sin(radians(decimal_geolat))
+                   * tan(radians(precessed_declination)))
 
         campanus_longitude = 90 - calc_cz if (calc_cx < 0) else 270 - calc_cz
 
-        planet_pvl = []
-        planet_pvl[0] = (int(campanus_longitude / 30) + 1)
-        planet_pvl[1] = campanus_longitude
+        planet_pvl = list()
+        planet_pvl.append((int(campanus_longitude / 30) + 1))
+        planet_pvl.append(campanus_longitude)
         return planet_pvl
 
     def populate_houses_and_cusps(self, julian_day_utc, geolatitude, geolongitude):
@@ -194,8 +193,8 @@ class ChartData:
     def _populate_ecliptic_values(self):
         """Calculates and populates ecliptic longitude, the SVP, and obliquity for a chart instance."""
 
-        decimal_hour_utc = self._convert_hms_to_decimal(self.utc_datetime.hour, self.utc_datetime.min,
-                                                        self.utc_datetime.sec)
+        decimal_hour_utc = self._convert_hms_to_decimal(self.utc_datetime.hour, self.utc_datetime.minute,
+                                                        self.utc_datetime.second)
         with SwissephLib() as s:
             time_julian_day = s.get_julian_day(self.utc_datetime.year, self.utc_datetime.month, self.utc_datetime.day,
                                                decimal_hour_utc, 1)
@@ -208,7 +207,7 @@ class ChartData:
                 logger.error("Error retrieving ayanamsa: " + str(errorstring))
 
             self.ayanamsa = ayanamsa
-            self.svp = (30 - ayanamsa.value)
+            self.svp = (30 - ayanamsa)
 
             planet_number = 0
             returnarray = [(c_double * 6)() for _ in range(10)]
@@ -229,19 +228,20 @@ class ChartData:
             s.calculate_planets_UT(time_julian_day, -1, settings.SIDEREALMODE, obliquity_array, errorstring)
             self.obliquity = obliquity_array[0]
 
-    def populate_ramc(self):
+    def _populate_ramc(self):
         self.ramc = self.LST * 15
 
-    def populate_mundane_values(self):
-        for body_number in settings.SWISSEPH_BODY_NUMBER_MAP:
-            body_name = settings.SWISSEPH_BODY_NUMBER_MAP[body_number]
+    def _populate_mundane_values(self):
+        for body_name in settings.SWISSEPH_BODY_NUMBER_MAP:
+            # body_name = settings.SWISSEPH_BODY_NUMBER_MAP[body_number]
             planet_longitude = self.planets_ecliptic[body_name][0]
             planet_latitude = self.planets_ecliptic[body_name][1]
             planet_prime_vert_longitude = self._calculate_prime_vertical_longitude(planet_longitude, planet_latitude,
                                                                                    self.ramc, self.obliquity,
                                                                                    self.svp, self.latitude)
 
-            self.planets_ecliptic[body_name] = planet_prime_vert_longitude
+            self.planets_mundane[body_name] = planet_prime_vert_longitude
+            print(body_name, planet_prime_vert_longitude)
 
     def _calculate_right_ascension(self, planet_latitude, planet_longitude):
 
@@ -255,10 +255,11 @@ class ChartData:
 
         if calcs_ax < 0:
             precessed_right_ascension = calcs_o + 180
-        elif calcs_ay < 0:
-            precessed_right_ascension = calcs_o + 360
         else:
-            precessed_right_ascension = calcs_o
+            if calcs_ay < 0:
+                precessed_right_ascension = calcs_o + 360
+            else:
+                precessed_right_ascension = calcs_o
 
         return precessed_right_ascension
 
