@@ -1,11 +1,12 @@
 import os
+import struct
 from ctypes import c_double, create_string_buffer
 from math import sin, cos, tan, asin, acos, atan, degrees, radians
 import pendulum
 from logging import getLogger
 
 import settings
-from dll_tools.SwissephLib import SwissephLib
+from dll_tools.swissephlib import SwissephLib
 from dll_tools.dll_tools import get_ephe_path
 
 logger = getLogger(__name__)

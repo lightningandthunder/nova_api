@@ -1,24 +1,26 @@
 from ctypes import c_char_p, c_int, c_int32, c_double, POINTER, windll, CDLL, WinError
 import os
 import platform
-
+import struct
 import settings
+
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 """
 Wraps Swiss Ephemeris library functions.
 """
-# TODO: Logging
 
 
 class SwissephLib:
     def __init__(self):
-        self.ephemeris_path = self._get_ephemeris_path
+        self.ephemeris_path = self._get_ephemeris_path()
         self.swe_lib = self._load_library()
 
-        # Wrap Swiss Ephemeris functions and expose as object methods
+        # Wrap Swiss Ephemeris functions and expose as public methods
         self.set_ephemeris_path = self._wrap_set_ephemeris_path(self.swe_lib)
-
-        # self.local_time_to_UTC = self._wrap_local_time_to_UTC(self.swe_lib) # Delete me
+        self.set_sidereal_mode = self._wrap_set_sidereal_mode(self.swe_lib)
         self.get_julian_day = self._wrap_get_julian_day(self.swe_lib)
         self.reverse_julian_day = self._wrap_reverse_julian_day(self.swe_lib)
         self.get_sidereal_time_UT = self._wrap_get_sidereal_time_UT(self.swe_lib)
@@ -28,41 +30,65 @@ class SwissephLib:
         self.close = self._wrap_close(self.swe_lib)
 
     def __enter__(self):
-        self.ephemeris_path = self._format_ephemeris_path(self.ephemeris_path)
+        self.set_ephemeris_path(self.ephemeris_path)
+        self.set_sidereal_mode(0, 0, 0)
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, _type, value, traceback):
         self.close()
 
-    def _get_ephemeris_path(self):
-        return settings.EPHEMERIS_PATH
+    def _get_library_relpath(self, library_dir):
+        """
+        Get the absolute path of the Swiss Ephemeris library version needed for current system.
+        """
 
-    def _format_ephemeris_path(self, path):
+        plat = platform.system()
+        bit_mode = struct.calcsize("P") * 8  # Yields 32-bit or 64-bit according to OS
+        if plat == 'Windows':
+            if bit_mode == 32:
+                library_relpath = os.path.join(library_dir, 'swedll32.dll')
+            else:
+                library_relpath = os.path.join(library_dir, 'swedll64.dll')
+        elif plat == 'Linux':
+            library_relpath = os.path.join(library_dir, 'libswe.so')
+        else:
+            raise OSError('OS must be Windows or Linux')
+        # library_relpath = os.path.relpath(os.path.abspath(library_relpath))
+        return library_relpath
+
+    def _load_library(self):
+        plat = platform.system()
+        library_relpath = self._get_library_relpath(settings.SWISSEPH_LIB_PATH)
+        swe_lib = None
+        try:
+            if plat == 'Windows':
+                swe_lib = windll.LoadLibrary(library_relpath)
+                logger.info(msg='Loaded Swiss Ephemeris library for Windows.')
+            elif plat == 'Linux':
+                swe_lib = CDLL(library_relpath)
+                logger.info(msg='Loaded Swiss Ephemeris library for Linux.')
+            else:
+                raise OSError('OS must be Windows or Linux')
+        except OSError as e:
+            logger.error(e)
+        except WinError as e:
+            logger.error(e)
+        finally:
+            if swe_lib is None:
+                raise ImportError("Unable to load Swiss Ephemeris Library.")
+            else:
+                return swe_lib
+
+    def _get_ephemeris_path(self):
+        # path = os.path.abspath(settings.EPHEMERIS_PATH)
+        path = settings.EPHEMERIS_PATH
         e_path = path.encode('utf-8')
         e_pointer = c_char_p(e_path)
         return e_pointer
 
-    def _load_library(self):
-        plat = platform.system()
-        file_dir = 'swe'
-        swe_lib = None
-        try:
-            if plat == 'Windows':
-                swe_lib = windll.LoadLibrary(os.path.join(file_dir, 'swedll64.dll'))
-            elif plat == 'Linux':
-                swe_lib = CDLL(os.path.join(file_dir, 'libswe.so'))
-            else:
-                raise OSError('OS must be Windows or Linux')
-        except OSError as e:
-            print(e)
-        except WinError as e:
-            print(e)
-
-        if swe_lib is None:
-            raise ImportError("Unable to load Swiss Ephemeris Library.")
-        else:
-            return swe_lib
-
+    #                                           #
+    #     Wrapped Swiss Ephemeris functions     #
+    #                                           #
     def _wrap_set_ephemeris_path(self, swe_lib):
         set_ephemeris_path = swe_lib.swe_set_ephe_path
         set_ephemeris_path.argtypes = [c_char_p]

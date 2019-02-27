@@ -2,10 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="abfc1491-3d37-4b35-83cd-e89d68c9b3e8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/dll_tools/testme.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ChartData.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ChartData.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/astrosetup.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/astrosetup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/SwissephLib.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/SwissephLib.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/SwissephLib.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swissephlib.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/PerlSwissEph-2.07.tar.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/libswe.a" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/dll/libswe.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/libswe.so" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/dll/libswe.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swedll32.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/dll/swedll32.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swedll32.lib" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/dll/swedll32.lib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swedll64.dll" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/dll/swedll64.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swedll64.lib" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swe/dll/swedll64.lib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/test_swissephFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/test_swissephlib.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,11 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ChartData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="240" column="36" lean-forward="true" selection-start-line="240" selection-start-column="36" selection-end-line="240" selection-end-column="36" />
+            <state relative-caret-position="1156">
+              <caret line="71" selection-start-line="71" selection-end-line="71" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -29,10 +37,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/dll_tools/SwissephLib.py">
+        <entry file="file://$PROJECT_DIR$/src/dll_tools/swissephlib.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="23" column="53" selection-start-line="23" selection-start-column="53" selection-end-line="23" selection-end-column="53" />
+            <state relative-caret-position="-2890">
+              <caret line="20" column="69" lean-forward="true" selection-start-line="20" selection-start-column="69" selection-end-line="20" selection-end-column="69" />
               <folding>
                 <element signature="e#0#86#0" expanded="true" />
               </folding>
@@ -40,11 +48,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/settings.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/dll_tools/testme.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+            <state relative-caret-position="187">
+              <caret line="11" column="18" lean-forward="true" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+              <folding>
+                <element signature="e#0#20#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -52,8 +63,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/astrosetup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-586">
-              <caret line="899" column="21" selection-start-line="899" selection-start-column="4" selection-end-line="899" selection-end-column="21" />
+            <state relative-caret-position="272">
+              <caret line="130" lean-forward="true" selection-start-line="130" selection-end-line="130" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -76,6 +87,8 @@
       <find>decimal</find>
       <find>decimalhour</find>
       <find>lst</find>
+      <find>path</find>
+      <find>ephe</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -99,17 +112,20 @@
         <option value="$PROJECT_DIR$/src/dll_tools/test_swissephFunctions.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/dll_tools.py" />
         <option value="$PROJECT_DIR$/src/astrosetup.py" />
-        <option value="$PROJECT_DIR$/src/dll_tools/SwissephLib.py" />
-        <option value="$PROJECT_DIR$/src/settings.py" />
         <option value="$PROJECT_DIR$/src/ChartData.py" />
+        <option value="$PROJECT_DIR$/src/dll_tools/SwissephLib.py" />
+        <option value="$PROJECT_DIR$/src/dll_tools/swisseplib.py" />
+        <option value="$PROJECT_DIR$/src/settings.py" />
+        <option value="$PROJECT_DIR$/src/dll_tools/swissephlib.py" />
+        <option value="$PROJECT_DIR$/src/dll_tools/testme.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="3384" />
-    <option name="y" value="-23" />
-    <option name="width" value="1166" />
-    <option name="height" value="662" />
+    <option name="x" value="3759" />
+    <option name="y" value="-48" />
+    <option name="width" value="1167" />
+    <option name="height" value="663" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -117,17 +133,13 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="astronova_api" type="b2602c69:ProjectViewProjectNode" />
               <item name="astronova_api" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="astronova_api" type="b2602c69:ProjectViewProjectNode" />
-              <item name="astronova_api" type="462c0819:PsiDirectoryNode" />
-              <item name="etc" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="astronova_api" type="b2602c69:ProjectViewProjectNode" />
@@ -144,7 +156,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -152,14 +163,15 @@
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Mike\PycharmProjects\astronova_api\src\swe\ephemeris" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Mike\PycharmProjects\astronova_api\src\dll_tools\swe\dll" />
       <recent name="C:\Users\Mike\PycharmProjects\astronova_api\src\dll_tools" />
       <recent name="C:\Users\Mike\PycharmProjects\astronova_api\src\dll_tools\tests" />
       <recent name="C:\Users\Mike\PycharmProjects\astronova_api\src\swe" />
       <recent name="C:\Users\Mike\PycharmProjects\astronova_api\src\app" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Mike\PycharmProjects\astronova_api\src\swe\ephemeris" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -174,7 +186,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests for test_swissephFunctions.TestSwissephFunctions">
+  <component name="RunManager" selected="Python.testme">
     <configuration name="dll_tools" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="astronova_api" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -187,7 +199,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\Mike\PycharmProjects\astronova_api\src\dll_tools\SwissephLib.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\Mike\PycharmProjects\astronova_api\src\dll_tools\swissephlib.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -238,7 +250,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_swissephFunctions.TestSwissephFunctions" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="testme" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="astronova_api" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/dll_tools" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/dll_tools/testme.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for dll_tools.test_swissephlib.TestSwissephFunctions" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="astronova_api" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -248,13 +281,14 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_swissephFunctions.TestSwissephFunctions&quot;" />
+      <option name="_new_target" value="&quot;dll_tools.test_swissephlib.TestSwissephFunctions&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Unittests for test_swissephFunctions.TestSwissephFunctions" />
+        <item itemvalue="Python.testme" />
+        <item itemvalue="Python tests.Unittests for dll_tools.test_swissephlib.TestSwissephFunctions" />
         <item itemvalue="Python.dll_tools_test" />
         <item itemvalue="Python.dll_tools" />
       </list>
@@ -303,24 +337,43 @@
     <frame x="3193" y="-7" width="1295" height="695" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21939586" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1899841" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32960895" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32960895" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4283054" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.40409684" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49920508" weight="0.32774675" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5007949" side_tool="true" weight="0.32774675" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32960895" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.59590316" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>os.getcwd()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>os.curdir</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>import os</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/venv/lib/site-packages/pip-10.0.1-py3.7.egg/pip/__main__.py" />
@@ -376,24 +429,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="320" selection-start-line="320" selection-end-line="320" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/dll_tools_test.py" />
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/test_swissephFunctions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="45" lean-forward="true" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/dll_tools.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -411,17 +447,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/settings.py">
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/test_swissephlib.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+        <state relative-caret-position="170">
+          <caret line="10" column="45" lean-forward="true" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/SwissephLib.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/platform.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="23" column="53" selection-start-line="23" selection-start-column="53" selection-end-line="23" selection-end-column="53" />
+        <state relative-caret-position="93">
+          <caret line="1067" selection-start-line="1067" selection-end-line="1067" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="86">
+          <caret line="320" selection-start-line="320" selection-end-line="320" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ChartData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1156">
+          <caret line="71" selection-start-line="71" selection-end-line="71" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/swissephlib.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2890">
+          <caret line="20" column="69" lean-forward="true" selection-start-line="20" selection-start-column="69" selection-end-line="20" selection-end-column="69" />
           <folding>
             <element signature="e#0#86#0" expanded="true" />
           </folding>
@@ -430,20 +500,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/astrosetup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-586">
-          <caret line="899" column="21" selection-start-line="899" selection-start-column="4" selection-end-line="899" selection-end-column="21" />
+        <state relative-caret-position="272">
+          <caret line="130" lean-forward="true" selection-start-line="130" selection-end-line="130" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ChartData.py">
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/testme.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="240" column="36" lean-forward="true" selection-start-line="240" selection-start-column="36" selection-end-line="240" selection-end-column="36" />
+        <state relative-caret-position="187">
+          <caret line="11" column="18" lean-forward="true" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
