@@ -16,16 +16,24 @@ import settings
 # print("Done")
 
 name = 'Mike'
-ldt = pendulum.datetime(2019, 2, 26, 23, 47, 43, tz='America/New_York')
-udt = pendulum.datetime(2019, 2, 27, 4, 48, 51)
+ldt = pendulum.datetime(2019, 2, 27, 20, 31, 0, tz='America/New_York')
+udt = pendulum.datetime(2019, 2, 28, 1, 31, 0)
 lat = 40.9958
-long = 74.0435
+long = -74.0435
 
 chart = ChartData(name, ldt, udt, long, lat)
-# x = chart.get_ecliptical_coords()
-# for y, z in x.items():
-#     print(y, z)
-
-x = chart.get_mundane_coords()
+x = chart.get_ecliptical_coords()
 for y, z in x.items():
     print(y, z)
+
+print("\n")
+
+a = chart.get_mundane_coords()
+for b, c in a.items():
+    print(b, c)
+
+print("\n")
+
+d = chart.get_right_ascension_coords()
+for e, f in d.items():
+    print(e, f)

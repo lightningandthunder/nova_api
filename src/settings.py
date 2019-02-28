@@ -22,18 +22,5 @@ SWISSEPH_LIB_PATH = 'swe\\dll'
 
 Q2 = 0.002737909
 
-PLANET_DICT = {
-    "Sun": '',
-    "Moon": '',
-    "Mercury": '',
-    "Venus": '',
-    "Mars": '',
-    "Jupiter": '',
-    "Saturn": '',
-    "Uranus": '',
-    "Neptune": '',
-    "Pluto": '',
-}
-
 SWISSEPH_BODY_NUMBER_MAP = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune',
                             'Pluto']

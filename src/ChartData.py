@@ -7,6 +7,7 @@ from logging import getLogger
 
 import settings
 from src.dll_tools.swissephlib import SwissephLib
+from src.dll_tools.dll_tools import get_planet_dict
 
 logger = getLogger(__name__)
 
@@ -19,28 +20,29 @@ class ChartData:
         self.longitude = geo_longitude
         self.latitude = geo_latitude
         self.obliquity = None
-        self.LST = self._calculate_LST(local_datetime, geo_latitude)
+        self.LST = self._calculate_LST(local_datetime, geo_longitude)
         self.svp = None
         self.ayanamsa = None
         self.ramc = None
 
         # Ecliptical longitude, celestial latitude, distance,
         # Speed in long, speed in lat, speed in dist
-        self.planets_ecliptic = settings.PLANET_DICT.copy()
+        self.planets_ecliptic = get_planet_dict()
 
         # House placement, decimal longitude (out of 360*)
-        self.planets_mundane = settings.PLANET_DICT.copy()
+        self.planets_mundane = get_planet_dict()
 
         # Decimal longitude (out of 360*)
-        self.planets_right_ascension = settings.PLANET_DICT.copy()
+        self.planets_right_ascension = get_planet_dict()
 
         self.cusps_longitude = None
         self.angles_longitude = None
 
-        self._populate_ecliptic_values()
+        # self._populate_ecliptic_values()
+        self.__rewritten_populate_ecliptic()
         self._populate_ramc()
         self._populate_mundane_values()
-        # TODO: all of the calculation and population as part of __init__
+        self._populate_right_ascension_values()
 
     def get_ecliptical_coords(self):
         coords = dict()
@@ -65,11 +67,15 @@ class ChartData:
         key = int(longitude / 30)
         return zodiac[key]
 
+    #
+
     def _calculate_LST(self, dt, decimal_longitude):
         """Calculate local sidereal time for date, time, location of event"""
 
         year, month, day = dt.year, dt.month, dt.day
         decimal_hour = self._convert_hms_to_decimal(dt.hour, dt.minute, dt.second)
+
+        # Julian Day number at midnight
         with SwissephLib() as s:
             julian_day_0_GMT = s.get_julian_day(year, month, day, 0, 1)
 
@@ -148,10 +154,8 @@ class ChartData:
 
         campanus_longitude = 90 - calc_cz if (calc_cx < 0) else 270 - calc_cz
 
-        planet_pvl = list()
-        planet_pvl.append((int(campanus_longitude / 30) + 1))
-        planet_pvl.append(campanus_longitude)
-        return planet_pvl
+        planet_pvl_house = (int(campanus_longitude / 30) + 1)
+        return [planet_pvl_house, campanus_longitude]
 
     def populate_houses_and_cusps(self, julian_day_utc, geolatitude, geolongitude):
         """Calculate house cusps and ecliptical longitudes of angles in the Campanus system"""
@@ -201,23 +205,22 @@ class ChartData:
             errorstring = create_string_buffer(126)
 
             # svp is a destination for the Swiss Ephemeris function to write to
-            ayanamsa = c_double()
-            ayanamsa = s.get_ayanamsa_UT(time_julian_day, settings.SIDEREALMODE, ayanamsa, errorstring)
-            if ayanamsa < 0:
+            svp = c_double()
+            ayanamsa_return = s.get_ayanamsa_UT(time_julian_day, settings.SIDEREALMODE, svp, errorstring)
+            if ayanamsa_return < 0:
                 logger.error("Error retrieving ayanamsa: " + str(errorstring))
 
-            self.ayanamsa = ayanamsa
-            self.svp = (30 - ayanamsa)
+            self.svp = (30 - svp.value)
 
             planet_number = 0
             returnarray = [(c_double * 6)() for _ in range(10)]
-            for key in settings.PLANET_DICT.keys():
+            for planet_name in settings.SWISSEPH_BODY_NUMBER_MAP:
 
                 # dll.swe_calc_ut uses ints as identifiers; 0-9 is Sun-Pluto
                 if planet_number <= 9:
                     s.calculate_planets_UT(time_julian_day, planet_number, settings.SIDEREALMODE,
                                            returnarray[planet_number], errorstring)
-                    self.planets_ecliptic[key] = returnarray[planet_number]
+                    self.planets_ecliptic[planet_name] = returnarray[planet_number]
                     planet_number += 1
                 else:
                     break
@@ -233,19 +236,17 @@ class ChartData:
 
     def _populate_mundane_values(self):
         for body_name in settings.SWISSEPH_BODY_NUMBER_MAP:
-            # body_name = settings.SWISSEPH_BODY_NUMBER_MAP[body_number]
             planet_longitude = self.planets_ecliptic[body_name][0]
             planet_latitude = self.planets_ecliptic[body_name][1]
-            planet_prime_vert_longitude = self._calculate_prime_vertical_longitude(planet_longitude, planet_latitude,
+            house, long = self._calculate_prime_vertical_longitude(planet_longitude, planet_latitude,
                                                                                    self.ramc, self.obliquity,
                                                                                    self.svp, self.latitude)
 
-            self.planets_mundane[body_name] = planet_prime_vert_longitude
-            print(body_name, planet_prime_vert_longitude)
+            self.planets_mundane[body_name] = house, long
 
     def _calculate_right_ascension(self, planet_latitude, planet_longitude):
 
-        circle_minus_ayanamsa = 360 - self.ayanamsa
+        circle_minus_ayanamsa = 360 - (330 + self.svp)
 
         precessed_longitude = planet_longitude + (circle_minus_ayanamsa)  # C8
         calcs_ay = (sin(radians(precessed_longitude)) * cos(radians(self.obliquity))
@@ -263,35 +264,34 @@ class ChartData:
 
         return precessed_right_ascension
 
-    def __rewritten_populate_ecliptic(self):
-        # TODO: This is untested. Get everything up and running before messing with this.
+    def _populate_right_ascension_values(self):
+        for body_name in settings.SWISSEPH_BODY_NUMBER_MAP:
+            planet_longitude = self.planets_ecliptic[body_name][0]
+            planet_latitude = self.planets_ecliptic[body_name][1]
+            planet_right_ascension = self._calculate_right_ascension(planet_latitude, planet_longitude)
 
-        decimal_hour_local = self._convert_hms_to_decimal(self.local_datetime.hour, self.local_datetime.min,
-                                                          self.local_datetime.sec)
-        decimal_hour_utc = self._convert_hms_to_decimal(self.utc_datetime.hour, self.utc_datetime.min,
-                                                        self.utc_datetime.sec)
+            self.planets_right_ascension[body_name] = planet_right_ascension
+
+    def __rewritten_populate_ecliptic(self):
+        decimal_hour_utc = self._convert_hms_to_decimal(self.utc_datetime.hour, self.utc_datetime.minute,
+                                                        self.utc_datetime.second)
 
         with SwissephLib() as s:
-
-            # Get Julian Day number
             time_julian_day = s.get_julian_day(self.utc_datetime.year, self.utc_datetime.month, self.utc_datetime.day,
                                                decimal_hour_utc, 1)
             errorstring = create_string_buffer(126)
 
-            # svp is a destination for the Swiss Ephemeris function to write to
-            svp = c_double()
-            ayanamsa = s.get_ayanamsa_UT(time_julian_day, settings.SIDEREALMODE, svp, errorstring)
-            if ayanamsa < 0:
+            svp = c_double()  # svp is a destination for the Swiss Ephemeris function to write to
+            ayanamsa_return = s.get_ayanamsa_UT(time_julian_day, settings.SIDEREALMODE, svp, errorstring)
+            if ayanamsa_return < 0:
                 logger.error("Error retrieving ayanamsa: " + str(errorstring))
-
             self.svp = (30 - svp.value)
 
             returnarray = [(c_double * 6)() for _ in range(10)]
 
-            for body_number in settings.SWISSEPH_BODY_NUMBER_MAP:
+            for body_number, body_name in enumerate(settings.SWISSEPH_BODY_NUMBER_MAP):
                 s.calculate_planets_UT(time_julian_day, body_number, settings.SIDEREALMODE,
                                        returnarray[body_number], errorstring)
-                body_name = settings.SWISSEPH_BODY_NUMBER_MAP[body_number]
                 self.planets_ecliptic[body_name] = returnarray[body_number]
 
             obliquity_array = (c_double * 6)()
