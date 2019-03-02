@@ -11,15 +11,13 @@ from src.dll_tools.swissephlib import SwissephLib
 logger = getLogger(__name__)
 
 
-class BaseChartData:
+class ChartData:
     def __init__(self, name, local_datetime, utc_datetime, geo_longitude, geo_latitude):
-        self.relocated = False
-        self.precessed_into_other_framework = False
         self.name = name
         self.local_datetime = local_datetime
         self.utc_datetime = utc_datetime
-        self.longitude = geo_longitude
-        self.latitude = geo_latitude
+        self.geo_longitude = geo_longitude
+        self.geo_latitude = geo_latitude
         self.julian_day = self._calculate_julian_day(self.utc_datetime)
         self.LST = self._calculate_LST(local_datetime, geo_longitude)
         self.ramc = self.LST * 15
@@ -37,7 +35,23 @@ class BaseChartData:
         self.cusps_longitude = None
         self.angles_longitude = None
 
-        self._populate_houses_and_cusps(self.julian_day, self.latitude, self.longitude)
+        self._populate_houses_and_cusps()
+
+        self.altered_framework = False
+        self.original_values = {
+            'geo_longitude': self.geo_longitude,
+            'geo_latitude': self.geo_latitude,
+            'LST': self.LST,
+            'ramc': self.ramc,
+            'svp': self.svp,
+            'obliquity': self.obliquity,
+            'mundane': self.planets_mundane,
+            'right_ascension': self.planets_right_ascension
+        }
+
+    class SiderealFramework:
+        def __init__(self):
+
 
     #
     # Public functions
@@ -80,6 +94,40 @@ class BaseChartData:
         minute = int(fabs((decimal - degree) * 60))
         second = int((fabs((decimal - degree) * 60) - int(fabs((decimal - degree) * 60))) * 60)
         return degree, minute, second
+
+    def import_sidereal_framework(self, LST, ramc, svp, obliquity, geo_longitude, geo_latitude):
+        self.LST = LST
+        self.ramc = ramc
+        self.svp = svp
+        self.obliquity = obliquity
+        self.geo_longitude = geo_longitude
+        self.geo_latitude = geo_latitude
+
+        self.planets_mundane = self._populate_mundane_values()
+        self.planets_right_ascension = self._populate_right_ascension_values()
+        # TODO: Unsure if houses and cusps actually need to be recalculated. Not including this for now.
+        self.altered_framework = True
+
+
+    def export_sidereal_framework(self):
+        return self.LST, self.ramc, self.svp, self.obliquity, self.geo_longitude, self.geo_latitude
+
+    def reset_sidereal_framework(self):
+        if self.altered_framework:
+            self.LST = self.original_values['LST']
+            self.ramc = self.original_values['ramc'],
+            self.svp = self.original_values['svp'],
+            self.obliquity = self.original_values['obliquity']
+            self.geo_longitude = self.original_values['geo_longitude']
+            self.geo_latitude = self.original_values['geo_latitude']
+            self.planets_mundane = self.original_values['mundane']
+            self.planets_right_ascension = self.original_values['right_ascension']
+
+            self.planets_mundane = self._populate_mundane_values()
+            self.planets_right_ascension = self._populate_right_ascension_values()
+
+            self.altered_framework = False
+
 
     #
     # Internal calculations
@@ -203,9 +251,9 @@ class BaseChartData:
 
         return precessed_right_ascension
 
-        #
-        # Functions to populate coordinate data sets
-        #
+    #
+    # Functions to populate coordinate data sets
+    #
 
     def _populate_ecliptic_values(self):
         with SwissephLib() as s:
@@ -227,7 +275,7 @@ class BaseChartData:
             planet_latitude = self.planets_ecliptic[body_name][1]
             house, long = self._calculate_prime_vertical_longitude(planet_longitude, planet_latitude,
                                                                    self.ramc, self.obliquity,
-                                                                   self.svp, self.latitude)
+                                                                   self.svp, self.geo_latitude)
 
             mundane_dict[body_name] = house, long
         return mundane_dict
@@ -242,13 +290,18 @@ class BaseChartData:
             right_ascension_dict[body_name] = planet_right_ascension
         return right_ascension_dict
 
-    def _populate_houses_and_cusps(self, julian_day_utc, geolatitude, geolongitude):
+    def _populate_houses_and_cusps(self):
         """Calculate house cusps and ecliptical longitudes of angles in the Campanus system"""
+
+        julian_day_utc = self.julian_day
+        geo_longitude = self.geo_longitude
+        geo_latitude = self.geo_latitude
+
         cusp_array = (c_double * 13)()
         house_array = (c_double * 8)()
 
         with SwissephLib() as s:
-            s.calculate_houses(julian_day_utc, settings.SIDEREALMODE, geolatitude, geolongitude, settings.CAMPANUS,
+            s.calculate_houses(julian_day_utc, settings.SIDEREALMODE, geo_latitude, geo_longitude, settings.CAMPANUS,
                                cusp_array, house_array)
 
         self.cusps_longitude = {
@@ -278,3 +331,7 @@ class BaseChartData:
         self.angles_longitude["Zen"] = (self.angles_longitude["Dsc"] + 90) % 360
         self.angles_longitude["WP (Ecliptical)"] = (self.angles_longitude["IC"] + 90) % 360
         self.angles_longitude["Ndr"] = (self.angles_longitude["Asc"] + 90) % 360
+
+
+# Notes. It appears as though, once a ChartData object is initialized, the only params that determine framework are:
+# LST (and thus RAMC), SVP, Obliquity, geolat, geolong.

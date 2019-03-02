@@ -1,4 +1,4 @@
-from BaseChartData import BaseChartData
+from ChartData import ChartData
 import pendulum
 from numpy import round
 
@@ -10,6 +10,7 @@ def test_nj_area():
     lat = 40.9958
     long = -74.0435
 
+    # TODO: Eventually do these checks with just degree/min/sec and not floats
     ecliptic = {
         'Sun': 314.1574473222989,
         'Moon': 242.31248223042022,
@@ -49,7 +50,7 @@ def test_nj_area():
         'Pluto': 294.2457769761652
     }
 
-    chart = BaseChartData(name, ldt, udt, long, lat)
+    chart = ChartData(name, ldt, udt, long, lat)
 
     e = chart.get_ecliptical_coords()
     assert e == ecliptic
@@ -60,6 +61,7 @@ def test_nj_area():
     r = chart.get_right_ascension_coords()
     assert r == RA
 
+    # TODO: Do checks with degree/min/sec
     assert round(chart.LST - 7.0863, 2) == 0
     assert round(chart.ramc - 106.296, 2) == 0
 
@@ -78,4 +80,66 @@ def test_nj_area():
         assert value == angles[key]
 
 
+
+def test_natal():
+    name = 'Mike'
+    ldt = pendulum.datetime(1989, 12, 20, 22, 20, 0, tz='America/New_York')
+    udt = ldt.in_tz('UTC')
+    lat = 40.9792
+    long = -74.1169
+    natal_chart = ChartData(name, ldt, udt, long, lat)
+
+    assert natal_chart.get_ecliptical_coords() == {
+        'Sun': 244.6313629376893,
+        'Moon': 167.13759652799106,
+        'Mercury': 264.38172216168175,
+        'Venus': 280.5141929178817,
+        'Mars': 217.43828113917368,
+        'Jupiter': 72.08233125322747,
+        'Saturn': 259.7217882439701,
+        'Uranus': 250.49893171302688,
+        'Neptune': 257.0068942021749,
+        'Pluto': 202.15101494641362
+    }
+    assert natal_chart.get_mundane_coords() == {
+        'Sun': 112.30177637740623,
+        'Moon': 31.73940479378539,
+        'Mercury': 130.83782823970748,
+        'Venus': 146.42614237772526,
+        'Mars': 84.4099562736074,
+        'Jupiter': 299.6760710412005,
+        'Saturn': 127.11796339621995,
+        'Uranus': 118.00207743229325,
+        'Neptune': 124.6836834230844,
+        'Pluto': 68.65188700850499
+    }
+
+    assert natal_chart.get_right_ascension_coords() == {
+        'Sun': 269.1625706083745,
+        'Moon': 189.15316359652076,
+        'Mercury': 290.83014331163423,
+        'Venus': 307.6064368752971,
+        'Mars': 239.96535633889692,
+        'Jupiter': 97.26967529094908,
+        'Saturn': 285.514947289806,
+        'Uranus': 275.5664554682417,
+        'Neptune': 282.53946438003425,
+        'Pluto': 228.57596239602026
+    }
+
+    name = 'Transits in LA'
+    ldt = pendulum.datetime(2019, 3, 1, 21, 58, 25, tz='America/Los_Angeles')
+    udt = ldt.in_timezone('UTC')
+    lat = 37.9577
+    long = -121.2897
+    los_angeles = ChartData(name, ldt, udt, long, lat)
+
+    LST, ramc, svp, obliquity, geo_longitude, geo_latitude = los_angeles.export_sidereal_framework()
+    natal_chart.import_sidereal_framework(LST, ramc, svp, obliquity, geo_longitude, geo_latitude)
+
+    for x, y in natal_chart.get_mundane_coords().items():
+        print(x, y)
+
+
 test_nj_area()
+test_natal()
