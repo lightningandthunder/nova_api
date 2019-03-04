@@ -40,4 +40,10 @@ class ChartData:
     def get_right_ascension_coords(self):
         return self.planets_right_ascension
 
+    def get_angles_longitude(self):
+        return self.angles_longitude
+
+    def get_cusps_longitude(self):
+        return self.cusps_longitude
+
 

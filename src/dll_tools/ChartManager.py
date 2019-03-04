@@ -43,6 +43,8 @@ class ChartManager:
         radix.planets_right_ascension = self._populate_right_ascension_values(radix)
         radix.angles_longitude, radix.cusps_longitude = self._populate_houses_and_cusps(radix)
 
+
+
     @staticmethod
     def get_sign(longitude):
         """Determine astrological sign from unsigned longitude"""
@@ -116,7 +118,7 @@ class ChartManager:
     def _initialize_sidereal_framework(self, utc_datetime, local_datetime, geo_longitude, geo_latitude):
 
         julian_day = self._calculate_julian_day(utc_datetime)
-        LST = self._calculate_LST(local_datetime, geo_longitude)
+        LST = self._calculate_LST(utc_datetime, geo_longitude)
         ramc = LST * 15
         svp = self._calculate_svp(julian_day)
         obliquity = self._calculate_obliquity(julian_day)
@@ -278,3 +280,135 @@ class ChartManager:
         angles_longitude["Ndr"] = (angles_longitude["Asc"] + 90) % 360
 
         return angles_longitude, cusps_longitude
+
+    def generate_lunar_return_list(self, local_natal_chart, earliest_dt, latest_dt):
+        current_dt = local_natal_chart.local_datetime
+
+        # Initialize lower and upper bounds to midnight
+        earliest_dt = pendulum.datetime(earliest_dt.year, earliest_dt.month, earliest_dt.day, tz=earliest_dt.tz)
+        latest_dt = pendulum.datetime(latest_dt.year, latest_dt.month, latest_dt.day, tz=latest_dt.tz)
+
+        moon_radix = local_natal_chart.get_ecliptical_coords()['Moon']
+        datetime_list = list()
+        pointer = earliest_dt
+        while pointer < latest_dt:
+
+            # Check moon position every hour; every time we go past it, add the previous hour to the list to check later
+
+            # TODO: generalize this as get_planet_array(jd, body_number) and use everywhere else
+            ret_array = (c_double * 6)()
+            errorstring = create_string_buffer(126)
+            jd = self.lib.get_julian_day(pointer.year, pointer.month, pointer.day, 0, 1)
+            self.lib.calculate_planets_ut(jd, 1, settings.SIDEREALMODE, ret_array, errorstring)
+            daily_moon_pos = ret_array[0]
+
+            if daily_moon_pos > moon_radix and (daily_moon_pos > fabs(360 - moon_radix)):
+                previous_hour = pointer.subtract(hours=1)
+                datetime_list.append(previous_hour)
+
+            pointer = pointer.add(hours=1)
+
+        for hour in datetime_list:
+            pass
+            # Binary search for exact second; only 3600 per hour
+
+    def get_orb(self, longitude_one, longitude_two, lowbound, highbound):
+        """Return the orb, or distance from exact, of an aspect"""
+
+        aspect = fabs(longitude_one - longitude_two)
+
+        # Used to catch situations where one longitude is near 360* and the other is near 0*
+        aspect360 = fabs(aspect - 360)
+        aspect_average = (lowbound + highbound) / 2
+
+        if aspect >= lowbound and aspect <= highbound:
+            if lowbound != 0:
+                return fabs(aspect - aspect_average)
+            else:
+                return aspect
+        elif aspect360 >= lowbound and aspect360 <= highbound:
+            if lowbound != 0:
+                return fabs(aspect360 - aspect_average)
+            else:
+                return aspect360
+
+
+    def calculate_return_datetime(planet, planet_longitude, harmonic, dt_utc):
+
+        def nearest(items, pivot):
+            return min(items, key=lambda x: abs(x - pivot))
+
+        natal_pos = planet_longitude
+
+        startdate = dt_utc.datetime.subtract(hours=24)
+        enddate = dt_utc.datetime.add(hours=24)
+
+        period = pendulum.period(startdate, enddate)
+
+        searchlist = [x for x in range(startdate.diff(enddate).in_seconds())]
+
+        returnarray = (c_double * 6)()
+        found = False
+        while found == False:
+            midpoint = len(searchlist) // 2
+            errorstring = create_string_buffer(126)
+
+            if len(searchlist) > 0:
+                test_date = startdate.add(seconds=searchlist[midpoint])
+
+                # Conversion from local time to UTC
+                # This can probably just be done with pendulum
+                (outyear, outmonth, outday,
+                 outhour, outmin, outsec) = (c_int32(), c_int32(), c_int32(),
+                                             c_int32(), c_int32(), c_double())
+                py_local_time_to_UTC(test_date.year, test_date.month, test_date.day,
+                                     test_date.hour, test_date.minute, test_date.second,
+                                     test_date.offset_hours, outyear, outmonth, outday, outhour,
+                                     outmin, outsec)
+
+                decimalhour_UTC = (((((outhour.value * 60)
+                                      + outmin.value) * 60)
+                                    + outsec.value) / 3600)
+
+                # Using the new UTC time to get a correct Julian Day Number
+                time_julian_day = py_get_julian_day(outyear, outmonth, outday,
+                                                    decimalhour_UTC, 1)
+
+                py_calculate_planets_UT(time_julian_day, 0, SIDEREALMODE, returnarray, errorstring)
+
+            if len(searchlist) < 2:
+                print("found SSR Date! {} {} {} {} {} {}".format(test_date.year, test_date.month, test_date.day,
+                                                                 test_date.hour, test_date.minute,
+                                                                 test_date.second))
+                return time_julian_day
+
+            elif returnarray[0] > natal_pos:
+                if fabs(returnarray[0] - natal_pos) <= 180:
+                    try:
+                        searchlist = searchlist[:(midpoint - 1)]
+                        print(len(searchlist))
+                    except:
+                        return None
+                else:
+                    try:
+                        searchlist = searchlist[(midpoint + 1):]
+                        print(len(searchlist))
+                    except:
+                        return None
+
+            elif returnarray[0] < natal_pos:
+                if fabs(returnarray[0] - natal_pos) <= 180:
+                    try:
+                        searchlist = searchlist[(midpoint + 1):]
+                        print(len(searchlist))
+                    except:
+                        return None
+                else:
+                    try:
+                        searchlist = searchlist[:(midpoint - 1)]
+                        print(len(searchlist))
+                    except:
+                        return None
+        return None
+
+# Lunar returns, 0 to 0, seem to vary by up to 29 in distance. Search 2 days on either side?

@@ -154,15 +154,21 @@ lat = 40.9792
 long = -74.1169
 
 mike = manager.create_chartdata(name, ldt, long, lat)
-for x, y in mike.sidereal_framework.__dict__.items():
-    print(x, y)
-print('\n\n')
-for x, y in mike.get_ecliptical_coords().items():
-    print(x, y)
-print('\n\n')
-for x, y in mike.get_mundane_coords().items():
-    print(x, y)
-print('\n\n')
-for x, y in mike.get_right_ascension_coords().items():
-    print(x, y)
-print('\n\n')
+
+name = 'Transits in LA'
+ldt = pendulum.datetime(2019, 3, 3, 22, 40, 24, tz='America/Los_Angeles')
+udt = ldt.in_timezone('UTC')
+lat = 34.0522
+long = -118.2427
+
+la = manager.create_chartdata(name, ldt, long, lat)
+manager.precess_into_sidereal_framework(radix=mike, transit_chart=la)
+
+dt = pendulum.datetime(2019, 3, 3, 6, 0, 0, tz='America/Argentina/La_Rioja')
+lat = -29.4333
+long = -66.85
+
+test = manager.create_chartdata('', dt, long, lat)
+print(test.get_ecliptical_coords()['Moon'])
+print(test.sidereal_framework.LST)
+print(test.julian_day)
