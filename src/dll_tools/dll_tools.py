@@ -2,9 +2,6 @@ from math import fabs
 import pendulum
 from ctypes import c_double, create_string_buffer
 
-from dll_tools.swissephlib import SwissephLib
-
-
 def calculate_harmonic_return(planet, planet_longitude, harmonic, dt_utc):
 
     def nearest(items, pivot):
