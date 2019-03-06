@@ -205,7 +205,7 @@ class ChartManager:
         returnarray = [(c_double * 6)() for _ in range(10)]
 
         ecliptic_dict = dict()
-        for body_number, body_name in enumerate(settings.SWISSEPH_BODY_NUMBER_MAP):
+        for body_number, body_name in enumerate(settings.INT_TO_STRING_PLANET_MAP):
             self.lib.calculate_planets_UT(julian_day, body_number, settings.SIDEREALMODE,
                                           returnarray[body_number], errorstring)
             ecliptic_dict[body_name] = returnarray[body_number]
@@ -214,7 +214,7 @@ class ChartManager:
 
     def _populate_mundane_values(self, chart):
         mundane_dict = dict()
-        for body_name in settings.SWISSEPH_BODY_NUMBER_MAP:
+        for body_name in settings.INT_TO_STRING_PLANET_MAP:
             planet_longitude = chart.planets_ecliptic[body_name][0]
             planet_latitude = chart.planets_ecliptic[body_name][1]
             house, long = self._calculate_prime_vertical_longitude(planet_longitude, planet_latitude,
@@ -228,7 +228,7 @@ class ChartManager:
 
     def _populate_right_ascension_values(self, chart):
         right_ascension_dict = dict()
-        for body_name in settings.SWISSEPH_BODY_NUMBER_MAP:
+        for body_name in settings.INT_TO_STRING_PLANET_MAP:
             planet_longitude = chart.planets_ecliptic[body_name][0]
             planet_latitude = chart.planets_ecliptic[body_name][1]
             planet_right_ascension = self._calculate_right_ascension(planet_latitude, planet_longitude,
@@ -281,36 +281,63 @@ class ChartManager:
 
         return angles_longitude, cusps_longitude
 
-    def generate_lunar_return_list(self, local_natal_chart, earliest_dt, latest_dt):
-        current_dt = local_natal_chart.local_datetime
 
-        # Initialize lower and upper bounds to midnight
-        earliest_dt = pendulum.datetime(earliest_dt.year, earliest_dt.month, earliest_dt.day, tz=earliest_dt.tz)
-        latest_dt = pendulum.datetime(latest_dt.year, latest_dt.month, latest_dt.day, tz=latest_dt.tz)
+    def _get_planet_array(self, body_number, dt):
+        if type(body_number) == str:
+            body_number = settings.STRING_TO_INT_PLANET_MAP[body_number]
 
-        moon_radix = local_natal_chart.get_ecliptical_coords()['Moon']
-        datetime_list = list()
-        pointer = earliest_dt
-        while pointer < latest_dt:
+        decimal_hour = self.convert_hms_to_decimal(dt.hour, dt.minute, dt.second)
+        ret_array = (c_double * 6)()
+        errorstring = create_string_buffer(126)
+        jd = self.lib.get_julian_day(dt.year, dt.month, dt.day, decimal_hour, 1)
 
-            # Check moon position every hour; every time we go past it, add the previous hour to the list to check later
+        self.lib.calculate_planets_ut(jd, body_number, settings.SIDEREALMODE, ret_array, errorstring)
+        return ret_array
 
-            # TODO: generalize this as get_planet_array(jd, body_number) and use everywhere else
-            ret_array = (c_double * 6)()
-            errorstring = create_string_buffer(126)
-            jd = self.lib.get_julian_day(pointer.year, pointer.month, pointer.day, 0, 1)
-            self.lib.calculate_planets_ut(jd, 1, settings.SIDEREALMODE, ret_array, errorstring)
-            daily_moon_pos = ret_array[0]
+    def _is_first_past_second(self, first_longitude, second_longitude):
+        if first_longitude == second_longitude:
+            return 'Equal'  # Extreme edge case given that these longitudes are floats
 
-            if daily_moon_pos > moon_radix and (daily_moon_pos > fabs(360 - moon_radix)):
-                previous_hour = pointer.subtract(hours=1)
-                datetime_list.append(previous_hour)
+        # Default: if first and second longitude are within 180, behavior is as you would expect.
+        if fabs(first_longitude - second_longitude) <= 180:
+            if first_longitude > second_longitude:
+                return True
+            else:
+                return False
 
-            pointer = pointer.add(hours=1)
+        # The inverse case: if they are more than 180 apart, behavior is reversed.
+        # Ex: first = 5, second = 355; first is past second even though the int value is lower, since 359 wraps to 0.
+        else:
+            if first_longitude < second_longitude:
+                return True
+            else:
+                return False
 
-        for hour in datetime_list:
-            pass
-            # Binary search for exact second; only 3600 per hour
+
+    def _find_harmonic_between_dates(self, harmonic, planet, natal_longitude, start_dt, end_dt, precision):
+        period = end_dt - start_dt
+        dt_difference = getattr(period, precision, default=None)
+        dt_list = [x for x in range(dt_difference)]
+
+        while len(dt_list) >= 1:
+            midpoint_dt = start_dt
+            midpoint_index = len(dt_list) // 2
+            midpoint_dt = midpoint_dt.add(**{precision: dt_list[midpoint_index]})  # Unpacks to keyword and argument
+            if len(dt_list) == 1:
+                return midpoint_dt
+
+            return_array = self._get_planet_array(planet, midpoint_dt)
+            test_pos = return_array[0]
+
+            # Ternary logic: greater, lesser, or equal (which is highly unlikely but must be checked)
+            if self._is_first_past_second(test_pos, natal_longitude) == True:
+                dt_list = dt_list[: (midpoint_index + 1)]
+            elif self._is_first_past_second(test_pos, natal_longitude) == False:
+                dt_list = dt_list[(midpoint_index - 1) :]
+            else:
+                return midpoint_dt
+
+            # TODO: Add protection against index errors. Maybe try ... except IndexError: return (current value)?
 
     def get_orb(self, longitude_one, longitude_two, lowbound, highbound):
         """Return the orb, or distance from exact, of an aspect"""
@@ -331,7 +358,6 @@ class ChartManager:
                 return fabs(aspect360 - aspect_average)
             else:
                 return aspect360
-
 
     def calculate_return_datetime(planet, planet_longitude, harmonic, dt_utc):
 

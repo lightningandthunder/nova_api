@@ -22,5 +22,18 @@ SWISSEPH_LIB_PATH = 'swe/dll'
 
 Q2 = 0.002737909
 
-SWISSEPH_BODY_NUMBER_MAP = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune',
+INT_TO_STRING_PLANET_MAP = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune',
                             'Pluto']
+
+STRING_TO_INT_PLANET_MAP = {
+    'Sun' : 0,
+    'Moon' : 1,
+    'Mercury' : 2,
+    'Venus' : 3,
+    'Mars' : 4,
+    'Jupiter' : 5,
+    'Saturn' : 6,
+    'Uranus' : 7,
+    'Neptune' : 8,
+    'Pluto' : 9
+}
