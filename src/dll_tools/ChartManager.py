@@ -281,7 +281,6 @@ class ChartManager:
 
         return angles_longitude, cusps_longitude
 
-
     def _get_planet_array(self, body_number, dt):
         if type(body_number) == str:
             body_number = settings.STRING_TO_INT_PLANET_MAP[body_number]
@@ -294,30 +293,30 @@ class ChartManager:
         self.lib.calculate_planets_ut(jd, body_number, settings.SIDEREALMODE, ret_array, errorstring)
         return ret_array
 
-    def _is_first_past_second(self, first_longitude, second_longitude):
-        if first_longitude == second_longitude:
-            return 'Equal'  # Extreme edge case given that these longitudes are floats
+    def _is_past(self, transit_longitude, natal_longitude, coordinate_range):
+        distance = fabs(transit_longitude - natal_longitude)
+        half_of_range = coordinate_range / 2
 
-        # Default: if first and second longitude are within 180, behavior is as you would expect.
-        if fabs(first_longitude - second_longitude) <= 180:
-            if first_longitude > second_longitude:
-                return True
-            else:
-                return False
+        # Slide coordinates so natal planet is at 0, preserving the harmonic distance between them
+        transit_longitude = distance % coordinate_range
+        natal_longitude = 0
 
-        # The inverse case: if they are more than 180 apart, behavior is reversed.
-        # Ex: first = 5, second = 355; first is past second even though the int value is lower, since 359 wraps to 0.
-        else:
-            if first_longitude < second_longitude:
-                return True
-            else:
-                return False
-
+        past = True if transit_longitude > natal_longitude else False
+        # If the longitudes are in same half of range, expected behavior; otherwise, reverse
+        return past if distance <= half_of_range else not past
 
     def _find_harmonic_between_dates(self, harmonic, planet, natal_longitude, start_dt, end_dt, precision):
+        if type(harmonic) != int:
+            raise ValueError('Cannot calculate harmonic returns with a non-integer harmonic')
+        elif harmonic > 36 or harmonic < 1:
+            raise ValueError('Cannot only safely calculate harmonic returns with harmonic between 1-36')
+
         period = end_dt - start_dt
         dt_difference = getattr(period, precision, default=None)
         dt_list = [x for x in range(dt_difference)]
+
+        circle_harmonic = 360 / harmonic
+
 
         while len(dt_list) >= 1:
             midpoint_dt = start_dt
@@ -329,13 +328,10 @@ class ChartManager:
             return_array = self._get_planet_array(planet, midpoint_dt)
             test_pos = return_array[0]
 
-            # Ternary logic: greater, lesser, or equal (which is highly unlikely but must be checked)
-            if self._is_first_past_second(test_pos, natal_longitude) == True:
+            if self._is_past(test_pos, natal_longitude, circle_harmonic) == True:
                 dt_list = dt_list[: (midpoint_index + 1)]
-            elif self._is_first_past_second(test_pos, natal_longitude) == False:
+            elif self._is_past(test_pos, natal_longitude, circle_harmonic) == False:
                 dt_list = dt_list[(midpoint_index - 1) :]
-            else:
-                return midpoint_dt
 
             # TODO: Add protection against index errors. Maybe try ... except IndexError: return (current value)?
 
