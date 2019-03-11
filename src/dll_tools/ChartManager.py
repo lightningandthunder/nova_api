@@ -43,8 +43,6 @@ class ChartManager:
         radix.planets_right_ascension = self._populate_right_ascension_values(radix)
         radix.angles_longitude, radix.cusps_longitude = self._populate_houses_and_cusps(radix)
 
-
-
     @staticmethod
     def get_sign(longitude):
         """Determine astrological sign from unsigned longitude"""
@@ -284,20 +282,22 @@ class ChartManager:
     def _get_planet_array(self, body_number, dt):
         if type(body_number) == str:
             body_number = settings.STRING_TO_INT_PLANET_MAP[body_number]
+        if type(dt) == float:
+            jd = dt
+        else:
+            decimal_hour = self.convert_hms_to_decimal(dt.hour, dt.minute, dt.second)
+            jd = self.lib.get_julian_day(dt.year, dt.month, dt.day, decimal_hour, 1)
 
-        decimal_hour = self.convert_hms_to_decimal(dt.hour, dt.minute, dt.second)
         ret_array = (c_double * 6)()
         errorstring = create_string_buffer(126)
-        jd = self.lib.get_julian_day(dt.year, dt.month, dt.day, decimal_hour, 1)
-
-        self.lib.calculate_planets_ut(jd, body_number, settings.SIDEREALMODE, ret_array, errorstring)
+        self.lib.calculate_planets_UT(jd, body_number, settings.SIDEREALMODE, ret_array, errorstring)
         return ret_array
 
     def _is_past(self, transit_longitude, natal_longitude, coordinate_range):
-        distance = fabs(transit_longitude - natal_longitude)
         half_of_range = coordinate_range / 2
 
         # Slide coordinates so natal planet is at 0, preserving the harmonic distance between them
+        distance = fabs(transit_longitude - natal_longitude)
         transit_longitude = distance % coordinate_range
         natal_longitude = 0
 
@@ -305,33 +305,84 @@ class ChartManager:
         # If the longitudes are in same half of range, expected behavior; otherwise, reverse
         return past if distance <= half_of_range else not past
 
-    def _find_harmonic_between_dates(self, harmonic, planet, natal_longitude, start_dt, end_dt, precision):
+    def calculate_return_list(self, radix, body, harmonic, return_quantity):
+        body_name = settings.INT_TO_STRING_PLANET_MAP[body]
+        radix_position = radix.planets_ecliptic[body_name][0]
+        date = radix.utc_datetime
+        geo_longitude = radix.sidereal_framework.geo_longitude
+        geo_latitude = radix.sidereal_framework.geo_latitude
+        return_time_list = self._get_return_time_list(body, radix_position, date, harmonic, return_quantity)
+
+        return_chart_list = list()
+        for time in return_time_list:
+            chart = self.create_chartdata('', time, geo_longitude, geo_latitude)
+            return_chart_list.append(chart)
+        return return_chart_list
+
+    def _get_nearest_return(self, body, radix_position, dt, harmonic):
+        delta = (settings.ORBITAL_PERIODS[body] // harmonic) - 1
+        earliest_dt = dt.subtract(days=delta)
+        latest_dt = dt.add(days=delta)
+        return_in_past = self._find_harmonic_in_date_range(harmonic, body, radix_position, earliest_dt, dt,
+                                                           precision='days')
+        return_in_future = self._find_harmonic_in_date_range(harmonic, body, radix_position, dt, latest_dt,
+                                                           precision='days')
+
+        if return_in_past and return_in_future:
+            return min(return_in_past and return_in_future, key=lambda x: abs(x - dt))
+
+    def _get_return_time_list(self, body, radix_position, dt, harmonic, return_quantity):
+        return_time_list_days = list()
+        initial_return_day = self._get_nearest_return(body, radix_position, dt, harmonic)
+        return_time_list_days.append(initial_return_day)
+
+        delta = (settings.ORBITAL_PERIODS[body] // harmonic) - 1
+        period_begin = dt.add(days=delta - 2)
+        period_end = dt.add(days=delta + 2)
+
+        while len(return_time_list_days) < return_quantity:
+            next_return = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
+                                                           precision='days')
+
+            if next_return: return_time_list_days.append(next_return)
+            period_begin = next_return.add(days=delta - 2)
+            period_end = next_return.add(days=delta + 2)
+
+        return_time_list_seconds = list()
+
+        for day in return_time_list_days:
+            period_begin = day
+            period_end = day.add(days=1)
+            hit = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
+                                                           precision='seconds')
+            return_time_list_seconds.append(day)
+
+        return return_time_list_seconds
+
+    def _find_harmonic_in_date_range(self, harmonic, planet, natal_longitude, start_dt, end_dt, precision):
         if type(harmonic) != int:
             raise ValueError('Cannot calculate harmonic returns with a non-integer harmonic')
         elif harmonic > 36 or harmonic < 1:
-            raise ValueError('Cannot only safely calculate harmonic returns with harmonic between 1-36')
+            raise ValueError('Can only safely calculate harmonic returns with harmonic between 1-36')
 
         period = end_dt - start_dt
-        dt_difference = getattr(period, precision, default=None)
+        dt_difference = getattr(period, precision)
         dt_list = [x for x in range(dt_difference)]
 
         circle_harmonic = 360 / harmonic
 
-
         while len(dt_list) >= 1:
             midpoint_dt = start_dt
             midpoint_index = len(dt_list) // 2
-            midpoint_dt = midpoint_dt.add(**{precision: dt_list[midpoint_index]})  # Unpacks to keyword and argument
-            if len(dt_list) == 1:
-                return midpoint_dt
-
+            midpoint_dt = midpoint_dt.add(**{precision: dt_list[midpoint_index]})
             return_array = self._get_planet_array(planet, midpoint_dt)
             test_pos = return_array[0]
-
-            if self._is_past(test_pos, natal_longitude, circle_harmonic) == True:
-                dt_list = dt_list[: (midpoint_index + 1)]
+            if len(dt_list) == 1:
+                return midpoint_dt if abs(test_pos - natal_longitude) < 0.1 else None
+            elif self._is_past(test_pos, natal_longitude, circle_harmonic) == True:
+                dt_list = dt_list[: (midpoint_index - 1)]
             elif self._is_past(test_pos, natal_longitude, circle_harmonic) == False:
-                dt_list = dt_list[(midpoint_index - 1) :]
+                dt_list = dt_list[(midpoint_index + 1):]
 
             # TODO: Add protection against index errors. Maybe try ... except IndexError: return (current value)?
 
@@ -356,9 +407,6 @@ class ChartManager:
                 return aspect360
 
     def calculate_return_datetime(planet, planet_longitude, harmonic, dt_utc):
-
-        def nearest(items, pivot):
-            return min(items, key=lambda x: abs(x - pivot))
 
         natal_pos = planet_longitude
 

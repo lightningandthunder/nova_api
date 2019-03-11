@@ -16,7 +16,7 @@ ANGLES = ["Asc", "MC", "Dsc", "IC", "Eq Asc", "Eq Dsc", "EP (Ecliptical)",
           "Zen", "WP (Ecliptical)", "Ndr"]
 
 CAMPANUS = c_int(67)
-VERSION_NUMBER = "0.2a"
+VERSION_NUMBER = "0.3a"
 EPHEMERIS_PATH = 'swe/ephemeris'
 SWISSEPH_LIB_PATH = 'swe/dll'
 
@@ -37,3 +37,5 @@ STRING_TO_INT_PLANET_MAP = {
     'Neptune' : 8,
     'Pluto' : 9
 }
+
+ORBITAL_PERIODS = [365, 27]  # Sun, Moon

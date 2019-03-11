@@ -172,3 +172,13 @@ test = manager.create_chartdata('', dt, long, lat)
 print(test.get_ecliptical_coords()['Moon'])
 print(test.sidereal_framework.LST)
 print(test.julian_day)
+
+name = 'Mike'
+ldt = pendulum.datetime(1989, 12, 20, 22, 20, 0, tz='America/New_York')
+udt = ldt.in_tz('UTC')
+lat = 40.9792
+long = -74.1169
+mike = manager.create_chartdata(name, ldt, long, lat)
+
+L = manager.calculate_return_list(mike, 1, 1, 1)
+print(L)
