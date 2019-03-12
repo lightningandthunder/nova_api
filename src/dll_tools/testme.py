@@ -1,8 +1,8 @@
 import pendulum
 from numpy import round
+from timeit import default_timer as timer
 
 from ChartData import ChartData
-from sidereal_framework import SiderealFramework
 from ChartManager import ChartManager
 from swissephlib import SwissephLib
 
@@ -169,9 +169,7 @@ lat = -29.4333
 long = -66.85
 
 test = manager.create_chartdata('', dt, long, lat)
-print(test.get_ecliptical_coords()['Moon'])
-print(test.sidereal_framework.LST)
-print(test.julian_day)
+
 
 name = 'Mike'
 ldt = pendulum.datetime(1989, 12, 20, 22, 20, 0, tz='America/New_York')
@@ -180,5 +178,10 @@ lat = 40.9792
 long = -74.1169
 mike = manager.create_chartdata(name, ldt, long, lat)
 
-L = manager.calculate_return_list(mike, 1, 1, 1)
-print(L)
+now = pendulum.datetime(2019, 3, 11)
+start = timer()
+L = manager.calculate_return_list(mike, now, 1, 2, 15)
+end = timer()
+print(end - start)
+# for x in L:
+#     print(x.utc_datetime)
