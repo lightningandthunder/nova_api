@@ -293,16 +293,28 @@ class ChartManager:
         self.lib.calculate_planets_UT(jd, body_number, settings.SIDEREALMODE, ret_array, errorstring)
         return ret_array
 
-    def _is_past(self, transit_longitude, natal_longitude, coordinate_range):
-        half_of_range = coordinate_range / 2
+    def _get_closest_harmonic(self, radix_pos, transit_pos, harmonic):
+        harmonic_positions = set()
+        for x in range(1, harmonic + 1):
+            # i.e. 360 / 1, 360 / 2, etc
+            new_pos = (radix_pos + (360 / x)) % 360
+            harmonic_positions.add(new_pos)
 
-        distance = fabs(transit_longitude - natal_longitude)
-        # transit_longitude = distance % coordinate_range
-        # natal_longitude = 0
+        opposites = set()
+        for y in harmonic_positions:
+            opposites.add((y + 180) % 360)
 
-        past = True if transit_longitude > natal_longitude else False
+        harmonic_positions = harmonic_positions | opposites  # Concatenate, discarding duplicates
+        return min(harmonic_positions, key=lambda x: abs(x - transit_pos))
+
+    def _is_past(self, transit_longitude, natal_longitude, harmonic):
+        natal_harmonic_pos = self._get_closest_harmonic(natal_longitude, transit_longitude, harmonic)
+        half_coordinate_range = (360 / harmonic) / 2
+        distance = fabs(transit_longitude - natal_harmonic_pos)
+
+        past = True if transit_longitude > natal_harmonic_pos else False
         # If the longitudes are in same half of range, expected behavior; otherwise, reverse
-        return past if distance <= half_of_range else not past
+        return past if distance <= half_coordinate_range else not past
 
     def calculate_return_list(self, radix, date, body, harmonic, return_quantity):
         body_name = settings.INT_TO_STRING_PLANET_MAP[body]
@@ -314,7 +326,7 @@ class ChartManager:
 
         return_chart_list = list()
         for time in return_time_list:
-            chart = self.create_chartdata('', time, geo_longitude, geo_latitude)
+            chart = self.create_chartdata(str(time), time, geo_longitude, geo_latitude)
             return_chart_list.append(chart)
         return return_chart_list
 
@@ -380,7 +392,6 @@ class ChartManager:
         dt_difference = getattr(period, funcs[precision])
         dt_list = [x for x in range(dt_difference())]
 
-        circle_harmonic = 360 / harmonic
         midpoint_dt = None
 
         while len(dt_list) >= 1:
@@ -389,9 +400,9 @@ class ChartManager:
             midpoint_dt = midpoint_dt.add(**{precision: dt_list[midpoint_index]})
             return_array = self._get_planet_array(planet, midpoint_dt)
             test_pos = return_array[0]
-            if self._is_past(test_pos, natal_longitude, circle_harmonic) == True:
+            if self._is_past(test_pos, natal_longitude, harmonic) == True:
                 dt_list = dt_list[: (midpoint_index - 1)]
-            elif self._is_past(test_pos, natal_longitude, circle_harmonic) == False:
+            else:
                 dt_list = dt_list[(midpoint_index + 1) :]
 
             # TODO: Add protection against index errors. Maybe try ... except IndexError: return (current value)?
