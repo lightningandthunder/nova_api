@@ -180,8 +180,8 @@ mike = manager.create_chartdata(name, ldt, long, lat)
 
 now = pendulum.datetime(2019, 3, 11)
 start = timer()
-L = manager.calculate_return_list(mike, date=now, body=1, harmonic=2, return_quantity=100)
+L = manager.generate_return_list(mike, date=now, body=0, harmonic=4, return_quantity=10)
 end = timer()
 print(end - start)
-for x in L:
-    print(x.utc_datetime)
+# for x in L:
+#     print(x.utc_datetime)

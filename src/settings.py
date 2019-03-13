@@ -22,20 +22,30 @@ SWISSEPH_LIB_PATH = 'swe/dll'
 
 Q2 = 0.002737909
 
+PENDULUM_FUNCS = {
+    'seconds': 'in_seconds',
+    'minutes': 'in_minutes',
+    'hours': 'in_hours',
+    'days': 'in_days',
+    'weeks': 'in_weeks',
+    'months': 'in_months',
+    'years': 'in_years'
+}
+
 INT_TO_STRING_PLANET_MAP = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune',
                             'Pluto']
 
 STRING_TO_INT_PLANET_MAP = {
-    'Sun' : 0,
-    'Moon' : 1,
-    'Mercury' : 2,
-    'Venus' : 3,
-    'Mars' : 4,
-    'Jupiter' : 5,
-    'Saturn' : 6,
-    'Uranus' : 7,
-    'Neptune' : 8,
-    'Pluto' : 9
+    'Sun': 0,
+    'Moon': 1,
+    'Mercury': 2,
+    'Venus': 3,
+    'Mars': 4,
+    'Jupiter': 5,
+    'Saturn': 6,
+    'Uranus': 7,
+    'Neptune': 8,
+    'Pluto': 9
 }
 
 ORBITAL_PERIODS_HOURS = [8760, 648]  # Sun, Moon

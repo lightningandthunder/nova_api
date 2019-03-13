@@ -23,7 +23,18 @@ class ChartManager:
             raise ImportError("Unable to import library.")
         self.lib = lib
 
+    # =============================================================================================================== #
+    # =========================================   Public functions   ================================================ #
+    # =============================================================================================================== #
+
     def create_chartdata(self, name, local_datetime, geo_longitude, geo_latitude):
+        """Create a ChartData instance representing an astrological chart.
+        :param name: String
+        :param local_datetime: pendulum.datetime
+        :param geo_longitude: Float
+        :param geo_latitude: Float
+        :returns: ChartData instance"""
+
         utc_datetime = local_datetime.in_tz('UTC')
         julian_day = self._calculate_julian_day(utc_datetime)
         chart = ChartData(name, local_datetime, utc_datetime, julian_day)
@@ -32,20 +43,50 @@ class ChartManager:
         chart.planets_ecliptic = self._populate_ecliptic_values(julian_day)
         chart.planets_mundane = self._populate_mundane_values(chart)
         chart.planets_right_ascension = self._populate_right_ascension_values(chart)
-        chart.angles_longitude, chart.cusps_longitude = self._populate_houses_and_cusps(chart)
+        chart.angles_longitude, chart.cusps_longitude = self._populate_ecliptical_angles_and_cusps(chart)
 
         return chart
 
     def precess_into_sidereal_framework(self, radix, transit_chart):
+        """Recalculate prime vertical longitude, right ascension, and ecliptical angles and cusps against another
+        sidereal framework. Done on the radix chart in place.
+        :param radix: ChartData instance to be precessed
+        :param transit_chart: ChartData instance
+        :returns: None"""
+
         radix.sidereal_framework = transit_chart.sidereal_framework
         radix.local_datetime = radix.local_datetime.in_tz(transit_chart.local_datetime.tz)
         radix.planets_mundane = self._populate_mundane_values(radix)
         radix.planets_right_ascension = self._populate_right_ascension_values(radix)
-        radix.angles_longitude, radix.cusps_longitude = self._populate_houses_and_cusps(radix)
+        radix.angles_longitude, radix.cusps_longitude = self._populate_ecliptical_angles_and_cusps(radix)
+
+    def generate_return_list(self, radix, date, body, harmonic, return_quantity):
+        """Generate a list of harmonic return datetimes.
+        :param radix: ChartData instance
+        :param date: pendulum.datetime
+        :param body: Int 0-9
+        :param harmonic: Int 1-36
+        :param return_quantity: Int
+        :returns: List of second-precision harmonic returns"""
+
+        body_name = settings.INT_TO_STRING_PLANET_MAP[body]
+        radix_position = radix.planets_ecliptic[body_name][0]
+        date = date.in_tz('UTC')
+        geo_longitude = radix.sidereal_framework.geo_longitude
+        geo_latitude = radix.sidereal_framework.geo_latitude
+        return_time_list = self._get_return_time_list(body, radix_position, date, harmonic, return_quantity)
+
+        return_chart_list = list()
+        for time in return_time_list:
+            chart = self.create_chartdata(str(time), time, geo_longitude, geo_latitude)
+            return_chart_list.append(chart)
+        return return_chart_list
 
     @staticmethod
     def get_sign(longitude):
-        """Determine astrological sign from unsigned longitude"""
+        """Determine astrological sign from unsigned longitude.
+        :param longitude: Float 0-359.9~
+        :returns: String"""
 
         zodiac = ["Ari", "Tau", "Gem", "Can", "Leo", "Vir",
                   "Lib", "Sco", "Sag", "Cap", "Aqu", "Pis"]
@@ -53,152 +94,35 @@ class ChartManager:
         return zodiac[key]
 
     @staticmethod
-    def convert_hms_to_decimal(hour, minute, second):
-        decimal_hour = (((((hour * 60)
-                           + minute) * 60)
-                         + second) / 3600)
-        return decimal_hour
+    def convert_dms_to_decimal(degree, minute, second):
+        """Convert hour/degree, minute, and second into a decimal hour or decimal degree.
+        :param degree: Int
+        :param minute: Int
+        :param second: Int
+        :returns: Float"""
+        decimal = (((((degree * 60)
+                      + minute) * 60)
+                    + second) / 3600)
+        return decimal
 
     @staticmethod
     def convert_decimal_to_dms(decimal):
+        """Convert a decimal hour or degree into degree/hour, minute, second.
+        :param decimal: Float
+        :returns: Int Degree/hour, Int minute, Int second"""
         degree = int(decimal)
         minute = int(fabs((decimal - degree) * 60))
         second = int((fabs((decimal - degree) * 60) - int(fabs((decimal - degree) * 60))) * 60)
         return degree, minute, second
 
-    #
-    # Internal calculations
-    #
-
-    def _calculate_julian_day(self, dt_utc):
-        decimal_hour_utc = self.convert_hms_to_decimal(dt_utc.hour, dt_utc.minute, dt_utc.second)
-        time_julian_day = self.lib.get_julian_day(dt_utc.year, dt_utc.month, dt_utc.day, decimal_hour_utc, 1)
-        return time_julian_day
-
-    def _calculate_LST(self, dt, decimal_longitude):
-        """Calculate local sidereal time for date, time, location of event"""
-
-        year, month, day = dt.year, dt.month, dt.day
-        decimal_hour = self.convert_hms_to_decimal(dt.hour, dt.minute, dt.second)
-
-        # Julian Day number at midnight
-        julian_day_0_GMT = self.lib.get_julian_day(year, month, day, 0, 1)
-
-        universal_time = (decimal_hour - dt.offset_hours)
-        sidereal_time_at_midnight_julian_day = (julian_day_0_GMT - 2451545.0) / 36525.0
-
-        greenwich_sidereal_time = (6.697374558
-                                   + (2400.051336 * sidereal_time_at_midnight_julian_day)
-                                   + (0.000024862
-                                      * (pow(sidereal_time_at_midnight_julian_day, 2)))
-                                   + (universal_time * 1.0027379093))
-        local_sidereal_time = ((greenwich_sidereal_time
-                                + (decimal_longitude / 15)) % 24)
-
-        return local_sidereal_time if local_sidereal_time > 0 else local_sidereal_time + 24
-
-    def _calculate_svp(self, julian_day):
-        svp = c_double()  # svp is a destination for the Swiss Ephemeris function to write to
-        errorstring = create_string_buffer(126)
-        ayanamsa_return = self.lib.get_ayanamsa_UT(julian_day, settings.SIDEREALMODE, svp, errorstring)
-        if ayanamsa_return < 0:
-            logger.error("Error retrieving ayanamsa: " + str(errorstring))
-        return 30 - svp.value
-
-    def _calculate_obliquity(self, julian_day):
-        obliquity_array = (c_double * 6)()
-        errorstring = create_string_buffer(126)
-
-        # -1 is the special "planetary body" for calculating obliquity
-        self.lib.calculate_planets_UT(julian_day, -1, settings.SIDEREALMODE, obliquity_array, errorstring)
-        return obliquity_array[0]
-
-    def _initialize_sidereal_framework(self, utc_datetime, local_datetime, geo_longitude, geo_latitude):
-
-        julian_day = self._calculate_julian_day(utc_datetime)
-        LST = self._calculate_LST(utc_datetime, geo_longitude)
-        ramc = LST * 15
-        svp = self._calculate_svp(julian_day)
-        obliquity = self._calculate_obliquity(julian_day)
-        framework = SiderealFramework(geo_longitude, geo_latitude, LST, ramc, svp, obliquity)
-
-        return framework
-
-    def _calculate_prime_vertical_longitude(self, planet_longitude, planet_latitude, ramc, obliquity, decimal_svp,
-                                            decimal_geolat):
-        """Calculate a planet's prime vertical longitude"""
-
-        # Variable names reference the original angularity spreadsheet posted on Solunars.com.
-        # Most do not have official names and are intermediary values used elsewhere.
-        calc_ax = (cos(radians(planet_longitude
-                               + (360 - (330 + decimal_svp)))))
-
-        precessed_declination = (degrees(asin
-                                         (sin(radians(planet_latitude))
-                                          * cos(radians(obliquity))
-                                          + cos(radians(planet_latitude))
-                                          * sin(radians(obliquity))
-                                          * sin(radians(planet_longitude
-                                                        + (360 - (330 + decimal_svp)))))))
-
-        calc_ay = (sin(radians((planet_longitude
-                                + (360 - (330 + decimal_svp)))))
-                   * cos(radians(obliquity))
-                   - tan(radians(planet_latitude))
-                   * sin(radians(obliquity)))
-
-        calc_ayx_deg = degrees(atan(calc_ay / calc_ax))
-
-        if calc_ax < 0:
-            precessed_right_ascension = calc_ayx_deg + 180
-        elif calc_ay < 0:
-            precessed_right_ascension = calc_ayx_deg + 360
-        else:
-            precessed_right_ascension = calc_ayx_deg
-
-        hour_angle_degree = ramc - precessed_right_ascension
-
-        calc_cz = (degrees(atan(1
-                                / (cos(radians(decimal_geolat))
-                                   / tan(radians(hour_angle_degree))
-                                   + sin(radians(decimal_geolat))
-                                   * tan(radians(precessed_declination))
-                                   / sin(radians(hour_angle_degree))))))
-
-        calc_cx = (cos(radians(decimal_geolat))
-                   * cos(radians(hour_angle_degree))
-                   + sin(radians(decimal_geolat))
-                   * tan(radians(precessed_declination)))
-
-        campanus_longitude = 90 - calc_cz if (calc_cx < 0) else 270 - calc_cz
-
-        planet_pvl_house = (int(campanus_longitude / 30) + 1)
-        return [planet_pvl_house, campanus_longitude]
-
-    def _calculate_right_ascension(self, planet_latitude, planet_longitude, svp, obliquity):
-
-        circle_minus_ayanamsa = 360 - (330 + svp)
-
-        precessed_longitude = planet_longitude + circle_minus_ayanamsa
-        calcs_ay = (sin(radians(precessed_longitude)) * cos(radians(obliquity))
-                    - tan(radians(planet_latitude)) * sin(radians(obliquity)))
-        calcs_ax = cos(radians(precessed_longitude))
-        calcs_o = degrees(atan(calcs_ay / calcs_ax))
-
-        if calcs_ax < 0:
-            precessed_right_ascension = calcs_o + 180
-        elif calcs_ay < 0:
-            precessed_right_ascension = calcs_o + 360
-        else:
-            precessed_right_ascension = calcs_o
-
-        return precessed_right_ascension
-
-    #
-    # Functions to populate coordinate data sets
-    #
+    # =============================================================================================================== #
+    # ============================   Functions to populate coordinate data sets   =================================== #
+    # =============================================================================================================== #
 
     def _populate_ecliptic_values(self, julian_day):
+        """Calculate ecliptical longitude for planets.
+        :param chart: ChartData instance.
+        :returns: Dict ecliptical longitude by planet"""
         errorstring = create_string_buffer(126)
         returnarray = [(c_double * 6)() for _ in range(10)]
 
@@ -211,6 +135,10 @@ class ChartManager:
         return ecliptic_dict
 
     def _populate_mundane_values(self, chart):
+        """Calculate prime vertical longitude for planets.
+        :param chart: ChartData instance.
+        :returns: Dict prime vertical longitude by planet"""
+
         mundane_dict = dict()
         for body_name in settings.INT_TO_STRING_PLANET_MAP:
             planet_longitude = chart.planets_ecliptic[body_name][0]
@@ -225,6 +153,10 @@ class ChartManager:
         return mundane_dict
 
     def _populate_right_ascension_values(self, chart):
+        """Calculate right ascension values for planets.
+        :param chart: ChartData instance.
+        :returns: Dict right ascension values by planet"""
+
         right_ascension_dict = dict()
         for body_name in settings.INT_TO_STRING_PLANET_MAP:
             planet_longitude = chart.planets_ecliptic[body_name][0]
@@ -236,8 +168,10 @@ class ChartManager:
             right_ascension_dict[body_name] = planet_right_ascension
         return right_ascension_dict
 
-    def _populate_houses_and_cusps(self, chart):
-        """Calculate house cusps and ecliptical longitudes of angles in the Campanus system"""
+    def _populate_ecliptical_angles_and_cusps(self, chart):
+        """Calculate house cusps and ecliptical longitudes of angles in the Campanus system.
+        :param chart: ChartData instance.
+        :returns: List angles, list cusps"""
 
         julian_day_utc = chart.julian_day
         geo_longitude = chart.sidereal_framework.geo_longitude
@@ -279,13 +213,213 @@ class ChartManager:
 
         return angles_longitude, cusps_longitude
 
+    # =============================================================================================================== #
+    # =============================   Functions for harmonic return calculation   =================================== #
+    # =============================================================================================================== #
+
+    def _is_past(self, transit_longitude, natal_longitude, harmonic):
+        """Determine if a transit longitude is 'past' a radical one in the context of a harmonic.
+        :param transit_longitude: Float 0-359.9~
+        :param natal_longitude: Float 0-359.9~
+        :param harmonic: Int 1-36
+        :returns: Boolean"""
+
+        harmonic_of_natal_pos = self._get_closest_harmonic_pos(natal_longitude, transit_longitude, harmonic)
+        half_coordinate_range = (360 / harmonic) / 2
+        distance = fabs(transit_longitude - harmonic_of_natal_pos)
+
+        past = True if transit_longitude > harmonic_of_natal_pos else False
+        # If the longitudes are in same half of range, expected behavior; otherwise, reverse
+        return past if distance <= half_coordinate_range else not past
+
+    def _get_closest_harmonic_pos(self, radix_pos, transit_pos, harmonic):
+        """Calculate the closest valid harmonic position of a radical longitude to a transiting longitude.
+        :param radix_pos: Float 0-359.9~
+        :param transit_pos: Float 0-359.9~
+        :param harmonic: Int 1-36
+        returns: Float 0-359.9~"""
+
+        harmonic_positions = set()
+        coordinate_range = 360 / harmonic
+        next_harmonic_pos = (radix_pos + coordinate_range) % 360
+        while next_harmonic_pos not in harmonic_positions:
+            harmonic_positions.add(next_harmonic_pos)
+            next_harmonic_pos = (next_harmonic_pos + coordinate_range) % 360
+
+        return min(harmonic_positions, key=lambda x: abs(x - transit_pos))
+
+    def _get_nearest_return(self, body, radix_position, dt, harmonic):
+        """Get nearest harmonic return date to a given date, to start a list of return dates.
+        :param body: Int 0-9
+        :param radix_position: Float 0-359.9~
+        :param dt: pendulum.datetime
+        :param harmonic: Int 1-36
+        :returns: pendulum.datetime"""
+
+        delta = (settings.ORBITAL_PERIODS_HOURS[body] // harmonic) - 24
+        earliest_dt = dt.subtract(hours=delta)
+        latest_dt = dt.add(hours=delta)
+        return_in_past = self._find_harmonic_in_date_range(harmonic, body, radix_position, earliest_dt, dt,
+                                                           precision='hours')
+        return_in_future = self._find_harmonic_in_date_range(harmonic, body, radix_position, dt, latest_dt,
+                                                             precision='hours')
+
+        if return_in_past and return_in_future:
+            return min([return_in_past, return_in_future], key=lambda x: abs(x - dt))
+        else:
+            return return_in_past if return_in_past else return_in_future
+
+    def _find_harmonic_in_date_range(self, harmonic, body, natal_longitude, start_dt, end_dt, precision):
+        """Finds a harmonic return within a pair of dates, to a specified precision.
+        :param harmonic: Int 1-36
+        :param body: Int 0-9 (referring to planetary body)
+        :param natal_longitude: Float 0-359.9~
+        :param start_dt: Pendulum.Datetime instance
+        :param end_dt: Pendulum.Datetime instance
+        :param precision: String, e.g. 'hours', 'seconds'
+        :returns: pendulum.datetime instance for harmonic return"""
+
+        if type(harmonic) != int:
+            raise ValueError('Cannot calculate harmonic returns with a non-integer harmonic')
+        elif harmonic > 36 or harmonic < 1:
+            raise ValueError('Can only safely calculate harmonic returns with harmonic between 1-36')
+        elif harmonic > 4 and body == 0:
+            raise ValueError('Cannot search for return harmonics greater than 4 on the Moon')
+
+        if precision not in settings.PENDULUM_FUNCS.keys():
+            raise ValueError('Precision must be a unit of time as a string: \'hours\', \'seconds\', etc')
+
+        #  Calculate a list of hours/seconds/etc to add to a base datetime, rather than a list of actual datetimes
+        period = end_dt - start_dt
+        dt_difference = getattr(period, settings.PENDULUM_FUNCS[precision])  # period.in_seconds(), .in_hours(), etc
+        increment_list = [x for x in range(dt_difference())]
+
+        # Binary search for a planetary return to a specific precision
+        midpoint_dt = None
+        while len(increment_list) >= 1:
+            midpoint_dt = start_dt
+            midpoint_index = len(increment_list) // 2
+            midpoint_dt = midpoint_dt.add(**{precision: increment_list[midpoint_index]})  # e.g. .add(hours=some_int)
+            return_array = self._get_planet_array(body, midpoint_dt)
+            test_pos = return_array[0]
+            if self._is_past(test_pos, natal_longitude, harmonic) == True:
+                increment_list = increment_list[: (midpoint_index - 1)]
+            else:
+                increment_list = increment_list[(midpoint_index + 1):]
+
+        return midpoint_dt
+
+    def _get_return_time_list(self, body, radix_position, dt, harmonic, return_quantity=1):
+        """Calculate a list of harmonic return times to second precision.
+        :param body: Int 0-9
+        :param radix_position: Float 0-359.9~
+        :param dt: Pendulum.Datetime instance
+        :param harmonic: Int 1-36.
+        :param return_quantity: Int
+        :returns: List of pendulum.datetimes
+        """
+        return_time_list_hour_precision = list()
+        initial_return_hour = self._get_nearest_return(body, radix_position, dt, harmonic)
+        return_time_list_hour_precision.append(initial_return_hour)
+
+        delta = (settings.ORBITAL_PERIODS_HOURS[body] // harmonic) - 24  # Approx how far away next return is
+        buffer = delta // 2.5  # Create a window of a few hours on either side of delta
+        period_begin = initial_return_hour.add(hours=delta - buffer)
+        period_end = initial_return_hour.add(hours=delta + buffer)
+
+        while len(return_time_list_hour_precision) < return_quantity:
+            next_return = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
+                                                            precision='hours')
+
+            if next_return: return_time_list_hour_precision.append(next_return)
+            period_begin = next_return.add(hours=delta - buffer)
+            period_end = next_return.add(hours=delta + buffer)
+
+        return_time_list_second_precision = list()
+
+        for hour in return_time_list_hour_precision:
+            period_begin = hour.subtract(hours=2)
+            period_end = hour.add(hours=2)
+            match = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
+                                                      precision='seconds')
+            return_time_list_second_precision.append(match)
+
+        return return_time_list_second_precision
+
+    # =============================================================================================================== #
+    # =======================================   Internal calculations   ============================================= #
+    # =============================================================================================================== #
+
+    def _calculate_julian_day(self, dt_utc):
+        """Calculate Julian Day for a given UTC datetime.
+        :param dt_utc: pendulum.datetime in UTC
+        :returns: Float"""
+        decimal_hour_utc = self.convert_dms_to_decimal(dt_utc.hour, dt_utc.minute, dt_utc.second)
+        time_julian_day = self.lib.get_julian_day(dt_utc.year, dt_utc.month, dt_utc.day, decimal_hour_utc, 1)
+        return time_julian_day
+
+    def _calculate_LST(self, dt, decimal_longitude):
+        """Calculate local sidereal time for date, time, location of event.
+        :param dt: pendulum.datetime in UTC
+        :param decimal_longitude: Float
+        :returns: Float"""
+
+        year, month, day = dt.year, dt.month, dt.day
+        decimal_hour = self.convert_dms_to_decimal(dt.hour, dt.minute, dt.second)
+
+        # Julian Day number at midnight
+        julian_day_0_GMT = self.lib.get_julian_day(year, month, day, 0, 1)
+
+        universal_time = (decimal_hour - dt.offset_hours)
+        sidereal_time_at_midnight_julian_day = (julian_day_0_GMT - 2451545.0) / 36525.0
+
+        greenwich_sidereal_time = (6.697374558
+                                   + (2400.051336 * sidereal_time_at_midnight_julian_day)
+                                   + (0.000024862
+                                      * (pow(sidereal_time_at_midnight_julian_day, 2)))
+                                   + (universal_time * 1.0027379093))
+        local_sidereal_time = ((greenwich_sidereal_time
+                                + (decimal_longitude / 15)) % 24)
+
+        return local_sidereal_time if local_sidereal_time > 0 else local_sidereal_time + 24
+
+    def _calculate_svp(self, julian_day):
+        """Calculate the Sidereal Vernal Point for a given Julian Day.
+        :param julian_day: Float
+        :returns: Float"""
+
+        svp = c_double()  # Destination for the Swiss Ephemeris function to write to
+        errorstring = create_string_buffer(126)
+        ayanamsa_return = self.lib.get_ayanamsa_UT(julian_day, settings.SIDEREALMODE, svp, errorstring)
+        if ayanamsa_return < 0:
+            logger.error("Error retrieving ayanamsa: " + str(errorstring))
+        return 30 - svp.value
+
+    def _calculate_obliquity(self, julian_day):
+        """Calculate the obliquity of the zodiac for a given Julian Day.
+        :param julian_day: Float
+        :returns: Float"""
+
+        obliquity_array = (c_double * 6)()
+        errorstring = create_string_buffer(126)
+
+        # -1 is the special "planetary body" for calculating obliquity
+        self.lib.calculate_planets_UT(julian_day, -1, settings.SIDEREALMODE, obliquity_array, errorstring)
+        return obliquity_array[0]
+
     def _get_planet_array(self, body_number, dt):
+        """Get Swiss Ephemeris output for a given body and datetime. Accepts Julian Day or pendulum.datetime.
+        :param body_number: String or Int
+        :param dt: Julian Day or pendulum.datetime instance in any timezone
+        :returns: Array of 6 c_doubles"""
+
         if type(body_number) == str:
             body_number = settings.STRING_TO_INT_PLANET_MAP[body_number]
         if type(dt) == float:
             jd = dt
         else:
-            decimal_hour = self.convert_hms_to_decimal(dt.hour, dt.minute, dt.second)
+            dt = dt.in_tz('UTC')
+            decimal_hour = self.convert_dms_to_decimal(dt.hour, dt.minute, dt.second)
             jd = self.lib.get_julian_day(dt.year, dt.month, dt.day, decimal_hour, 1)
 
         ret_array = (c_double * 6)()
@@ -293,214 +427,102 @@ class ChartManager:
         self.lib.calculate_planets_UT(jd, body_number, settings.SIDEREALMODE, ret_array, errorstring)
         return ret_array
 
-    def _get_closest_harmonic(self, radix_pos, transit_pos, harmonic):
-        harmonic_positions = set()
-        for x in range(1, harmonic + 1):
-            # i.e. 360 / 1, 360 / 2, etc
-            new_pos = (radix_pos + (360 / x)) % 360
-            harmonic_positions.add(new_pos)
+    def _initialize_sidereal_framework(self, utc_datetime, local_datetime, geo_longitude, geo_latitude):
+        """Initialize an instance of the SiderealFramework class to use in calculations inside a ChartData instance.
+        :param utc_datetime: pendulum.datetime
+        :param local_datetime: pendulum.datetime
+        :param geo_longitude: Float
+        :param geo_latitude: Float
+        :returns: SiderealFramework instance"""
 
-        opposites = set()
-        for y in harmonic_positions:
-            opposites.add((y + 180) % 360)
+        julian_day = self._calculate_julian_day(utc_datetime)
+        LST = self._calculate_LST(utc_datetime, geo_longitude)
+        ramc = LST * 15
+        svp = self._calculate_svp(julian_day)
+        obliquity = self._calculate_obliquity(julian_day)
+        framework = SiderealFramework(geo_longitude, geo_latitude, LST, ramc, svp, obliquity)
 
-        harmonic_positions = harmonic_positions | opposites  # Concatenate, discarding duplicates
-        return min(harmonic_positions, key=lambda x: abs(x - transit_pos))
+        return framework
 
-    def _is_past(self, transit_longitude, natal_longitude, harmonic):
-        natal_harmonic_pos = self._get_closest_harmonic(natal_longitude, transit_longitude, harmonic)
-        half_coordinate_range = (360 / harmonic) / 2
-        distance = fabs(transit_longitude - natal_harmonic_pos)
+    def _calculate_prime_vertical_longitude(self, planet_longitude, planet_latitude, ramc, obliquity, svp,
+                                            geo_latitude):
+        """Calculate a planet's prime vertical longitude.
+        :param planet_longitude: Float
+        :param planet_latitude: Float
+        :param ramc: Float
+        :param obliquity: Float
+        :param svp: Float
+        :param geo_latitude: Float
+        :returns: Int Campanus house, Float prime vertical longitude"""
 
-        past = True if transit_longitude > natal_harmonic_pos else False
-        # If the longitudes are in same half of range, expected behavior; otherwise, reverse
-        return past if distance <= half_coordinate_range else not past
+        # Variable names reference the original angularity spreadsheet posted on Solunars.com.
+        # Most do not have official names and are intermediary values used elsewhere.
+        calc_ax = (cos(radians(planet_longitude
+                               + (360 - (330 + svp)))))
 
-    def calculate_return_list(self, radix, date, body, harmonic, return_quantity):
-        body_name = settings.INT_TO_STRING_PLANET_MAP[body]
-        radix_position = radix.planets_ecliptic[body_name][0]
-        date = date.in_tz('UTC')
-        geo_longitude = radix.sidereal_framework.geo_longitude
-        geo_latitude = radix.sidereal_framework.geo_latitude
-        return_time_list = self._get_return_time_list(body, radix_position, date, harmonic, return_quantity)
+        precessed_declination = (degrees(asin
+                                         (sin(radians(planet_latitude))
+                                          * cos(radians(obliquity))
+                                          + cos(radians(planet_latitude))
+                                          * sin(radians(obliquity))
+                                          * sin(radians(planet_longitude
+                                                        + (360 - (330 + svp)))))))
 
-        return_chart_list = list()
-        for time in return_time_list:
-            chart = self.create_chartdata(str(time), time, geo_longitude, geo_latitude)
-            return_chart_list.append(chart)
-        return return_chart_list
+        calc_ay = (sin(radians((planet_longitude
+                                + (360 - (330 + svp)))))
+                   * cos(radians(obliquity))
+                   - tan(radians(planet_latitude))
+                   * sin(radians(obliquity)))
 
-    def _get_nearest_return(self, body, radix_position, dt, harmonic):
-        delta = (settings.ORBITAL_PERIODS_HOURS[body] // harmonic) - 24
-        earliest_dt = dt.subtract(hours=delta)
-        latest_dt = dt.add(hours=delta)
-        return_in_past = self._find_harmonic_in_date_range(harmonic, body, radix_position, earliest_dt, dt,
-                                                           precision='hours')
-        return_in_future = self._find_harmonic_in_date_range(harmonic, body, radix_position, dt, latest_dt,
-                                                           precision='hours')
+        calc_ayx_deg = degrees(atan(calc_ay / calc_ax))
 
-        if return_in_past and return_in_future:
-            return min([return_in_past, return_in_future], key=lambda x: abs(x - dt))
+        if calc_ax < 0:
+            precessed_right_ascension = calc_ayx_deg + 180
+        elif calc_ay < 0:
+            precessed_right_ascension = calc_ayx_deg + 360
         else:
-            return return_in_past if return_in_past else return_in_future
+            precessed_right_ascension = calc_ayx_deg
 
-    def _get_return_time_list(self, body, radix_position, dt, harmonic, return_quantity):
-        return_time_list_hours = list()
-        initial_return_hour = self._get_nearest_return(body, radix_position, dt, harmonic)
-        return_time_list_hours.append(initial_return_hour)
+        hour_angle_degree = ramc - precessed_right_ascension
 
-        delta = (settings.ORBITAL_PERIODS_HOURS[body] // harmonic) - 24
-        period_begin = initial_return_hour.add(hours=delta - 48)
-        period_end = initial_return_hour.add(hours=delta + 48)
+        calc_cz = (degrees(atan(1
+                                / (cos(radians(geo_latitude))
+                                   / tan(radians(hour_angle_degree))
+                                   + sin(radians(geo_latitude))
+                                   * tan(radians(precessed_declination))
+                                   / sin(radians(hour_angle_degree))))))
 
-        while len(return_time_list_hours) < return_quantity:
-            next_return = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
-                                                           precision='hours')
+        calc_cx = (cos(radians(geo_latitude))
+                   * cos(radians(hour_angle_degree))
+                   + sin(radians(geo_latitude))
+                   * tan(radians(precessed_declination)))
 
-            if next_return: return_time_list_hours.append(next_return)
-            period_begin = next_return.add(hours=delta - 48)
-            period_end = next_return.add(hours=delta + 48)
+        campanus_longitude = 90 - calc_cz if (calc_cx < 0) else 270 - calc_cz
 
-        return_time_list_seconds = list()
+        planet_pvl_house = (int(campanus_longitude / 30) + 1)
+        return [planet_pvl_house, campanus_longitude]
 
-        for hour in return_time_list_hours:
-            period_begin = hour.subtract(hours=2)
-            period_end = hour.add(hours=2)
-            hit = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
-                                                           precision='seconds')
-            return_time_list_seconds.append(hit)
+    def _calculate_right_ascension(self, planet_latitude, planet_longitude, svp, obliquity):
+        """Calculate a planet's right ascension.
+        :param planet_latitude: Float
+        :param planet_longitude: Float
+        :param svp: Float
+        :param obliquity: Float
+        :returns: Float right ascension"""
 
-        return return_time_list_seconds
+        circle_minus_ayanamsa = 360 - (330 + svp)
 
-    def _find_harmonic_in_date_range(self, harmonic, planet, natal_longitude, start_dt, end_dt, precision):
-        if type(harmonic) != int:
-            raise ValueError('Cannot calculate harmonic returns with a non-integer harmonic')
-        elif harmonic > 36 or harmonic < 1:
-            raise ValueError('Can only safely calculate harmonic returns with harmonic between 1-36')
+        precessed_longitude = planet_longitude + circle_minus_ayanamsa
+        calcs_ay = (sin(radians(precessed_longitude)) * cos(radians(obliquity))
+                    - tan(radians(planet_latitude)) * sin(radians(obliquity)))
+        calcs_ax = cos(radians(precessed_longitude))
+        calcs_o = degrees(atan(calcs_ay / calcs_ax))
 
-        funcs = {
-            'seconds': 'in_seconds',
-            'minutes': 'in_minutes',
-            'hours': 'in_hours',
-            'days': 'in_days',
-            'weeks': 'in_weeks',
-            'months': 'in_months',
-            'years': 'in_years'
-        }
+        if calcs_ax < 0:
+            precessed_right_ascension = calcs_o + 180
+        elif calcs_ay < 0:
+            precessed_right_ascension = calcs_o + 360
+        else:
+            precessed_right_ascension = calcs_o
 
-        period = end_dt - start_dt
-        dt_difference = getattr(period, funcs[precision])
-        dt_list = [x for x in range(dt_difference())]
-
-        midpoint_dt = None
-
-        while len(dt_list) >= 1:
-            midpoint_dt = start_dt
-            midpoint_index = len(dt_list) // 2
-            midpoint_dt = midpoint_dt.add(**{precision: dt_list[midpoint_index]})
-            return_array = self._get_planet_array(planet, midpoint_dt)
-            test_pos = return_array[0]
-            if self._is_past(test_pos, natal_longitude, harmonic) == True:
-                dt_list = dt_list[: (midpoint_index - 1)]
-            else:
-                dt_list = dt_list[(midpoint_index + 1) :]
-
-            # TODO: Add protection against index errors. Maybe try ... except IndexError: return (current value)?
-        return midpoint_dt
-
-    def get_orb(self, longitude_one, longitude_two, lowbound, highbound):
-        """Return the orb, or distance from exact, of an aspect"""
-
-        aspect = fabs(longitude_one - longitude_two)
-
-        # Used to catch situations where one longitude is near 360* and the other is near 0*
-        aspect360 = fabs(aspect - 360)
-        aspect_average = (lowbound + highbound) / 2
-
-        if aspect >= lowbound and aspect <= highbound:
-            if lowbound != 0:
-                return fabs(aspect - aspect_average)
-            else:
-                return aspect
-        elif aspect360 >= lowbound and aspect360 <= highbound:
-            if lowbound != 0:
-                return fabs(aspect360 - aspect_average)
-            else:
-                return aspect360
-
-    def calculate_return_datetime(planet, planet_longitude, harmonic, dt_utc):
-
-        natal_pos = planet_longitude
-
-        startdate = dt_utc.datetime.subtract(hours=24)
-        enddate = dt_utc.datetime.add(hours=24)
-
-        period = pendulum.period(startdate, enddate)
-
-        searchlist = [x for x in range(startdate.diff(enddate).in_seconds())]
-
-        returnarray = (c_double * 6)()
-        found = False
-        while found == False:
-            midpoint = len(searchlist) // 2
-            errorstring = create_string_buffer(126)
-
-            if len(searchlist) > 0:
-                test_date = startdate.add(seconds=searchlist[midpoint])
-
-                # Conversion from local time to UTC
-                # This can probably just be done with pendulum
-                (outyear, outmonth, outday,
-                 outhour, outmin, outsec) = (c_int32(), c_int32(), c_int32(),
-                                             c_int32(), c_int32(), c_double())
-                py_local_time_to_UTC(test_date.year, test_date.month, test_date.day,
-                                     test_date.hour, test_date.minute, test_date.second,
-                                     test_date.offset_hours, outyear, outmonth, outday, outhour,
-                                     outmin, outsec)
-
-                decimalhour_UTC = (((((outhour.value * 60)
-                                      + outmin.value) * 60)
-                                    + outsec.value) / 3600)
-
-                # Using the new UTC time to get a correct Julian Day Number
-                time_julian_day = py_get_julian_day(outyear, outmonth, outday,
-                                                    decimalhour_UTC, 1)
-
-                py_calculate_planets_UT(time_julian_day, 0, SIDEREALMODE, returnarray, errorstring)
-
-            if len(searchlist) < 2:
-                print("found SSR Date! {} {} {} {} {} {}".format(test_date.year, test_date.month, test_date.day,
-                                                                 test_date.hour, test_date.minute,
-                                                                 test_date.second))
-                return time_julian_day
-
-            elif returnarray[0] > natal_pos:
-                if fabs(returnarray[0] - natal_pos) <= 180:
-                    try:
-                        searchlist = searchlist[:(midpoint - 1)]
-                        print(len(searchlist))
-                    except:
-                        return None
-                else:
-                    try:
-                        searchlist = searchlist[(midpoint + 1):]
-                        print(len(searchlist))
-                    except:
-                        return None
-
-            elif returnarray[0] < natal_pos:
-                if fabs(returnarray[0] - natal_pos) <= 180:
-                    try:
-                        searchlist = searchlist[(midpoint + 1):]
-                        print(len(searchlist))
-                    except:
-                        return None
-                else:
-                    try:
-                        searchlist = searchlist[:(midpoint - 1)]
-                        print(len(searchlist))
-                    except:
-                        return None
-        return None
-
-# Lunar returns, 0 to 0, seem to vary by up to 29 in distance. Search 2 days on either side?
+        return precessed_right_ascension
