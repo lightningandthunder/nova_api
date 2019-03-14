@@ -23,6 +23,9 @@ class ChartManager:
             raise ImportError("Unable to import library.")
         self.lib = lib
 
+    def __del__(self):
+        self.lib.close()
+
     # =============================================================================================================== #
     # =========================================   Public functions   ================================================ #
     # =============================================================================================================== #
@@ -331,7 +334,10 @@ class ChartManager:
             next_return = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
                                                             precision='hours')
 
-            if next_return: return_time_list_hour_precision.append(next_return)
+            if next_return:
+                return_time_list_hour_precision.append(next_return)
+            else:
+                raise RuntimeError(f'Failed to find a return between {period_begin} and {period_end}')
             period_begin = next_return.add(hours=delta - buffer)
             period_end = next_return.add(hours=delta + buffer)
 
@@ -349,6 +355,23 @@ class ChartManager:
     # =============================================================================================================== #
     # =======================================   Internal calculations   ============================================= #
     # =============================================================================================================== #
+
+    def _calculate_transits(self, radix, local_dt, geo_longitude, geo_latitude):
+        ssr_dt = radix.local_datetime
+        ssr_dt.year = local_dt.year if radix.local_datetime.month < local_dt.month else local_dt.year - 1
+        active_ssr = self.generate_return_list(radix=radix, date=ssr_dt, body=0, harmonic=1, return_quantity=1)[0]
+
+        transits = self.create_chartdata('transits', local_dt, geo_longitude, geo_latitude)
+
+        # return radix, local_natal, active_ssr, transits
+        # TODO: Test me
+
+    def _calculate_progressions(self, radix, local_dt, geo_longitude, geo_latitude):
+        progressed_time = (local_dt.in_tz('UTC') - radix.utc_datetime).in_hours() * settings.Q2
+        progressed_dt = radix.utc_datetime.add(hours=progressed_time)
+
+        secondary_progs = self.create_chartdata('Progs', progressed_dt, geo_longitude, geo_latitude)
+        return secondary_progs  # TODO: Test me
 
     def _calculate_julian_day(self, dt_utc):
         """Calculate Julian Day for a given UTC datetime.
