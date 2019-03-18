@@ -3,8 +3,9 @@ from ctypes import c_char_p, c_int, c_int32, c_double, POINTER, CDLL
 import os
 import platform
 import struct
-import settings
+import pathlib
 
+import settings
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -135,7 +136,7 @@ class SwissephLib:
         self.set_ephemeris_path(self.ephemeris_path)
         self.set_sidereal_mode(0, 0, 0)
 
-    def _get_library_relpath(self, library_dir):
+    def _get_library_for_platform(self):
         """
         Get the absolute path of the Swiss Ephemeris library version needed for current system.
         """
@@ -144,26 +145,28 @@ class SwissephLib:
         bit_mode = struct.calcsize("P") * 8  # Yields 32-bit or 64-bit according to OS
         if plat == 'Windows':
             if bit_mode == 32:
-                library_relpath = os.path.join(library_dir, 'swedll32.dll')
+                library = 'swedll32.dll'
             else:
-                library_relpath = os.path.join(library_dir, 'swedll64.dll')
+                library = 'swedll64.dll'
         elif plat == 'Linux':
-            library_relpath = os.path.join(library_dir, 'libswe.so')
+            library = 'libswe.so'
         else:
             raise OSError('OS must be Windows or Linux')
-        # library_relpath = os.path.relpath(os.path.abspath(library_relpath))
-        return library_relpath
+
+        return library
 
     def _load_library(self):
         plat = platform.system()
-        library_relpath = self._get_library_relpath(settings.SWISSEPH_LIB_PATH)
+        library_with_extension = self._get_library_for_platform()
+        library_sub_dir = os.path.join('swe/dll', library_with_extension)
+        path_to_library = os.path.join(os.path.dirname(__file__), library_sub_dir)
         swe_lib = None
         try:
             if plat == 'Windows':
-                swe_lib = ctypes.windll.LoadLibrary(library_relpath)
+                swe_lib = ctypes.windll.LoadLibrary(path_to_library)
                 logger.info(msg='Loaded Swiss Ephemeris library for Windows.')
             elif plat == 'Linux':
-                swe_lib = CDLL(library_relpath)
+                swe_lib = CDLL(path_to_library)
                 logger.info(msg='Loaded Swiss Ephemeris library for Linux.')
             else:
                 raise OSError('OS must be Windows or Linux')
@@ -176,7 +179,6 @@ class SwissephLib:
                 return swe_lib
 
     def _get_ephemeris_path(self):
-        # path = os.path.abspath(settings.EPHEMERIS_PATH)
         path = settings.EPHEMERIS_PATH
         e_path = path.encode('utf-8')
         e_pointer = c_char_p(e_path)

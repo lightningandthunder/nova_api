@@ -30,7 +30,7 @@ class ChartManager:
     # =========================================   Public functions   ================================================ #
     # =============================================================================================================== #
 
-    def create_chartdata(self, name, local_datetime, geo_longitude, geo_latitude):
+    def create_chartdata(self, local_datetime, geo_longitude, geo_latitude):
         """Create a ChartData instance representing an astrological chart.
         :param name: String
         :param local_datetime: pendulum.datetime
@@ -40,7 +40,7 @@ class ChartManager:
 
         utc_datetime = local_datetime.in_tz('UTC')
         julian_day = self._calculate_julian_day(utc_datetime)
-        chart = ChartData(name, local_datetime, utc_datetime, julian_day)
+        chart = ChartData(local_datetime, utc_datetime, julian_day)
         chart.sidereal_framework = self._initialize_sidereal_framework(utc_datetime, local_datetime, geo_longitude,
                                                                        geo_latitude)
         chart.planets_ecliptic = self._populate_ecliptic_values(julian_day)

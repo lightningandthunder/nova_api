@@ -7,8 +7,7 @@ A class created by the ChartManager singleton representing chart data for a give
 """
 
 class ChartData:
-    def __init__(self, name, local_datetime, utc_datetime, julian_day):
-        self.name = name
+    def __init__(self, local_datetime, utc_datetime, julian_day):
         self.local_datetime = local_datetime
         self.utc_datetime = utc_datetime
         self.julian_day = julian_day
