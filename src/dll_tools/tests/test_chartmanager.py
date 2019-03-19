@@ -5,17 +5,21 @@ from timeit import default_timer as timer
 from ChartData import ChartData
 from ChartManager import ChartManager
 from swissephlib import SwissephLib
+from . import fixtures
 
 swiss_lib = SwissephLib()
 manager = ChartManager(swiss_lib)
 
 # Test plain charts
 
-ldt = pendulum.datetime(2019, 3, 20, 21, 46, 0, tz='America/New_York')
+# 2019/3/18 22:30:15
+ldt = pendulum.datetime(2019, 3, 18, 22, 30, 15, tz='America/New_York')
 udt = ldt.in_tz('UTC')
 lat = 40.9792
 long = -74.1169
 chart = manager.create_chartdata(ldt, long, lat)
+
+fixtures.transits_2019_3_18_22_30_15['Ecliptic']
 
 print(chart.get_ecliptical_coords())
 print(chart.get_mundane_coords())
