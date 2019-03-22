@@ -11,6 +11,7 @@ def compare_charts(chart, fixture, name):
     for body in ecliptic:
         if not round(ecliptic[body], decimals=2) == round(fixture['Ecliptic'][body], decimals=2):
             print(f"Test failed on {body} ecliptical coords: {ecliptic[body]} != {fixture['Ecliptic'][body]}")
+            failed = True
 
     if not failed: print('Ecliptical coordinates passed.')
 
@@ -140,69 +141,71 @@ transits_2019_3_18_22_30_15_Hackensack = {
 }
 
 transits_2019_3_10_1_30_15_Melbourne = {
-    'LST': 9.325,
+    'LST': 8.884,
     'SVP': 4.995,
     'Obliquity': 23.436,
     'Ecliptic': {
-        'Sun': 333.1960,
-        'Moon': 125.5073,
-        'Mercury': 325.4267,
-        'Venus': 295.7339,
-        'Mars': 26.9233,
-        'Jupiter': 238.5565,
-        'Saturn': 264.1137,
-        'Uranus': 5.6030,
-        'Neptune': 321.6134,
-        'Pluto': 267.8205
+        'Sun': 332.5745,
+        'Moon': 116.1571,
+        'Mercury': 325.9758,
+        'Venus': 294.9854,
+        'Mars': 26.5067,
+        'Jupiter': 238.5130,
+        'Saturn': 264.0730,
+        'Uranus': 5.5716,
+        'Neptune': 321.5900,
+        'Pluto': 267.8094
     },
     'Mundane': {
-        'Sun': 136.032,
-        'Moon': 284.850,
-        'Mercury': 127.041,
-        'Venus': 93.594,
-        'Mars': 192.304,
-        'Jupiter': 39.346,
-        'Saturn': 62.019,
-        'Uranus': 171.238,
-        'Neptune': 122.649,
-        'Pluto': 65.746,
+        'Sun': 141.727,
+        'Moon': 287.887,
+        'Mercury': 134.319,
+        'Venus': 104.577,
+        'Mars': 172.371,
+        'Jupiter': 17.920,
+        'Saturn': 51.533,
+        'Uranus': 161.643,
+        'Neptune': 134.392,
+        'Pluto': 57.690,
     },
     'Right Ascension': {
-        'Sun': 358.349,
-        'Moon': 153.658,
-        'Mercury': 350.075,
-        'Venus': 323.221,
-        'Mars': 49.286,
-        'Jupiter': 263.020,
-        'Saturn': 290.633,
-        'Uranus': 28.668,
-        'Neptune': 348.063,
-        'Pluto': 294.681,
+        'Sun': 357.778,
+        'Moon': 144.301,
+        'Mercury': 350.532,
+        'Venus': 322.474,
+        'Mars': 48.862,
+        'Jupiter': 262.973,
+        'Saturn': 290.590,
+        'Uranus': 28.638,
+        'Neptune': 348.042,
+        'Pluto': 294.670,
     },
     'Cusps': {
-        "1": 194.254,
-        "2": 227.347,
-        "3": 261.680,
-        "4": 292.426,
-        "5": 319.359,
-        "6": 345.489,
-        "7": 14.253,
-        "8": 47.347,
-        "9": 81.680,
-        "10": 112.426,
-        "11": 139.359,
-        "12": 165.489
+        "1": 217.330,
+        "2": 249.704,
+        "3": 269.071,
+        "4": 285.814,
+        "5": 307.338,
+        "6": 345.598,
+        "7": 37.330,
+        "8": 69.704,
+        "9": 89.071,
+        "10": 105.814,
+        "11": 127.338,
+        "12": 165.598
     },
     'Angles': {
-        "Asc": 194.254,
-        "MC": 112.426,
-        "Dsc": 14.254,
-        "IC": 292.426,
-        "Eq Asc": 207.283,
-        "Eq Dsc": 27.283,
-        "EP (Ecliptical)": 202.349,
-        "Zen": 104.160,
-        "WP (Ecliptical)": 22.349,
-        "Ndr": 284.160
+        "Asc": 217.330,
+        "MC": 105.814,
+        "Dsc": 37.330,
+        "IC": 285.814,
+        "Eq Asc": 200.732,
+        "Eq Dsc": 20.732,
+        "EP (Ecliptical)": 195.810,
+        "Zen": 127.324,
+        "WP (Ecliptical)": 15.810,
+        "Ndr": 307.324
     }
 }
+
+

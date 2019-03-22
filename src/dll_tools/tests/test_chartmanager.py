@@ -23,10 +23,12 @@ fixtures.compare_charts(chart, fixtures.transits_2019_3_18_22_30_15_Hackensack, 
 # 2019/3/10 3:30:15am Melbourne
 ldt = pendulum.datetime(2019, 3, 18, 22, 30, 15, tz='Australia/Melbourne')
 udt = ldt.in_tz('UTC')
-lat = 40.9792
-long = -74.1169
+lat = -37.8166
+long = 144.9666
 chart = manager.create_chartdata(ldt, long, lat)
-fixtures.compare_charts(chart, fixtures.transits_2019_3_18_22_30_15_Hackensack, "2019-3-18 22:30:15 NY")
+fixtures.compare_charts(chart, fixtures.transits_2019_3_10_1_30_15_Melbourne, "2019-3-18 22:30:15 Melbourne, AUS")
+
+
 
 # la = manager.create_chartdata(name, ldt, long, lat)
 # manager.precess_into_sidereal_framework(radix=mike, transit_chart=la)
