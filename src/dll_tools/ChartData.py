@@ -1,4 +1,3 @@
-from math import fabs
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -45,4 +44,12 @@ class ChartData:
     def get_cusps_longitude(self):
         return self.cusps_longitude
 
-
+    def __str__(self):
+        return str({
+            'Sidereal framework': str(self.sidereal_framework),
+            'Ecliptical': self.get_ecliptical_coords(),
+            'Mundane': self.get_mundane_coords(),
+            'RA': self.get_right_ascension_coords(),
+            'Cusps': self.get_cusps_longitude(),
+            'Angles': self.get_angles_longitude(),
+        })

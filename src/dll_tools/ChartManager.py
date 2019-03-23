@@ -74,14 +74,14 @@ class ChartManager:
 
         body_name = settings.INT_TO_STRING_PLANET_MAP[body]
         radix_position = radix.planets_ecliptic[body_name][0]
-        date = date.in_tz('UTC')
+        # date = date.in_tz('UTC')
         geo_longitude = radix.sidereal_framework.geo_longitude
         geo_latitude = radix.sidereal_framework.geo_latitude
         return_time_list = self._get_return_time_list(body, radix_position, date, harmonic, return_quantity)
 
         return_chart_list = list()
         for time in return_time_list:
-            chart = self.create_chartdata(str(time), time, geo_longitude, geo_latitude)
+            chart = self.create_chartdata(time, geo_longitude, geo_latitude)
             return_chart_list.append(chart)
         return return_chart_list
 
@@ -103,10 +103,8 @@ class ChartManager:
         :param minute: Int
         :param second: Int
         :returns: Float"""
-        decimal = (((((degree * 60)
-                      + minute) * 60)
-                    + second) / 3600)
-        return decimal
+
+        return degree + (minute / 60) + (second / 3600)
 
     @staticmethod
     def convert_decimal_to_dms(decimal):
@@ -286,7 +284,7 @@ class ChartManager:
             raise ValueError('Cannot calculate harmonic returns with a non-integer harmonic')
         elif harmonic > 36 or harmonic < 1:
             raise ValueError('Can only safely calculate harmonic returns with harmonic between 1-36')
-        elif harmonic > 4 and body == 0:
+        elif harmonic > 4 and body == 1:
             raise ValueError('Cannot search for return harmonics greater than 4 on the Moon')
 
         if precision not in settings.PENDULUM_FUNCS.keys():

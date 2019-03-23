@@ -6,3 +6,13 @@ class SiderealFramework:
         self.ramc = ramc
         self.svp = svp
         self.obliquity = obliquity
+
+    def __str__(self):
+        return str({
+            'Longitude': self.geo_longitude,
+            'Latitude': self.geo_latitude,
+            'LST': self.LST,
+            'RAMC': self.ramc,
+            'SVP': self.svp,
+            'Obliquity': self.obliquity
+        })
