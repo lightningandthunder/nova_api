@@ -145,15 +145,15 @@ class SwissephLib:
         bit_mode = struct.calcsize("P") * 8  # Yields 32-bit or 64-bit according to OS
         if plat == 'Windows':
             if bit_mode == 32:
-                library = 'swedll32.dll'
+                library_name = 'swedll32.dll'
             else:
-                library = 'swedll64.dll'
+                library_name = 'swedll64.dll'
         elif plat == 'Linux':
-            library = 'libswe.so'
+            library_name = 'libswe.so'
         else:
             raise OSError('OS must be Windows or Linux')
 
-        return library
+        return library_name
 
     def _load_library(self):
         plat = platform.system()

@@ -45,8 +45,8 @@ chart = manager.create_chartdata(ldt, long, lat)
 return_date = pendulum.datetime(2019, 3, 24, 10, tz='America/New_York')
 chart_list = manager.generate_return_list(chart, return_date, 1, 4, 20)  # Next 20 quarti-lunars
 
-fixtures.compare_return_times(chart_list, fixtures.quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack,
-                              '2019/3/18 22:30:15 Hackensack')
+# fixtures.compare_return_times(chart_list, fixtures.quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack,
+#                               '2019/3/18 22:30:15 Hackensack')
 
 # 2019/3/10 3:30:15am Melbourne
 # ldt = pendulum.datetime(2019, 3, 18, 22, 30, 15, tz='Australia/Melbourne')
@@ -56,6 +56,5 @@ fixtures.compare_return_times(chart_list, fixtures.quarti_lunar_dates_from_2019_
 # return_date = pendulum.datetime(2019, 9, 24, 10, tz='Australia/Melbourne')
 # chart_list = manager.generate_return_list(chart, return_date, 0, 36, 5)
 
-# for x in chart_list:
-#     print(x.local_datetime)
-
+for i, x in enumerate(chart_list):
+    print(x.local_datetime)

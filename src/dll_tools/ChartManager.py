@@ -2,6 +2,8 @@ from ctypes import c_char_p, c_int, c_int32, c_double, POINTER, create_string_bu
 from math import sin, cos, tan, asin, atan, degrees, radians, fabs
 import os
 import pendulum
+import time
+import threading
 
 from swissephlib import SwissephLib
 from sidereal_framework import SiderealFramework
@@ -80,8 +82,8 @@ class ChartManager:
         return_time_list = self._get_return_time_list(body, radix_position, date, harmonic, return_quantity)
 
         return_chart_list = list()
-        for time in return_time_list:
-            chart = self.create_chartdata(time, geo_longitude, geo_latitude)
+        for chart_time in return_time_list:
+            chart = self.create_chartdata(chart_time, geo_longitude, geo_latitude)
             return_chart_list.append(chart)
         return return_chart_list
 
@@ -359,7 +361,7 @@ class ChartManager:
         ssr_dt.year = local_dt.year if radix.local_datetime.month < local_dt.month else local_dt.year - 1
         active_ssr = self.generate_return_list(radix=radix, date=ssr_dt, body=0, harmonic=1, return_quantity=1)[0]
 
-        transits = self.create_chartdata('transits', local_dt, geo_longitude, geo_latitude)
+        transits = self.create_chartdata(local_dt, geo_longitude, geo_latitude)
 
         # return radix, local_natal, active_ssr, transits
         # TODO: Test me
@@ -368,7 +370,7 @@ class ChartManager:
         progressed_time = (local_dt.in_tz('UTC') - radix.utc_datetime).in_hours() * settings.Q2
         progressed_dt = radix.utc_datetime.add(hours=progressed_time)
 
-        secondary_progs = self.create_chartdata('Progs', progressed_dt, geo_longitude, geo_latitude)
+        secondary_progs = self.create_chartdata(progressed_dt, geo_longitude, geo_latitude)
         return secondary_progs  # TODO: Test me
 
     def _calculate_julian_day(self, dt_utc):
