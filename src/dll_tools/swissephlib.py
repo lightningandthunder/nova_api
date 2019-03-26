@@ -7,7 +7,7 @@ import pathlib
 import threading
 
 import settings
-from LibThreadManager import LibThreadManager
+# from LibThreadManager import LibThreadManager
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -19,7 +19,7 @@ Wraps Swiss Ephemeris library functions. Only one instance should exist at a tim
 class SwissephLib:
     def __init__(self):
         self.swe_lib = self._load_library()
-        self.thread = LibThreadManager()
+        # self.thread = LibThreadManager()
 
         # Wrap Swiss Ephemeris functions and expose as public methods
         self.set_ephemeris_path = self.swe_lib.swe_set_ephe_path
@@ -183,7 +183,7 @@ class SwissephLib:
                 return swe_lib
 
     def _get_ephemeris_path(self):
-        path = settings.EPHEMERIS_PATH
+        path = os.path.join('../', settings.EPHEMERIS_PATH)
         e_path = path.encode('utf-8')
         e_pointer = c_char_p(e_path)
         return e_pointer

@@ -17,7 +17,7 @@ ANGLES = ["Asc", "MC", "Dsc", "IC", "Eq Asc", "Eq Dsc", "EP (Ecliptical)",
 
 CAMPANUS = c_int(67)
 VERSION_NUMBER = "0.3a"
-EPHEMERIS_PATH = 'swe/ephemeris'
+EPHEMERIS_PATH = 'swe/ephemeris/'
 SWISSEPH_LIB_PATH = 'astronova_api/src/dll_tools/swe/dll'
 
 Q2 = 0.002737909  # MikeStar lists this as 0.0027378030919862
