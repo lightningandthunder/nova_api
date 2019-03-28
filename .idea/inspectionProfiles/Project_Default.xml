@@ -7,6 +7,9 @@
           <option value="dll_tools.set_ephemeris_path" />
           <option value="dll_tools.SwissephFunctions" />
           <option value="pendulum.datetime.Datetime" />
+          <option value="LibThreadManager.ThreadWithReturn._target" />
+          <option value="LibThreadManager.ThreadWithReturn._args" />
+          <option value="LibThreadManager.ThreadWithReturn._kwargs" />
         </list>
       </option>
     </inspection_tool>

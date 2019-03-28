@@ -19,7 +19,6 @@ Wraps Swiss Ephemeris library functions. Only one instance should exist at a tim
 class SwissephLib:
     def __init__(self):
         self.swe_lib = self._load_library()
-        # self.thread = LibThreadManager()
 
         # Wrap Swiss Ephemeris functions and expose as public methods
         self.set_ephemeris_path = self.swe_lib.swe_set_ephe_path
