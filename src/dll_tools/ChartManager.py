@@ -450,8 +450,8 @@ class ChartManager:
         ret_array = (c_double * 6)()
         errorstring = create_string_buffer(126)
         self.lib.calculate_planets_UT(jd, body_number, settings.SIDEREALMODE, ret_array, errorstring)
-        if errorstring.value:
-            print(f'Error encountered in {self._get_planet_array.__name__}: {errorstring.value}')
+        # if errorstring.value:
+        #     print(f'Error encountered in {self._get_planet_array.__name__}: {errorstring.value}')
         return ret_array
 
     def _initialize_sidereal_framework(self, utc_datetime, local_datetime, geo_longitude, geo_latitude):

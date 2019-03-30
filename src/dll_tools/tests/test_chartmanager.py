@@ -4,10 +4,10 @@ from timeit import default_timer as timer
 
 from ChartData import ChartData
 from ChartManager import ChartManager
-from swissephlib import SwissephLib
+from LibThreadManager import SwissephLibV2
 from tests import fixtures
 
-swiss_lib = SwissephLib()
+swiss_lib = SwissephLibV2()
 manager = ChartManager(swiss_lib)
 
 
@@ -43,7 +43,8 @@ lat = 40.9792
 long = -74.1169
 chart = manager.create_chartdata(ldt, long, lat)
 return_date = pendulum.datetime(2019, 3, 24, 10, tz='America/New_York')
-chart_list = manager.generate_return_list(chart, return_date, 1, 4, 2)  # Next 20 quarti-lunars
+chart_list = manager.generate_return_list(chart, return_date, 1, 2, 1)  # Next 20 quarti-lunars
+
 
 # fixtures.compare_return_times(chart_list, fixtures.quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack,
 #                               '2019/3/18 22:30:15 Hackensack')
@@ -57,4 +58,7 @@ chart_list = manager.generate_return_list(chart, return_date, 1, 4, 2)  # Next 2
 # chart_list = manager.generate_return_list(chart, return_date, 0, 36, 5)
 
 for i, x in enumerate(chart_list):
-    print(x.local_datetime)
+    if i % 2 == 0:
+        print(x.local_datetime)
+
+exit()
