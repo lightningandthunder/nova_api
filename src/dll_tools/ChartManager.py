@@ -49,6 +49,8 @@ class ChartManager:
         chart.planets_mundane = self._populate_mundane_values(chart)
         chart.planets_right_ascension = self._populate_right_ascension_values(chart)
         chart.angles_longitude, chart.cusps_longitude = self._populate_ecliptical_angles_and_cusps(chart)
+        print(f"A: {chart.angles_longitude}")
+        print(f"C: {chart.cusps_longitude}")
 
         return chart
 
@@ -85,6 +87,7 @@ class ChartManager:
         for chart_time in return_time_list:
             chart = self.create_chartdata(chart_time, geo_longitude, geo_latitude)
             return_chart_list.append(chart)
+            print(f"Final: {len(return_chart_list)}: {chart.local_datetime}")
         return return_chart_list
 
     @staticmethod
@@ -181,10 +184,13 @@ class ChartManager:
         geo_latitude = chart.sidereal_framework.geo_latitude
 
         cusp_array = (c_double * 13)()
-        house_array = (c_double * 8)()
+        house_array = (c_double * 10)()
 
+        print("Trying to calculate houses...")
         self.lib.calculate_houses(julian_day_utc, settings.SIDEREALMODE, geo_latitude, geo_longitude, settings.CAMPANUS,
                                   cusp_array, house_array)
+        print("Houses calculated.")
+
 
         cusps_longitude = {
             "1": cusp_array[1],
@@ -312,7 +318,7 @@ class ChartManager:
 
         return midpoint_dt
 
-    def _get_return_time_list(self, body, radix_position, dt, harmonic, return_quantity=1):
+    def _get_return_time_list(self, body, radix_position, dt, harmonic, return_quantity):
         """Calculate a list of harmonic return times to second precision.
         :param body: Int 0-9
         :param radix_position: Float 0-359.9~

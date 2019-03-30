@@ -7,7 +7,6 @@ import pathlib
 import threading
 
 import settings
-# from LibThreadManager import LibThreadManager
 from logging import getLogger
 
 logger = getLogger(__name__)
