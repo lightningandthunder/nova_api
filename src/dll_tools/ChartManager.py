@@ -1,11 +1,7 @@
 from ctypes import c_char_p, c_int, c_int32, c_double, POINTER, create_string_buffer
 from math import sin, cos, tan, asin, atan, degrees, radians, fabs
-import os
-import pendulum
-import time
-import threading
+import copy
 
-from swissephlib import SwissephLib
 from sidereal_framework import SiderealFramework
 from ChartData import ChartData
 from logging import getLogger
@@ -52,6 +48,14 @@ class ChartManager:
 
         return chart
 
+    def relocate(self, radix, geo_longitude, geo_latitude, timezone):
+        radix.sidereal_framework.geo_longitude = geo_longitude
+        radix.sidereal_framework.geo_latitude = geo_latitude
+        radix.local_datetime = radix.local_datetime.in_tz(timezone)
+        radix.planets_mundane = self._populate_mundane_values(radix)
+        radix.planets_right_ascension = self._populate_right_ascension_values(radix)
+        radix.angles_longitude, radix.cusps_longitude = self._populate_ecliptical_angles_and_cusps(radix)
+
     def precess_into_sidereal_framework(self, radix, transit_chart):
         """Recalculate prime vertical longitude, right ascension, and ecliptical angles and cusps against another
         sidereal framework. Done on the radix chart in place.
@@ -65,27 +69,35 @@ class ChartManager:
         radix.planets_right_ascension = self._populate_right_ascension_values(radix)
         radix.angles_longitude, radix.cusps_longitude = self._populate_ecliptical_angles_and_cusps(radix)
 
-    def generate_return_list(self, radix, date, body, harmonic, return_quantity):
-        """Generate a list of harmonic return datetimes.
-        :param radix: ChartData instance
-        :param date: pendulum.datetime
-        :param body: Int 0-9
-        :param harmonic: Int 1-36
-        :param return_quantity: Int
-        :returns: List of second-precision harmonic returns"""
+    def get_transit_sensitive_charts(self, radix, local_dt, geo_longitude, geo_latitude):
+        local_natal = copy.deepcopy(radix)
+        self.relocate(local_natal,geo_longitude, geo_latitude, local_dt.tz)
+        ssr_dt = radix.local_datetime
+        ssr_dt.year = local_dt.year if radix.local_datetime.month < local_dt.month else local_dt.year - 1
+        active_ssr = self._generate_return_list(radix=local_natal, geo_longitude=geo_longitude, geo_latitude=geo_latitude,
+                                                date=ssr_dt, body=0, harmonic=1, return_quantity=1)[0]
 
-        body_name = settings.INT_TO_STRING_PLANET_MAP[body]
-        radix_position = radix.planets_ecliptic[body_name][0]
-        # date = date.in_tz('UTC')
-        geo_longitude = radix.sidereal_framework.geo_longitude
-        geo_latitude = radix.sidereal_framework.geo_latitude
-        return_time_list = self._get_return_time_list(body, radix_position, date, harmonic, return_quantity)
+        transits = self.create_chartdata(local_dt, geo_longitude, geo_latitude)
 
-        return_chart_list = list()
-        for chart_time in return_time_list:
-            chart = self.create_chartdata(chart_time, geo_longitude, geo_latitude)
-            return_chart_list.append(chart)
-        return return_chart_list
+        return radix, local_natal, active_ssr, transits  # add progressed natal, progressed SSR
+        # TODO: Test me
+
+    def get_progressions(self, radix, local_dt, geo_longitude, geo_latitude):
+        progressed_time = (local_dt.in_tz('UTC') - radix.utc_datetime).in_minutes() * settings.Q2
+        progressed_dt = radix.utc_datetime.add(minutes=progressed_time)
+
+        secondary_progs = self.create_chartdata(progressed_dt, geo_longitude, geo_latitude)
+        return secondary_progs
+
+    def generate_radix_return_pairs(self, radix, geo_longitude, geo_latitude, date, body, harmonic, return_quantity):
+        return_list = self._generate_return_list(radix, geo_longitude, geo_latitude, date, body, harmonic,
+                                                 return_quantity)
+        pairs = list()
+        for _return in return_list:
+            radix_copy = copy.deepcopy(radix)
+            self.precess_into_sidereal_framework(radix_copy, _return)
+            pairs.append((radix_copy, _return))
+        return pairs
 
     @staticmethod
     def get_sign(longitude):
@@ -185,7 +197,6 @@ class ChartManager:
 
         self.lib.calculate_houses(julian_day_utc, settings.SIDEREALMODE, geo_latitude, geo_longitude, settings.CAMPANUS,
                                   cusp_array, house_array)
-
 
         cusps_longitude = {
             "1": cusp_array[1],
@@ -353,26 +364,36 @@ class ChartManager:
 
         return return_time_list_second_precision
 
+    def _generate_return_list(self, radix, geo_longitude, geo_latitude, date, body, harmonic, return_quantity):
+        """Generate a list of harmonic return datetimes.
+        :param radix: ChartData instance
+        :param date: pendulum.datetime
+        :param body: Int 0-9
+        :param harmonic: Int 1-36
+        :param return_quantity: Int
+        :returns: List of second-precision harmonic returns"""
+
+        body_name = settings.INT_TO_STRING_PLANET_MAP[body]
+        radix_position = radix.planets_ecliptic[body_name][0]
+        # date = date.in_tz('UTC')
+
+        self.relocate(radix, geo_longitude, geo_latitude, date.tz)
+        geo_longitude = radix.sidereal_framework.geo_longitude
+        geo_latitude = radix.sidereal_framework.geo_latitude
+        return_time_list = self._get_return_time_list(body, radix_position, date, harmonic, return_quantity)
+
+        return_chart_list = list()
+        for chart_time in return_time_list:
+            chart = self.create_chartdata(chart_time, geo_longitude, geo_latitude)
+            return_chart_list.append(chart)
+
+        for chart in return_chart_list:
+            chart.local_datetime = chart.local_datetime.in_tz(date.tz)
+        return return_chart_list
+
     # =============================================================================================================== #
     # =======================================   Internal calculations   ============================================= #
     # =============================================================================================================== #
-
-    def _calculate_transits(self, radix, local_dt, geo_longitude, geo_latitude):
-        ssr_dt = radix.local_datetime
-        ssr_dt.year = local_dt.year if radix.local_datetime.month < local_dt.month else local_dt.year - 1
-        active_ssr = self.generate_return_list(radix=radix, date=ssr_dt, body=0, harmonic=1, return_quantity=1)[0]
-
-        transits = self.create_chartdata(local_dt, geo_longitude, geo_latitude)
-
-        # return radix, local_natal, active_ssr, transits
-        # TODO: Test me
-
-    def _calculate_progressions(self, radix, local_dt, geo_longitude, geo_latitude):
-        progressed_time = (local_dt.in_tz('UTC') - radix.utc_datetime).in_hours() * settings.Q2
-        progressed_dt = radix.utc_datetime.add(hours=progressed_time)
-
-        secondary_progs = self.create_chartdata(progressed_dt, geo_longitude, geo_latitude)
-        return secondary_progs  # TODO: Test me
 
     def _calculate_julian_day(self, dt_utc):
         """Calculate Julian Day for a given UTC datetime.

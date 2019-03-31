@@ -39,7 +39,7 @@ lat = 40.9792
 long = -74.1169
 chart = manager.create_chartdata(ldt, long, lat)
 return_date = pendulum.datetime(2019, 3, 24, 10, tz='America/New_York')
-chart_list = manager.generate_return_list(chart, return_date, 1, 4, 20)  # Next 20 quarti-lunars
+chart_list = manager._generate_return_list(chart, long, lat, return_date, 1, 4, 20)  # Next 20 quarti-lunars
 
 fixtures.compare_return_times(chart_list, fixtures.quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack,
                               '2019/3/18 22:30:15 Hackensack')
@@ -50,7 +50,7 @@ lat = -37.8166
 long = 144.9666
 chart = manager.create_chartdata(ldt, long, lat)
 return_date = pendulum.datetime(2019, 9, 24, 10, tz='Australia/Melbourne')
-chart_list = manager.generate_return_list(chart, return_date, 0, 36, 20)
+chart_list = manager._generate_return_list(chart, long, lat, return_date, 0, 36, 20)
 
 # Note that Solar Fire doesn't seem to pay attention to Australian AEDT for this; most of its times are an hour behind.
 # However, its calculations are based on UTC, so it appears as though the charts themselves are identical;
@@ -58,4 +58,38 @@ chart_list = manager.generate_return_list(chart, return_date, 0, 36, 20)
 fixtures.compare_return_times(chart_list, fixtures.quarti_ennead_dates_from_2019_3_18_22_30_15_Melbourne,
                               '2019/3/18 22:30:15 Melbourne')
 
+# 1989/3/18 22:30:15 Hackensack
+ldt = pendulum.datetime(1989, 3, 18, 22, 30, 15, tz='America/New_York')
+lat = 40.9792
+long = -74.1169
+radix = manager.create_chartdata(ldt, long, lat)
+return_date = pendulum.datetime(2019, 3, 24, 10, tz='Australia/Melbourne')
+lunar_return = manager._generate_return_list(radix, 144.9666, -37.8166, return_date, 1, 1, 1)[0]
+manager.precess_into_sidereal_framework(radix=radix, transit_chart=lunar_return)
+
+ldt = pendulum.datetime(1989, 3, 18, 22, 30, 15, tz='America/New_York')
+lat = 40.9792
+long = -74.1169
+radix = manager.create_chartdata(ldt, long, lat)
+return_date = pendulum.datetime(2019, 3, 24, 10, tz='Australia/Melbourne')
+pairs = manager.generate_radix_return_pairs(radix, 144.9666, -37.8166, return_date, 1, 4, 10)
+
+failed = False
+errors = list()
+for pair in pairs:
+   if not pair[0].sidereal_framework.LST == pair[1].sidereal_framework.LST:
+       failed = True
+       errors.append(f"Radix LST: {pair[0].sidereal_framework.LST}; Return LST: {pair[1].sidereal_framework.LST}")
+if not failed: print('Precessing radix into consecutive returns passed.')
+else: print(f'Failed: precessing radix into consecutive returns: {errors}')
+
+ldt = pendulum.datetime(1989, 12, 20, 22, 20, 0, tz='America/New_York')
+lat = 40.9792
+long = -74.1169
+radix = manager.create_chartdata(ldt, long, lat)
+local_dt = pendulum.datetime(2019, 3, 31, 15, tz='America/New_York')
+sp = manager.get_progressions(radix, local_dt, long, lat)
+print(sp)
 print("Done")
+
+

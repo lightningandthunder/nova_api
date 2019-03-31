@@ -46,6 +46,7 @@ class ChartData:
 
     def __str__(self):
         return str({
+            'Date': str(self.local_datetime),
             'Sidereal framework': str(self.sidereal_framework),
             'Ecliptical': self.get_ecliptical_coords(),
             'Mundane': self.get_mundane_coords(),
