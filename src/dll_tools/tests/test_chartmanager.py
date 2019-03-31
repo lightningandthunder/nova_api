@@ -1,9 +1,6 @@
 import pendulum
-from numpy import round
 from timeit import default_timer as timer
-from datetime import timedelta
 
-from ChartData import ChartData
 from ChartManager import ChartManager
 from swissephlib import SwissephLib
 from tests import fixtures
@@ -13,7 +10,7 @@ manager = ChartManager(swiss_lib)
 
 
 #  Plain charts
-start = timer()
+
 # 2019/3/18 22:30:15 Hackensack - Positive latitude, negative longitude
 ldt = pendulum.datetime(2019, 3, 18, 22, 30, 15, tz='America/New_York')
 lat = 40.9792
@@ -45,11 +42,11 @@ lat = 40.9792
 long = -74.1169
 chart = manager.create_chartdata(ldt, long, lat)
 return_date = pendulum.datetime(2019, 3, 24, 10, tz='America/New_York')
-chart_list = manager.generate_return_list(chart, return_date, 1, 2, 10000)  # Next 20 quarti-lunars
+chart_list = manager.generate_return_list(chart, return_date, 1, 4, 20)  # Next 20 quarti-lunars
 
 
-# fixtures.compare_return_times(chart_list, fixtures.quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack,
-#                               '2019/3/18 22:30:15 Hackensack')
+fixtures.compare_return_times(chart_list, fixtures.quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack,
+                              '2019/3/18 22:30:15 Hackensack')
 
 # 2019/3/10 3:30:15am Melbourne
 ldt = pendulum.datetime(2019, 3, 18, 22, 30, 15, tz='Australia/Melbourne')
@@ -57,9 +54,7 @@ lat = -37.8166
 long = 144.9666
 chart = manager.create_chartdata(ldt, long, lat)
 return_date = pendulum.datetime(2019, 9, 24, 10, tz='Australia/Melbourne')
-chart_list = manager.generate_return_list(chart, return_date, 0, 36, 10000)
+chart_list = manager.generate_return_list(chart, return_date, 0, 36, 20)
 
-end=timer()
-print(end-start)
 
 print("Done")
