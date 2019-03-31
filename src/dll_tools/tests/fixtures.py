@@ -3,6 +3,7 @@ import pendulum
 
 """Test dictionaries based on Solar Fire output."""
 
+
 def compare_return_times(chart_list, expected_date_list, name):
     print(f'Testing return times for {name}...')
 
@@ -13,6 +14,7 @@ def compare_return_times(chart_list, expected_date_list, name):
             failed = True
 
     if not failed: print('Return dates passed.')
+
 
 def compare_charts(chart, fixture, name):
     print(f'Testing chart {name}...')
@@ -65,7 +67,7 @@ def compare_charts(chart, fixture, name):
     if not round(chart.sidereal_framework.LST, decimals=2) == round(fixture['LST'], decimals=2):
         print(f"Test failed on LST: {chart.sidereal_framework.LST} != {fixture['LST']}")
     else:
-        print ('LST passed.')
+        print('LST passed.')
 
     if not round(chart.sidereal_framework.svp, decimals=2) == round(fixture['SVP'], decimals=2):
         print(f"Test failed on SVP: {chart.sidereal_framework.svp} != {fixture['SVP']}")
@@ -219,7 +221,6 @@ transits_2019_3_10_1_30_15_Melbourne = {
     }
 }
 
-
 transits_2019_3_23_1_30_15_murmansk = {
     'LST': 22.240,
     'SVP': 4.995,
@@ -261,7 +262,7 @@ transits_2019_3_23_1_30_15_murmansk = {
         'Pluto': 294.757,
     },
     'Cusps': {
-        "1": 99.960,   # This matches Solar Fire. The rest do not. SF's output below:
+        "1": 99.960,  # This matches Solar Fire. The rest do not. SF's output below:
         "2": 115.411,  # 129.963
         "3": 121.480,  # 159. etc
         "4": 126.582,  # 189
@@ -270,8 +271,8 @@ transits_2019_3_23_1_30_15_murmansk = {
         "7": 279.960,  # 279
         "8": 295.411,  # 309
         "9": 301.480,  # 9
-        "10": 306.582, # 39
-        "11": 314.476, # 69
+        "10": 306.582,  # 39
+        "11": 314.476,  # 69
         "12": 349.542  # 99
     },
     'Angles': {
@@ -310,4 +311,25 @@ quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack = [
     pendulum.parse('2019-07-27T03:25:33-04:00'),
     pendulum.parse('2019-08-02T10:09:41-04:00')
 ]
-
+quarti_ennead_dates_from_2019_3_18_22_30_15_Melbourne = [
+    pendulum.parse("2019-09-21T06:34:06+10:00"),
+    pendulum.parse("2019-10-01T11:25:58+10:00"),
+    pendulum.parse("2019-10-11T15:56:33+11:00"),
+    pendulum.parse("2019-10-21T18:06:23+11:00"),
+    pendulum.parse("2019-10-31T18:46:29+11:00"),
+    pendulum.parse("2019-11-10T18:15:15+11:00"),
+    pendulum.parse("2019-11-20T16:38:38+11:00"),
+    pendulum.parse("2019-11-30T13:55:12+11:00"),
+    pendulum.parse("2019-12-10T10:28:46+11:00"),
+    pendulum.parse("2019-12-20T06:30:04+11:00"),
+    pendulum.parse("2019-12-30T02:01:28+11:00"),
+    pendulum.parse("2020-01-08T21:29:29+11:00"),
+    pendulum.parse("2020-01-18T17:06:48+11:00"),
+    pendulum.parse("2020-01-28T12:56:27+11:00"),
+    pendulum.parse("2020-02-07T09:23:55+11:00"),
+    pendulum.parse("2020-02-17T06:41:08+11:00"),
+    pendulum.parse("2020-02-27T04:47:53+11:00"),
+    pendulum.parse("2020-03-08T04:06:16+11:00"),
+    pendulum.parse("2020-03-18T04:43:11+11:00"),
+    pendulum.parse("2020-03-28T06:33:09+11:00")
+]

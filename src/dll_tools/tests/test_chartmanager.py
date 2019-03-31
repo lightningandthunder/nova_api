@@ -8,7 +8,6 @@ from tests import fixtures
 swiss_lib = SwissephLib()
 manager = ChartManager(swiss_lib)
 
-
 #  Plain charts
 
 # 2019/3/18 22:30:15 Hackensack - Positive latitude, negative longitude
@@ -32,8 +31,6 @@ long = 33.0833
 chart = manager.create_chartdata(ldt, long, lat)
 fixtures.compare_charts(chart, fixtures.transits_2019_3_23_1_30_15_murmansk, "2019-3-23 10:59:59 Murmansk, RUS")
 
-
-
 # Test return chart dates
 
 # 2019/3/18 22:30:15 Hackensack
@@ -43,7 +40,6 @@ long = -74.1169
 chart = manager.create_chartdata(ldt, long, lat)
 return_date = pendulum.datetime(2019, 3, 24, 10, tz='America/New_York')
 chart_list = manager.generate_return_list(chart, return_date, 1, 4, 20)  # Next 20 quarti-lunars
-
 
 fixtures.compare_return_times(chart_list, fixtures.quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack,
                               '2019/3/18 22:30:15 Hackensack')
@@ -56,5 +52,10 @@ chart = manager.create_chartdata(ldt, long, lat)
 return_date = pendulum.datetime(2019, 9, 24, 10, tz='Australia/Melbourne')
 chart_list = manager.generate_return_list(chart, return_date, 0, 36, 20)
 
+# Note that Solar Fire doesn't seem to pay attention to Australian AEDT for this; most of its times are an hour behind.
+# However, its calculations are based on UTC, so it appears as though the charts themselves are identical;
+# All that differs is the wall clock time it returns.
+fixtures.compare_return_times(chart_list, fixtures.quarti_ennead_dates_from_2019_3_18_22_30_15_Melbourne,
+                              '2019/3/18 22:30:15 Melbourne')
 
 print("Done")
