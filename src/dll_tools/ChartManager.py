@@ -71,23 +71,44 @@ class ChartManager:
 
     def get_transit_sensitive_charts(self, radix, local_dt, geo_longitude, geo_latitude):
         local_natal = copy.deepcopy(radix)
-        self.relocate(local_natal,geo_longitude, geo_latitude, local_dt.tz)
-        ssr_dt = radix.local_datetime
-        ssr_dt.year = local_dt.year if radix.local_datetime.month < local_dt.month else local_dt.year - 1
-        active_ssr = self._generate_return_list(radix=local_natal, geo_longitude=geo_longitude, geo_latitude=geo_latitude,
-                                                date=ssr_dt, body=0, harmonic=1, return_quantity=1)[0]
+        self.relocate(local_natal, geo_longitude, geo_latitude, local_dt.tz)
+        ssr_dt = local_dt
+        active_ssr = \
+        self._generate_return_list(radix=local_natal, geo_longitude=geo_longitude, geo_latitude=geo_latitude,
+                                   date=ssr_dt, body=0, harmonic=1, return_quantity=1)[0]
+
+        # Re-generate if the SSR identified is in the future
+        if active_ssr.local_datetime > local_dt:
+            ssr_dt = ssr_dt.subtract(years=1)
+            active_ssr = \
+                self._generate_return_list(radix=local_natal, geo_longitude=geo_longitude, geo_latitude=geo_latitude,
+                                           date=ssr_dt, body=0, harmonic=1, return_quantity=1)[0]
 
         transits = self.create_chartdata(local_dt, geo_longitude, geo_latitude)
 
-        return radix, local_natal, active_ssr, transits  # add progressed natal, progressed SSR
+
+        # Secondary progressions
+        sp_radix = self.get_progressions(radix, local_dt, geo_longitude, geo_latitude)
+        sp_ssr = self.get_progressions(active_ssr, local_dt, geo_longitude, geo_latitude)
+
+        return radix, local_natal, sp_radix, active_ssr, sp_ssr, transits  # add progressed natal, progressed SSR
         # TODO: Test me
 
     def get_progressions(self, radix, local_dt, geo_longitude, geo_latitude):
         progressed_time = (local_dt.in_tz('UTC') - radix.utc_datetime).in_minutes() * settings.Q2
         progressed_dt = radix.utc_datetime.add(minutes=progressed_time)
 
-        secondary_progs = self.create_chartdata(progressed_dt, geo_longitude, geo_latitude)
-        return secondary_progs
+        # Create chart based on progressed date
+        chart = self.create_chartdata(progressed_dt, geo_longitude, geo_latitude)
+
+        # Precess chart into actual date
+        chart.local_datetime = local_dt
+        chart.utc_datetime = local_dt.in_tz('UTC')
+        chart.sidereal_framework = self._initialize_sidereal_framework(local_dt.in_tz('UTC'), local_dt,
+                                                                                 geo_longitude, geo_latitude)
+        chart.planets_mundane = self._populate_mundane_values(chart)
+        chart.planets_right_ascension = self._populate_right_ascension_values(chart)
+        return chart
 
     def generate_radix_return_pairs(self, radix, geo_longitude, geo_latitude, date, body, harmonic, return_quantity):
         return_list = self._generate_return_list(radix, geo_longitude, geo_latitude, date, body, harmonic,

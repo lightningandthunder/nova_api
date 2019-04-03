@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="abfc1491-3d37-4b35-83cd-e89d68c9b3e8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/ChartData.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/ChartData.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dll_tools/ChartManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/ChartManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/tests/fixtures.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/tests/fixtures.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/dll_tools/ChartManager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="86" column="54" selection-start-line="86" selection-start-column="54" selection-end-line="86" selection-end-column="54" />
+            <state relative-caret-position="117">
+              <caret line="75" column="22" lean-forward="true" selection-start-line="75" selection-start-column="22" selection-end-line="75" selection-end-column="22" />
               <folding>
                 <element signature="e#0#84#0" expanded="true" />
               </folding>
@@ -27,13 +27,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="469">
-              <caret line="90" column="57" lean-forward="true" selection-start-line="90" selection-start-column="57" selection-end-line="90" selection-end-column="57" />
+            <state relative-caret-position="192">
+              <caret line="110" column="31" selection-start-line="110" selection-start-column="31" selection-end-line="110" selection-end-column="31" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/fixtures.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="146">
+              <caret line="323" column="24" selection-start-line="323" selection-start-column="24" selection-end-line="323" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -115,10 +127,10 @@
         <option value="$PROJECT_DIR$/src/dll_tools/LibThreadManager.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/swissephlib.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/swissephlibthreadsafe.py" />
-        <option value="$PROJECT_DIR$/src/dll_tools/tests/fixtures.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/ChartData.py" />
-        <option value="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" />
+        <option value="$PROJECT_DIR$/src/dll_tools/tests/fixtures.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/ChartManager.py" />
+        <option value="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" />
       </list>
     </option>
   </component>
@@ -134,6 +146,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -163,7 +176,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -394,7 +406,7 @@
       <window_info anchor="bottom" x="0" y="0" width="1280" height="657" id="Debug" order="2" weight="0.46109176" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
-      <window_info anchor="bottom" x="10" y="262" width="1259" height="178" id="Run" order="5" weight="0.8844721" />
+      <window_info active="true" anchor="bottom" x="10" y="262" width="1259" height="178" id="Run" order="5" visible="true" weight="0.3726708" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.6629423" weight="0.18994413" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5007949" side_tool="true" weight="0.32774675" />
@@ -576,16 +588,6 @@
     <entry file="file://$PROJECT_DIR$/src/dll_tools/dll_tools.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/fixtures.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4150">
-          <caret line="313" column="53" selection-start-line="313" selection-end-line="313" selection-end-column="53" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/swissephlib.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1390">
@@ -596,9 +598,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/fixtures.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="323" column="24" selection-start-line="323" selection-start-column="24" selection-end-line="323" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/ChartData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
+        <state relative-caret-position="1104">
           <caret line="48" column="45" selection-start-line="48" selection-start-column="45" selection-end-line="48" selection-end-column="45" />
         </state>
       </provider>
@@ -610,22 +622,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py">
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/ChartManager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="469">
-          <caret line="90" column="57" lean-forward="true" selection-start-line="90" selection-start-column="57" selection-end-line="90" selection-end-column="57" />
+        <state relative-caret-position="117">
+          <caret line="75" column="22" lean-forward="true" selection-start-line="75" selection-start-column="22" selection-end-line="75" selection-end-column="22" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#84#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/ChartManager.py">
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="86" column="54" selection-start-line="86" selection-start-column="54" selection-end-line="86" selection-end-column="54" />
+        <state relative-caret-position="192">
+          <caret line="110" column="31" selection-start-line="110" selection-start-column="31" selection-end-line="110" selection-end-column="31" />
           <folding>
-            <element signature="e#0#84#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>

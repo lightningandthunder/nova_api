@@ -58,15 +58,24 @@ chart_list = manager._generate_return_list(chart, long, lat, return_date, 0, 36,
 fixtures.compare_return_times(chart_list, fixtures.quarti_ennead_dates_from_2019_3_18_22_30_15_Melbourne,
                               '2019/3/18 22:30:15 Melbourne')
 
-# 1989/3/18 22:30:15 Hackensack
+# ======= These still need tests written
+
+
+# 1989/3/18 22:30:15 Hackensack - precessing into an SLR on the other side of the world
 ldt = pendulum.datetime(1989, 3, 18, 22, 30, 15, tz='America/New_York')
 lat = 40.9792
 long = -74.1169
 radix = manager.create_chartdata(ldt, long, lat)
+
 return_date = pendulum.datetime(2019, 3, 24, 10, tz='Australia/Melbourne')
 lunar_return = manager._generate_return_list(radix, 144.9666, -37.8166, return_date, 1, 1, 1)[0]
 manager.precess_into_sidereal_framework(radix=radix, transit_chart=lunar_return)
 
+fixtures.compare_charts(radix, fixtures.slr_2019_3_19_melbourne,
+                        "1989-3-18 22:30:15 Hack NJ SLR 2019-3-19 Melbourne AUS")
+
+
+# Testing that precession is being accounted for in lists of solunar returns
 ldt = pendulum.datetime(1989, 3, 18, 22, 30, 15, tz='America/New_York')
 lat = 40.9792
 long = -74.1169
@@ -83,13 +92,24 @@ for pair in pairs:
 if not failed: print('Precessing radix into consecutive returns passed.')
 else: print(f'Failed: precessing radix into consecutive returns: {errors}')
 
+
 ldt = pendulum.datetime(1989, 12, 20, 22, 20, 0, tz='America/New_York')
 lat = 40.9792
 long = -74.1169
 radix = manager.create_chartdata(ldt, long, lat)
 local_dt = pendulum.datetime(2019, 3, 31, 15, tz='America/New_York')
+
 sp = manager.get_progressions(radix, local_dt, long, lat)
 print(sp)
 print("Done")
 
+ldt = pendulum.datetime(1989, 12, 20, 22, 30, tz='America/New_York')
+lat = 40.9792
+long = -74.1169
+natal = manager.create_chartdata(ldt, long, lat)
 
+ldt = pendulum.datetime(2019, 4, 2, 22, 32, tz='America/New_York')
+
+radix, local_natal, sp_radix, active_ssr, sp_ssr, transits = manager.get_transit_sensitive_charts(radix, ldt, long, lat)
+for x in [radix, local_natal, sp_radix, active_ssr, sp_ssr, transits]:
+    print(x)
