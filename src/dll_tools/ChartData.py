@@ -1,9 +1,11 @@
 from logging import getLogger
+import json
 
 logger = getLogger(__name__)
 """
 A class created by the ChartManager singleton representing chart data for a given date, time, and location.
 """
+
 
 class ChartData:
     def __init__(self, local_datetime, utc_datetime, julian_day):
@@ -43,6 +45,25 @@ class ChartData:
 
     def get_cusps_longitude(self):
         return self.cusps_longitude
+
+    def jsonify_chart(self):
+        j = dict()
+        j['ecliptical'] = self.get_ecliptical_coords()
+        j['mundane'] = self.get_mundane_coords()
+        j['right_ascension'] = self.get_right_ascension_coords()
+        j['angles'] = self.get_angles_longitude()
+        j['cusps'] = self.get_cusps_longitude()
+        j['local_datetime'] = self.local_datetime
+        j['utc_datetime'] = self.utc_datetime
+        j['julian_day'] = self.julian_day
+        j['lst'] = self.sidereal_framework.lst or ''
+        j['ramc'] = self.sidereal_framework.ramc or ''
+        j['obliquity'] = self.sidereal_framework.obliquity or ''
+        j['svp'] = self.sidereal_framework.svp or ''
+        j['longitude'] = self.sidereal_framework.geo_longitude or ''
+        j['latitude'] = self.sidereal_framework.geo_latitude or ''
+
+        return json.dumps(j)
 
     def __str__(self):
         return str({

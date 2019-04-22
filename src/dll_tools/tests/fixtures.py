@@ -87,7 +87,7 @@ def compare_charts(chart, fixture, name):
 
 transits_2019_3_18_22_30_15_Hackensack = {
     'LST': 9.325,
-    'SVP': 4.995,
+    'SVP': 4.991,
     'Obliquity': 23.436,
     'Ecliptic': {
         'Sun': 333.1960,
@@ -120,10 +120,10 @@ transits_2019_3_18_22_30_15_Hackensack = {
         'Venus': 323.221,
         'Mars': 49.286,
         'Jupiter': 263.020,
-        'Saturn': 290.633,
+        'Saturn': 290.637,
         'Uranus': 28.668,
-        'Neptune': 348.063,
-        'Pluto': 294.681,
+        'Neptune': 348.067,
+        'Pluto': 294.686,
     },
     'Cusps': {
         "1": 194.254,
@@ -155,7 +155,7 @@ transits_2019_3_18_22_30_15_Hackensack = {
 
 transits_2019_3_10_1_30_15_Melbourne = {
     'LST': 8.884,
-    'SVP': 4.995,
+    'SVP': 4.991,
     'Obliquity': 23.436,
     'Ecliptic': {
         'Sun': 332.5745,
@@ -184,13 +184,13 @@ transits_2019_3_10_1_30_15_Melbourne = {
     'Right Ascension': {
         'Sun': 357.778,
         'Moon': 144.301,
-        'Mercury': 350.532,
-        'Venus': 322.474,
-        'Mars': 48.862,
-        'Jupiter': 262.973,
+        'Mercury': 350.535,
+        'Venus': 322.478,
+        'Mars': 48.866,
+        'Jupiter': 262.977,
         'Saturn': 290.590,
         'Uranus': 28.638,
-        'Neptune': 348.042,
+        'Neptune': 348.046,
         'Pluto': 294.670,
     },
     'Cusps': {
@@ -223,7 +223,7 @@ transits_2019_3_10_1_30_15_Melbourne = {
 
 transits_2019_3_23_1_30_15_murmansk = {
     'LST': 22.240,
-    'SVP': 4.995,
+    'SVP': 4.991,
     'Obliquity': 23.436,
     'Ecliptic': {
         'Sun': 337.3951,
@@ -240,7 +240,7 @@ transits_2019_3_23_1_30_15_murmansk = {
     'Mundane': {
         'Sun': 325.360,
         'Moon': 159.949,
-        'Mercury': 309.498,
+        'Mercury': 309.504,
         'Venus': 235.326,
         'Mars': 337.453,
         'Jupiter': 164.068,
@@ -250,14 +250,14 @@ transits_2019_3_23_1_30_15_murmansk = {
         'Pluto': 171.626,
     },
     'Right Ascension': {
-        'Sun': 2.201,
+        'Sun': 2.206,
         'Moon': 212.906,
         'Mercury': 347.718,
         'Venus': 328.235,
-        'Mars': 52.164,
+        'Mars': 52.169,
         'Jupiter': 263.306,
-        'Saturn': 290.912,
-        'Uranus': 28.874,
+        'Saturn': 290.916,
+        'Uranus': 28.878,
         'Neptune': 348.209,
         'Pluto': 294.757,
     },
@@ -291,7 +291,7 @@ transits_2019_3_23_1_30_15_murmansk = {
 
 slr_2019_3_19_melbourne = {
     'LST': 12.426,
-    'SVP': 4.995,
+    'SVP': 4.991,
     'Obliquity': 23.436,
     'Ecliptic': {
         'Sun': 333.9193,
@@ -318,15 +318,15 @@ slr_2019_3_19_melbourne = {
         'Pluto': 317.405,
     },
     'Right Ascension': {
-        'Sun': 359.012,
+        'Sun': 359.016,
         'Moon': 146.055,
         'Mercury': 346.240,
         'Venus': 355.666,
-        'Mars': 62.964,
-        'Jupiter': 59.662,
+        'Mars': 62.968,
+        'Jupiter': 59.666,
         'Saturn': 284.440,
         'Uranus': 276.058,
-        'Neptune': 283.612,
+        'Neptune': 283.617,
         'Pluto': 227.530,
     },
     'Cusps': {'1': 60.46534287447976, '2': 101.02797414566278, '3': 142.37746406430412, '4': 170.81882375428106,
@@ -342,44 +342,44 @@ slr_2019_3_19_melbourne = {
 quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack = [
     pendulum.parse('2019-03-25T03:01:07-04:00'),
     pendulum.parse('2019-04-01T11:50:14-04:00'),
-    pendulum.parse('2019-04-08T18:11:29-04:00'),
-    pendulum.parse('2019-04-15T07:04:31-04:00'),
+    pendulum.parse('2019-04-08T18:11:26-04:00'),
+    pendulum.parse('2019-04-15T07:04:27-04:00'),
     pendulum.parse('2019-04-21T12:53:17-04:00'),
     pendulum.parse('2019-04-28T19:13:39-04:00'),
-    pendulum.parse('2019-05-06T00:35:31-04:00'),
+    pendulum.parse('2019-05-06T00:35:28-04:00'),
     pendulum.parse('2019-05-12T13:13:43-04:00'),
-    pendulum.parse('2019-05-18T22:15:26-04:00'),
-    pendulum.parse('2019-05-26T03:09:50-04:00'),
+    pendulum.parse('2019-05-18T22:15:22-04:00'),
+    pendulum.parse('2019-05-26T03:09:47-04:00'),
     pendulum.parse('2019-06-02T08:42:47-04:00'),
-    pendulum.parse('2019-06-08T18:36:51-04:00'),
-    pendulum.parse('2019-06-15T05:58:29-04:00'),
+    pendulum.parse('2019-06-08T18:36:47-04:00'),
+    pendulum.parse('2019-06-15T05:58:26-04:00'),
     pendulum.parse('2019-06-22T11:03:43-04:00'),
     pendulum.parse('2019-06-29T18:04:11-04:00'),
     pendulum.parse('2019-07-06T01:15:46-04:00'),
-    pendulum.parse('2019-07-12T12:01:29-04:00'),
-    pendulum.parse('2019-07-19T18:21:27-04:00'),
-    pendulum.parse('2019-07-27T03:25:33-04:00'),
-    pendulum.parse('2019-08-02T10:09:41-04:00')
+    pendulum.parse('2019-07-12T12:01:25-04:00'),
+    pendulum.parse('2019-07-19T18:21:24-04:00'),
+    pendulum.parse('2019-07-27T03:25:30-04:00'),
+    pendulum.parse('2019-08-02T10:09:37-04:00')
 ]
 quarti_ennead_dates_from_2019_3_18_22_30_15_Melbourne = [
     pendulum.parse("2019-09-21T06:34:06+10:00"),
     pendulum.parse("2019-10-01T11:25:58+10:00"),
-    pendulum.parse("2019-10-11T15:56:33+11:00"),
-    pendulum.parse("2019-10-21T18:06:23+11:00"),
-    pendulum.parse("2019-10-31T18:46:29+11:00"),
-    pendulum.parse("2019-11-10T18:15:15+11:00"),
+    pendulum.parse("2019-10-11T15:56:29+11:00"),
+    pendulum.parse("2019-10-21T18:06:19+11:00"),
+    pendulum.parse("2019-10-31T18:46:25+11:00"),
+    pendulum.parse("2019-11-10T18:15:12+11:00"),
     pendulum.parse("2019-11-20T16:38:38+11:00"),
-    pendulum.parse("2019-11-30T13:55:12+11:00"),
+    pendulum.parse("2019-11-30T13:55:09+11:00"),
     pendulum.parse("2019-12-10T10:28:46+11:00"),
-    pendulum.parse("2019-12-20T06:30:04+11:00"),
+    pendulum.parse("2019-12-20T06:30:00+11:00"),
     pendulum.parse("2019-12-30T02:01:28+11:00"),
-    pendulum.parse("2020-01-08T21:29:29+11:00"),
-    pendulum.parse("2020-01-18T17:06:48+11:00"),
+    pendulum.parse("2020-01-08T21:29:25+11:00"),
+    pendulum.parse("2020-01-18T17:06:45+11:00"),
     pendulum.parse("2020-01-28T12:56:27+11:00"),
-    pendulum.parse("2020-02-07T09:23:55+11:00"),
-    pendulum.parse("2020-02-17T06:41:08+11:00"),
+    pendulum.parse("2020-02-07T09:23:52+11:00"),
+    pendulum.parse("2020-02-17T06:41:04+11:00"),
     pendulum.parse("2020-02-27T04:47:53+11:00"),
     pendulum.parse("2020-03-08T04:06:16+11:00"),
     pendulum.parse("2020-03-18T04:43:11+11:00"),
-    pendulum.parse("2020-03-28T06:33:09+11:00")
+    pendulum.parse("2020-03-28T06:33:06+11:00")
 ]

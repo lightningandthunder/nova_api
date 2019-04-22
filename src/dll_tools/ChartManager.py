@@ -2,7 +2,6 @@ from ctypes import c_char_p, c_int, c_int32, c_double, POINTER, create_string_bu
 from math import sin, cos, tan, asin, atan, degrees, radians, fabs
 import copy
 
-from sidereal_framework import SiderealFramework
 from ChartData import ChartData
 from logging import getLogger
 import settings

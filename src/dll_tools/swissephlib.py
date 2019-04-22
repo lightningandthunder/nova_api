@@ -15,6 +15,7 @@ logger = getLogger(__name__)
 Wraps Swiss Ephemeris library functions. Only one instance should exist at a time.
 """
 
+
 class SwissephLib:
     def __init__(self):
         self.swe_lib = self._load_library()
@@ -135,8 +136,6 @@ class SwissephLib:
         self.ephemeris_path = self._get_ephemeris_path()
         self.set_ephemeris_path(self.ephemeris_path)
         self.set_sidereal_mode(0, 0, 0)
-
-
 
     def _get_library_for_platform(self):
         """
