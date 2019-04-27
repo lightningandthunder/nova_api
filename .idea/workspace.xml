@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="abfc1491-3d37-4b35-83cd-e89d68c9b3e8" name="Default Changelist" comment="Testing mostly done; moving on to flask.">
-      <change beforePath="$PROJECT_DIR$/.idea/astronova_api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/astronova_api.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="abfc1491-3d37-4b35-83cd-e89d68c9b3e8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/etc/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/.flaskenv" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/.flaskenv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/ChartData.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/ChartData.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/ChartManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/ChartManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swissephlib.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swissephlib.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/tests/fixtures.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/tests/fixtures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,8 +24,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/app/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="50" column="32" lean-forward="true" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
+            <state relative-caret-position="269">
+              <caret line="51" column="53" lean-forward="true" selection-start-line="51" selection-start-column="53" selection-end-line="51" selection-end-column="53" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -131,9 +120,9 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="3566" />
-    <option name="y" value="-56" />
+    <option name="y" value="-57" />
     <option name="width" value="1152" />
-    <option name="height" value="581" />
+    <option name="height" value="582" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -336,8 +325,8 @@
       <item itemvalue="Python.testme" />
       <item itemvalue="Python.test_chartmanager" />
       <item itemvalue="Python.LibThreadManager" />
-      <item itemvalue="Python tests.Unittests for dll_tools.test_swissephlib.TestSwissephFunctions" />
       <item itemvalue="Python.app" />
+      <item itemvalue="Python tests.Unittests for dll_tools.test_swissephlib.TestSwissephFunctions" />
     </list>
     <recent_temporary>
       <list>
@@ -360,6 +349,14 @@
       <option name="presentableId" value="Default" />
       <updated>1550201841833</updated>
     </task>
+    <task id="LOCAL-00001" summary="Started reworking flask application; not functional yet">
+      <created>1555891378040</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1555891378040</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -390,7 +387,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="3193" y="-7" width="1295" height="695" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.33705774" visible="true" weight="0.18730159" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -400,7 +396,7 @@
       <window_info anchor="bottom" x="0" y="0" width="1280" height="657" id="Debug" order="2" weight="0.46109176" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
-      <window_info active="true" anchor="bottom" x="0" y="23" width="1281" height="658" id="Run" maximized="true" order="5" type="WINDOWED" visible="true" weight="0.5009311" />
+      <window_info anchor="bottom" x="10" y="262" width="1259" height="178" id="Run" maximized="true" order="5" type="WINDOWED" weight="0.5009311" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.6629423" weight="0.18994413" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5007949" side_tool="true" weight="0.32774675" />
@@ -413,7 +409,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Testing mostly done; moving on to flask." />
-    <option name="LAST_COMMIT_MESSAGE" value="Testing mostly done; moving on to flask." />
+    <MESSAGE value="Started reworking flask application; not functional yet" />
+    <option name="LAST_COMMIT_MESSAGE" value="Started reworking flask application; not functional yet" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -622,8 +619,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="50" column="32" lean-forward="true" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
+        <state relative-caret-position="269">
+          <caret line="51" column="53" lean-forward="true" selection-start-line="51" selection-start-column="53" selection-end-line="51" selection-end-column="53" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
