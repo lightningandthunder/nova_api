@@ -4,8 +4,8 @@ import logging
 import pendulum
 import sys
 
-from ChartData import ChartData
-from ChartManager import ChartManager
+from chartdata import ChartData
+from chartmanager import ChartManager
 from swissephlib import SwissephLib
 
 app = Flask(__name__)

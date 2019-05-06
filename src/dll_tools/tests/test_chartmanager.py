@@ -3,7 +3,7 @@ from timeit import default_timer as timer
 import logging
 import sys
 
-from ChartManager import ChartManager
+from chartmanager import ChartManager
 from swissephlib import SwissephLib
 from tests import fixtures
 
