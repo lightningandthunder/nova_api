@@ -1,56 +1,69 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS, cross_origin
+from flask import Flask, request, jsonify
+from flask_restful import Resource, Api
 import logging
 import pendulum
+import sys
 
 from ChartData import ChartData
 from ChartManager import ChartManager
 from swissephlib import SwissephLib
 
 app = Flask(__name__)
-# CORS(app, support_credentials=True, expose_headers='Authorization')
+api = Api(app)
 
 logger = logging.getLogger(__name__)
-logging.basicConfig()
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    datefmt='%m-%d %H:%M')
 
-# swiss_lib = SwissephLib()
-# manager = ChartManager(swiss_lib)
+swiss_lib = SwissephLib()
+manager = ChartManager(swiss_lib)
 
-@app.route('/')
-# @cross_origin(origin='*')
-def index():
-    return "Something works at least"
+
+# CORS(app, support_credentials=True, expose_headers='Authorization')
+
+class TestMe(Resource):
+    def get(self):
+        return {'works?': 'works.'}
+
+    def put(self, route):
+        try:
+            data = request.get_json()
+            if not data:
+                logger.info(msg="Didn't receive data.")
+                return jsonify({'error_string': 'Did not receive JSON.'})
+
+            logger.info(f'Received data: {data}')
+            local_datetime = data.get('local_datetime')
+            longitude = data.get('longitude')
+            latitude = data.get('latitude')
+
+            local_datetime_pendulum = pendulum.datetime(year=int(local_datetime.get('year')),
+                                                        month=int(local_datetime.get('month')),
+                                                        day=int(local_datetime.get('day')),
+                                                        hour=int(local_datetime.get('hour')),
+                                                        minute=int(local_datetime.get('minute')),
+                                                        second=int(local_datetime.get('second')) or 0,
+                                                        tz='America/New_York')
+            # tz=local_datetime.get('tz'))
+
+            radix_chart = manager.create_chartdata(local_datetime=local_datetime_pendulum,
+                                                   geo_longitude=float(longitude),
+                                                   geo_latitude=float(latitude))
+
+            return radix_chart.jsonify_chart()
+
+        except Exception as e:
+            logger.exception(msg=str(e))
+
+
+api.add_resource(TestMe, '/<string:route>')
 
 # @app.route('/radix', methods=['POST'])
-# # @cross_origin(origin='*')
+# @cross_origin(origin='*')
 # def radix():
-#     data = request.get_json(force=True)
-#     if not data:
-#         logger.info(msg="Didn't receive data.")
-#         return jsonify({'error_string': 'Did not receive JSON.'})
-#
-#     else:
-#         try:
-#             local_datetime = data.get('local_datetime')
-#             longitude = data.get('longitude')
-#             latitude = data.get('latitude')
-#
-#             local_datetime_pendulum = pendulum.datetime(year=local_datetime.get('year'),
-#                                                         month=local_datetime.get('month'),
-#                                                         day=local_datetime.get('day'),
-#                                                         hour=local_datetime.get('hour'),
-#                                                         minute=local_datetime.get('minute'),
-#                                                         second=local_datetime.get('second') or 0,
-#                                                         tz=local_datetime.get('tz'))
-#
-#             radix_chart = manager.create_chartdata(local_datetime=local_datetime_pendulum,
-#                                                    geo_longitude=longitude,
-#                                                    geo_latitude=latitude)
-#
-#             return radix_chart.jsonify_chart()
-#         except Exception as e:
-#             logger.error(msg=str(e), exc_info=True)
+#     pass
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)

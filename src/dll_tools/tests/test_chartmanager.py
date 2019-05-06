@@ -1,5 +1,7 @@
 import pendulum
 from timeit import default_timer as timer
+import logging
+import sys
 
 from ChartManager import ChartManager
 from swissephlib import SwissephLib
@@ -7,6 +9,12 @@ from tests import fixtures
 
 swiss_lib = SwissephLib()
 manager = ChartManager(swiss_lib)
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    datefmt='%m-%d %H:%M')
+
 
 #  Plain charts
 
@@ -89,9 +97,9 @@ for pair in pairs:
         failed = True
         errors.append(f"Radix LST: {pair[0].sidereal_framework.LST}; Return LST: {pair[1].sidereal_framework.LST}")
 if not failed:
-    print('Precessing radix into consecutive returns passed.')
+    logger.info('Precessing radix into consecutive returns passed.')
 else:
-    print(f'Failed: precessing radix into consecutive returns: {errors}')
+    logger.warning(f'Failed: precessing radix into consecutive returns: {errors}')
 
 ldt = pendulum.datetime(1989, 12, 20, 22, 20, 0, tz='America/New_York')
 lat = 40.9792

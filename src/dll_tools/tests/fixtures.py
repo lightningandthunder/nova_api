@@ -1,83 +1,98 @@
 from numpy import round
+from math import fabs
 import pendulum
+import logging
+import sys
 
 """Test dictionaries based on Solar Fire output."""
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    datefmt='%m-%d %H:%M')
+
 
 def compare_return_times(chart_list, expected_date_list, name):
-    print(f'Testing return times for {name}...')
+    logger.info(f'Testing return times for {name}...')
 
     failed = False
     for index, c in enumerate(chart_list):
         if c.local_datetime != expected_date_list[index]:
-            print(f'Harmonic return test failed; {c.local_datetime} != expected date: {expected_date_list[index]}')
+            logger.warning(
+                f'Harmonic return test failed; {c.local_datetime} != expected date: {expected_date_list[index]}')
             failed = True
 
-    if not failed: print('Return dates passed.')
+    if not failed:
+        logger.info('Return dates passed.')
 
 
 def compare_charts(chart, fixture, name):
-    print(f'Testing chart {name}...')
+    logger.info(f'Testing chart {name}...')
 
     failed = False
     ecliptic = chart.get_ecliptical_coords()
     for body in ecliptic:
-        if not round(ecliptic[body], decimals=2) == round(fixture['Ecliptic'][body], decimals=2):
-            print(f"Test failed on {body} ecliptical coords: {ecliptic[body]} != {fixture['Ecliptic'][body]}")
+        if fabs(ecliptic[body] - fixture['Ecliptic'][body]) >= 0.5:
+            logger.warning(f"Test failed on {body} ecliptical coords: {ecliptic[body]} != {fixture['Ecliptic'][body]}")
             failed = True
 
-    if not failed: print('Ecliptical coordinates passed.')
+    if not failed:
+        logger.info('Ecliptical coordinates passed.')
 
     failed = False
     mundane = chart.get_mundane_coords()
     for body in mundane:
-        if not round(mundane[body], decimals=0) == round(fixture['Mundane'][body], decimals=0):
-            print(f"Test failed on {body} mundane coords: {mundane[body]} != {fixture['Mundane'][body]}")
+        if fabs(mundane[body] - fixture['Mundane'][body]) >= 0.5:
+            logger.warning(f"Test failed on {body} mundane coords: {mundane[body]} != {fixture['Mundane'][body]}")
             failed = True
 
-    if not failed: print('Mundane coordinates passed.')
+    if not failed:
+        logger.info('Mundane coordinates passed.')
 
     failed = False
     ra = chart.get_right_ascension_coords()
     for body in ra:
-        if not round(ra[body], decimals=2) == round(fixture['Right Ascension'][body], decimals=2):
-            print(f"Test failed on {body} RA coords: {ra[body]} != {fixture['Right Ascension'][body]}")
+        if fabs(ra[body] - fixture['Right Ascension'][body]) >= 0.5:
+            logger.warning(f"Test failed on {body} RA coords: {ra[body]} != {fixture['Right Ascension'][body]}")
             failed = True
 
-    if not failed: print('RA coordinates passed. ')
+    if not failed:
+        logger.info('RA coordinates passed. ')
 
     failed = False
     cusps = chart.get_cusps_longitude()
     for cusp in cusps:
-        if not round(cusps[cusp], decimals=0) == round(fixture['Cusps'][cusp], decimals=0):
-            print(f"Test failed on cusp {cusp}: {cusps[cusp]} != {fixture['Cusps'][cusp]}")
+        if fabs(cusps[cusp] - fixture['Cusps'][cusp]) >= 0.5:
+            logger.warning(f"Test failed on cusp {cusp}: {cusps[cusp]} != {fixture['Cusps'][cusp]}")
             failed = True
 
-    if not failed: print('Cusps coordinates passed.')
+    if not failed:
+        logger.info('Cusps coordinates passed.')
 
     failed = False
     angles = chart.get_angles_longitude()
     for angle in angles:
-        if not round(angles[angle], decimals=0) == round(fixture['Angles'][angle], decimals=0):
-            print(f"Test failed on angle {angle}: {angles[angle]} != {fixture['Angles'][angle]}")
+        if fabs(angles[angle] - fixture['Angles'][angle]) >= 0.5:
+            logger.warning(f"Test failed on angle {angle}: {angles[angle]} != {fixture['Angles'][angle]}")
             failed = True
 
-    if not failed: print('Angle coordinates passed.')
+    if not failed:
+        logger.info('Angle coordinates passed.')
 
-    if not round(chart.sidereal_framework.LST, decimals=2) == round(fixture['LST'], decimals=2):
-        print(f"Test failed on LST: {chart.sidereal_framework.LST} != {fixture['LST']}")
+    if fabs(chart.sidereal_framework.LST - fixture['LST']) >= 0.01:
+        logger.warning(f"Test failed on LST: {chart.sidereal_framework.LST} != {fixture['LST']}")
     else:
-        print('LST passed.')
+        logger.info('LST passed.')
 
-    if not round(chart.sidereal_framework.svp, decimals=2) == round(fixture['SVP'], decimals=2):
-        print(f"Test failed on SVP: {chart.sidereal_framework.svp} != {fixture['SVP']}")
+    if fabs(chart.sidereal_framework.svp - fixture['SVP']) >= 0.01:
+        logger.warning(f"Test failed on SVP: {chart.sidereal_framework.svp} != {fixture['SVP']}")
     else:
-        print('SVP passed.')
+        logger.info('SVP passed.')
 
-    if not round(chart.sidereal_framework.obliquity, decimals=2) == round(fixture['Obliquity'], decimals=2):
-        print(f"Test failed on obliquity: {chart.sidereal_framework.obliquity} != {fixture['Obliquity']}")
+    if fabs(chart.sidereal_framework.obliquity - fixture['Obliquity']) >= 0.001:
+        logger.warning(f"Test failed on obliquity: {chart.sidereal_framework.obliquity} != {fixture['Obliquity']}")
     else:
-        print('Obliquity passed.')
+        logger.info('Obliquity passed.')
 
 
 # ==================================================================================================================== #
@@ -334,7 +349,7 @@ slr_2019_3_19_melbourne = {
               '9': 322.3774640643041, '10': 350.8188237542811, '11': 11.943656386217109, '12': 32.83312536164474},
     'Angles': {
         'Asc': 60.46534287447976, 'MC': 350.8188237542811, 'Dsc': 240.46534287447975, 'IC': 170.81882375428108,
-        'Eq Asc': 78.47068148253182, 'Eq Dsc': 258.4706814825318, 'EP (Ecliptical)': (80.81882375428108,),
+        'Eq Asc': 78.47068148253182, 'Eq Dsc': 258.4706814825318, 'EP (Ecliptical)': 80.81882375428108,
         'Zen': 330.46534287447975, 'WP (Ecliptical)': 260.8188237542811, 'Ndr': 150.46534287447975
     }
 }

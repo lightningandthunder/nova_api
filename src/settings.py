@@ -51,7 +51,7 @@ STRING_TO_INT_PLANET_MAP = {
 
 ORBITAL_PERIODS_HOURS = [8760, 648]  # Sun, Moon
 
-TIMEZONES = [
+TIMEZONES = {
     "Africa/Abidjan",
     "Africa/Accra",
     "Africa/Addis_Ababa",
@@ -644,4 +644,4 @@ TIMEZONES = [
     "W-SU",
     "WET",
     "Zulu",
-]
+}

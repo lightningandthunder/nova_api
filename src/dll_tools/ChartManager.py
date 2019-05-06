@@ -4,6 +4,7 @@ import copy
 
 from ChartData import ChartData
 from logging import getLogger
+from sidereal_framework import SiderealFramework
 import settings
 
 logger = getLogger(__name__)
@@ -241,7 +242,7 @@ class ChartManager:
             "Eq Asc": house_array[4],
             "Eq Dsc": (house_array[4] + 180) % 360
         }
-        angles_longitude["EP (Ecliptical)"] = (angles_longitude["MC"] + 90) % 360,
+        angles_longitude["EP (Ecliptical)"] = (angles_longitude["MC"] + 90) % 360
         angles_longitude["Zen"] = (angles_longitude["Dsc"] + 90) % 360
         angles_longitude["WP (Ecliptical)"] = (angles_longitude["IC"] + 90) % 360
         angles_longitude["Ndr"] = (angles_longitude["Asc"] + 90) % 360

@@ -53,10 +53,10 @@ class ChartData:
         j['right_ascension'] = self.get_right_ascension_coords()
         j['angles'] = self.get_angles_longitude()
         j['cusps'] = self.get_cusps_longitude()
-        j['local_datetime'] = self.local_datetime
-        j['utc_datetime'] = self.utc_datetime
+        j['local_datetime'] = str(self.local_datetime)
+        j['utc_datetime'] = str(self.utc_datetime)
         j['julian_day'] = self.julian_day
-        j['lst'] = self.sidereal_framework.lst or ''
+        j['lst'] = self.sidereal_framework.LST or ''
         j['ramc'] = self.sidereal_framework.ramc or ''
         j['obliquity'] = self.sidereal_framework.obliquity or ''
         j['svp'] = self.sidereal_framework.svp or ''
