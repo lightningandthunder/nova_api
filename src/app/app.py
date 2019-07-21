@@ -2,11 +2,10 @@ from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 import logging
 import pendulum
-import sys
 
-from chartdata import ChartData
 from chartmanager import ChartManager
 from swissephlib import SwissephLib
+from src.dll_tools.tests.functionality_tests import run_tests
 
 app = Flask(__name__)
 api = Api(app)
@@ -66,4 +65,11 @@ api.add_resource(TestMe, '/<string:route>')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    while True:
+        try:
+            run_tests()
+            app.run(debug=True)
+        except KeyboardInterrupt:
+            exit(1)
+        except Exception as e:
+            logger.exception(msg='Error:')

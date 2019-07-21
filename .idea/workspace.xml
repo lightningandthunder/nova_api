@@ -2,22 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="abfc1491-3d37-4b35-83cd-e89d68c9b3e8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/dll_tools/tests/functionality_tests.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/etc/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swecl.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swedate.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swehel.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swehouse.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swejpl.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swemmoon.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swemplan.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swepcalc.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swepdate.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/sweph.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swephlib.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swetest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swetest.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/swissephlib.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swissephlib.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,11 +15,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/app/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-20">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
+            <state relative-caret-position="408">
+              <caret line="24" column="18" lean-forward="true" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -48,11 +39,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/functionality_tests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="463">
-              <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+            <state relative-caret-position="2299">
+              <caret line="121" selection-start-line="121" selection-end-line="121" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -137,11 +128,11 @@
         <option value="$PROJECT_DIR$/src/settings.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/ChartData.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/ChartManager.py" />
-        <option value="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/tests/fixtures.py" />
         <option value="$PROJECT_DIR$/etc/requirements.txt" />
-        <option value="$PROJECT_DIR$/src/app/app.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/swissephlib.py" />
+        <option value="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" />
+        <option value="$PROJECT_DIR$/src/app/app.py" />
       </list>
     </option>
   </component>
@@ -238,7 +229,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test_chartmanager">
+  <component name="RunManager" selected="Python.app">
     <configuration name="LibThreadManager" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="astronova_api" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -314,7 +305,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/dll_tools/tests/functionality_tests.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -359,17 +350,17 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.dll_tools_test (1)" />
+      <item itemvalue="Python.testme" />
+      <item itemvalue="Python.test_chartmanager" />
       <item itemvalue="Python.LibThreadManager" />
       <item itemvalue="Python.app" />
-      <item itemvalue="Python.dll_tools_test (1)" />
-      <item itemvalue="Python.test_chartmanager" />
-      <item itemvalue="Python.testme" />
       <item itemvalue="Python tests.Unittests for dll_tools.test_swissephlib.TestSwissephFunctions" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test_chartmanager" />
         <item itemvalue="Python.app" />
+        <item itemvalue="Python.test_chartmanager" />
         <item itemvalue="Python.LibThreadManager" />
         <item itemvalue="Python.testme" />
         <item itemvalue="Python tests.Unittests for dll_tools.test_swissephlib.TestSwissephFunctions" />
@@ -401,7 +392,14 @@
       <option name="project" value="LOCAL" />
       <updated>1556391068640</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Compiled swelib.dylib for macOS">
+      <created>1563745894766</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1563745894766</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -434,7 +432,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.33705774" visible="true" weight="0.18675123" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.33705774" visible="true" weight="0.18675123" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -456,7 +454,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Testing mostly done; moving on to flask." />
     <MESSAGE value="Started reworking flask application; not functional yet" />
-    <option name="LAST_COMMIT_MESSAGE" value="Started reworking flask application; not functional yet" />
+    <MESSAGE value="Compiled swelib.dylib for macOS" />
+    <option name="LAST_COMMIT_MESSAGE" value="Compiled swelib.dylib for macOS" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -639,13 +638,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-20">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/swissephlib.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-628">
@@ -656,12 +648,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py">
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/functionality_tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="463">
-          <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+        <state relative-caret-position="2299">
+          <caret line="121" selection-start-line="121" selection-end-line="121" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="18" lean-forward="true" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
