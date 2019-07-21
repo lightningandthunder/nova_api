@@ -3,12 +3,21 @@
   <component name="ChangeListManager">
     <list default="true" id="abfc1491-3d37-4b35-83cd-e89d68c9b3e8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/ChartData.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/ChartData.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/ChartManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/ChartManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/tests/fixtures.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/tests/fixtures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/etc/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swecl.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swedate.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swehel.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swehouse.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swejpl.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swemmoon.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swemplan.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swepcalc.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swepdate.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/sweph.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swephlib.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swetest" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swe/swetest.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/swissephlib.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/swissephlib.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,13 +27,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
-              <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
+            <state relative-caret-position="-20">
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/dll_tools/swissephlib.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-628">
+              <caret line="157" selection-start-line="157" selection-end-line="157" />
               <folding>
-                <element signature="e#0#41#0" expanded="true" />
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="463">
+              <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -79,7 +109,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/etc/requirements.txt" />
         <option value="$PROJECT_DIR$/src/app.py" />
         <option value="$PROJECT_DIR$/src/calcs.py" />
         <option value="$PROJECT_DIR$/src/dll_tools.py" />
@@ -101,7 +130,6 @@
         <option value="$PROJECT_DIR$/src/dll_tools/sidereal_framework.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/LibThreadManager.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/swissephlibthreadsafe.py" />
-        <option value="$PROJECT_DIR$/src/dll_tools/swissephlib.py" />
         <option value="$PROJECT_DIR$/src/__init__.py" />
         <option value="$PROJECT_DIR$/src/app/__init__.py" />
         <option value="$PROJECT_DIR$/src/app/.flaskenv" />
@@ -111,15 +139,15 @@
         <option value="$PROJECT_DIR$/src/dll_tools/ChartManager.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/tests/fixtures.py" />
+        <option value="$PROJECT_DIR$/etc/requirements.txt" />
         <option value="$PROJECT_DIR$/src/app/app.py" />
+        <option value="$PROJECT_DIR$/src/dll_tools/swissephlib.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="3728" />
-    <option name="y" value="-17" />
-    <option name="width" value="1163" />
-    <option name="height" value="623" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -133,6 +161,11 @@
             <path>
               <item name="astronova_api" type="b2602c69:ProjectViewProjectNode" />
               <item name="astronova_api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="astronova_api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="astronova_api" type="462c0819:PsiDirectoryNode" />
+              <item name="etc" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="astronova_api" type="b2602c69:ProjectViewProjectNode" />
@@ -166,8 +199,9 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -204,7 +238,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.app">
+  <component name="RunManager" selected="Python.test_chartmanager">
     <configuration name="LibThreadManager" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="astronova_api" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -325,17 +359,17 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.dll_tools_test (1)" />
-      <item itemvalue="Python.testme" />
-      <item itemvalue="Python.test_chartmanager" />
       <item itemvalue="Python.LibThreadManager" />
       <item itemvalue="Python.app" />
+      <item itemvalue="Python.dll_tools_test (1)" />
+      <item itemvalue="Python.test_chartmanager" />
+      <item itemvalue="Python.testme" />
       <item itemvalue="Python tests.Unittests for dll_tools.test_swissephlib.TestSwissephFunctions" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.app" />
         <item itemvalue="Python.test_chartmanager" />
+        <item itemvalue="Python.app" />
         <item itemvalue="Python.LibThreadManager" />
         <item itemvalue="Python.testme" />
         <item itemvalue="Python tests.Unittests for dll_tools.test_swissephlib.TestSwissephFunctions" />
@@ -397,23 +431,23 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="3193" y="-7" width="1295" height="695" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.33705774" visible="true" weight="0.18730159" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.33705774" visible="true" weight="0.18675123" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32546583" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3253012" />
       <window_info anchor="bottom" x="0" y="0" width="1280" height="657" id="Debug" order="2" weight="0.46109176" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
-      <window_info anchor="bottom" x="3207" y="222" width="749" height="176" id="Run" maximized="true" order="5" type="WINDOWED" weight="0.5009311" />
+      <window_info anchor="bottom" x="0" y="22" width="1440" height="878" id="Run" maximized="true" order="5" type="WINDOWED" weight="0.5009311" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.6629423" weight="0.18994413" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5007949" side_tool="true" weight="0.32774675" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.5584416" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49920508" weight="0.33580706" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49920508" weight="0.33493975" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -517,25 +551,8 @@
     <entry file="file://$USER_HOME$/anaconda3/envs/condaenv/lib/python3.7/site-packages/pendulum/datetime.py" />
     <entry file="file://$USER_HOME$/anaconda3/envs/condaenv/lib/python3.7/codecs.py" />
     <entry file="file://$USER_HOME$/anaconda3/envs/condaenv/lib/python3.7/site-packages/numpy/core/fromnumeric.py" />
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/test_swissephlib.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="10" column="45" lean-forward="true" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/dll_tools.py">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/etc/requirements.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/swissephlibthreadsafe.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -572,7 +589,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/ChartData.py">
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/chartdata.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="159">
           <caret line="56" column="32" selection-start-line="56" selection-start-column="32" selection-end-line="56" selection-end-column="32" />
@@ -589,32 +606,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/ChartManager.py">
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/chartmanager.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="244" column="81" lean-forward="true" selection-start-line="244" selection-start-column="81" selection-end-line="244" selection-end-column="81" />
           <folding>
             <element signature="e#0#84#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/swissephlib.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3534">
-          <caret line="186" lean-forward="true" selection-start-line="186" selection-end-line="186" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -629,12 +626,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/etc/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/test_swissephlib.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="10" column="45" lean-forward="true" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
+        <state relative-caret-position="-20">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/swissephlib.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-628">
+          <caret line="157" selection-start-line="157" selection-end-line="157" />
           <folding>
-            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/test_chartmanager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="463">
+          <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>

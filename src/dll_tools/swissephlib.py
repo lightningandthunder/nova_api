@@ -137,7 +137,7 @@ class SwissephLib:
         self.set_ephemeris_path(self.ephemeris_path)
         self.set_sidereal_mode(0, 0, 0)
 
-    def _get_library_for_platform(self):
+    def _get_library_name_for_platform(self):
         """
         Get the absolute path of the Swiss Ephemeris library version needed for current system.
         """
@@ -151,14 +151,14 @@ class SwissephLib:
                 library_name = 'swedll64.dll'
         elif plat == 'Linux':
             library_name = 'libswe.so'
-        else:
-            raise OSError('OS must be Windows or Linux')
+        else: #macOS
+            library_name = 'libswe.dylib'
 
         return library_name
 
     def _load_library(self):
         plat = platform.system()
-        library_with_extension = self._get_library_for_platform()
+        library_with_extension = self._get_library_name_for_platform()
         library_sub_dir = os.path.join('swe/dll', library_with_extension)
         path_to_library = os.path.join(os.path.dirname(__file__), library_sub_dir)
         swe_lib = None
@@ -170,7 +170,8 @@ class SwissephLib:
                 swe_lib = CDLL(path_to_library)
                 logger.info(msg='Loaded Swiss Ephemeris library for Linux.')
             else:
-                raise OSError('OS must be Windows or Linux')
+                swe_lib = CDLL(path_to_library)
+                logger.info(msg='Loaded Swiss Ephemeris library for macOS.')
         except OSError as e:
             logger.error(e)
         finally:
