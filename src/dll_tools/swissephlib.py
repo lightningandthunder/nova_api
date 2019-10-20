@@ -151,7 +151,7 @@ class SwissephLib:
                 library_name = 'swedll64.dll'
         elif plat == 'Linux':
             library_name = 'libswe.so'
-        else: #macOS
+        else:  # macOS
             library_name = 'libswe.dylib'
 
         return library_name

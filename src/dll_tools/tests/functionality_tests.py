@@ -1,12 +1,8 @@
 import pendulum
 import logging
 
-from chartmanager import ChartManager
-from swissephlib import SwissephLib
 from tests import fixtures
 
-swiss_lib = SwissephLib()
-manager = ChartManager(swiss_lib)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO,
@@ -14,7 +10,12 @@ logging.basicConfig(level=logging.INFO,
                     datefmt='%m-%d %H:%M')
 
 
-def run_tests():
+def run_tests(manager=None):
+    if not manager:
+        logger.error("No ChartManager provided!")
+        return
+
+    test_errors = list()
 
     #  Plain charts
 
@@ -23,21 +24,21 @@ def run_tests():
     lat = 40.9792
     long = -74.1169
     chart = manager.create_chartdata(ldt, long, lat)
-    fixtures.compare_charts(chart, fixtures.transits_2019_3_18_22_30_15_Hackensack, "2019-3-18 22:30:15 Hackensack")
+    test_errors += fixtures.compare_charts(chart, fixtures.transits_2019_3_18_22_30_15_Hackensack, "2019-3-18 22:30:15 Hackensack")
 
     # 2019/3/10 3:30:15am Melbourne - Negative latitude, positive longitude
     ldt = pendulum.datetime(2019, 3, 18, 22, 30, 15, tz='Australia/Melbourne')
     lat = -37.8166
     long = 144.9666
     chart = manager.create_chartdata(ldt, long, lat)
-    fixtures.compare_charts(chart, fixtures.transits_2019_3_10_1_30_15_Melbourne, "2019-3-18 22:30:15 Melbourne, AUS")
+    test_errors += fixtures.compare_charts(chart, fixtures.transits_2019_3_10_1_30_15_Melbourne, "2019-3-18 22:30:15 Melbourne, AUS")
 
     # 2010/3/23 10:59:59am Murmansk - Latitude above arctic circle
     ldt = pendulum.datetime(2019, 3, 23, 10, 59, 59, tz='Europe/Moscow')
     lat = 68.9666
     long = 33.0833
     chart = manager.create_chartdata(ldt, long, lat)
-    fixtures.compare_charts(chart, fixtures.transits_2019_3_23_1_30_15_murmansk, "2019-3-23 10:59:59 Murmansk, RUS")
+    test_errors += fixtures.compare_charts(chart, fixtures.transits_2019_3_23_1_30_15_murmansk, "2019-3-23 10:59:59 Murmansk, RUS")
 
     # Test return chart dates
 
@@ -49,7 +50,7 @@ def run_tests():
     return_date = pendulum.datetime(2019, 3, 24, 10, tz='America/New_York')
     chart_list = manager._generate_return_list(chart, long, lat, return_date, 1, 4, 20)  # Next 20 quarti-lunars
 
-    fixtures.compare_return_times(chart_list, fixtures.quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack,
+    test_errors += fixtures.compare_return_times(chart_list, fixtures.quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack,
                                   '2019/3/18 22:30:15 Hackensack')
 
     # 2019/3/10 3:30:15am Melbourne
@@ -63,7 +64,7 @@ def run_tests():
     # Note that Solar Fire doesn't seem to pay attention to Australian AEDT for this; most of its times are an hour behind.
     # However, its calculations are based on UTC, so it appears as though the charts themselves are identical;
     # All that differs is the wall clock time it returns.
-    fixtures.compare_return_times(chart_list, fixtures.quarti_ennead_dates_from_2019_3_18_22_30_15_Melbourne,
+    test_errors += fixtures.compare_return_times(chart_list, fixtures.quarti_ennead_dates_from_2019_3_18_22_30_15_Melbourne,
                                   '2019/3/18 22:30:15 Melbourne')
 
 
@@ -77,7 +78,7 @@ def run_tests():
     lunar_return = manager._generate_return_list(radix, 144.9666, -37.8166, return_date, 1, 1, 1)[0]
     manager.precess_into_sidereal_framework(radix=radix, transit_chart=lunar_return)
 
-    fixtures.compare_charts(radix, fixtures.slr_2019_3_19_melbourne,
+    test_errors += fixtures.compare_charts(radix, fixtures.slr_2019_3_19_melbourne,
                             "1989-3-18 22:30:15 Hack NJ SLR 2019-3-19 Melbourne AUS")
 
     # Testing that precession is being accounted for in lists of solunar returns
@@ -93,11 +94,9 @@ def run_tests():
     for pair in pairs:
         if not pair[0].sidereal_framework.LST == pair[1].sidereal_framework.LST:
             failed = True
-            errors.append(f"Radix LST: {pair[0].sidereal_framework.LST}; Return LST: {pair[1].sidereal_framework.LST}")
-    if not failed:
-        logger.info('Precessing radix into consecutive returns passed.')
-    else:
-        logger.warning(f'Failed: precessing radix into consecutive returns: {errors}')
+            test_errors += f"Radix LST: {pair[0].sidereal_framework.LST}; Return LST: {pair[1].sidereal_framework.LST}"
+    if failed:
+        test_errors += f'Failed: precessing radix into consecutive returns: {errors}'
 
 
     # These still need tests
@@ -119,6 +118,8 @@ def run_tests():
 
     radix, local_natal, sp_radix, active_ssr, sp_ssr, transits = manager.get_transit_sensitive_charts(radix, ldt, long, lat)
 
+    if test_errors:
+        logger.warning(test_errors)
+    else:
+        logger.info("Startup tests passed.")
 
-if __name__ == '__main__':
-    run_tests()

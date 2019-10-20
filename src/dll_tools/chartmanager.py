@@ -1,10 +1,12 @@
-from ctypes import c_char_p, c_int, c_int32, c_double, POINTER, create_string_buffer
+from ctypes import c_double, create_string_buffer
 from math import sin, cos, tan, asin, atan, degrees, radians, fabs
 import copy
 
 from chartdata import ChartData
 from logging import getLogger
 from sidereal_framework import SiderealFramework
+from swissephlib import SwissephLib
+
 import settings
 
 logger = getLogger(__name__)
@@ -16,10 +18,8 @@ Singleton that manages chart data sets. Initialized with an instance of a Swisse
 
 class ChartManager:
 
-    def __init__(self, lib):
-        if not lib:
-            raise ImportError("Unable to import library.")
-        self.lib = lib
+    def __init__(self):
+        self.lib = SwissephLib()
 
     def __del__(self):
         self.lib.close()

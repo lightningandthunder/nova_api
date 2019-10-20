@@ -1,98 +1,60 @@
-from numpy import round
 from math import fabs
 import pendulum
-import logging
-import sys
 
 """Test dictionaries based on Solar Fire output."""
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    datefmt='%m-%d %H:%M')
 
 
 def compare_return_times(chart_list, expected_date_list, name):
-    logger.info(f'Testing return times for {name}...')
+    errors = list()
 
-    failed = False
     for index, c in enumerate(chart_list):
-        if c.local_datetime != expected_date_list[index]:
-            logger.warning(
-                f'Harmonic return test failed; {c.local_datetime} != expected date: {expected_date_list[index]}')
-            failed = True
+        if (c.local_datetime - expected_date_list[index]).in_seconds() > 30:
+            errors.append(
+                f'{name} on harmonic return; {c.local_datetime} != expected date: {expected_date_list[index]}')
 
-    if not failed:
-        logger.info('Return dates passed.')
+    return errors
 
 
 def compare_charts(chart, fixture, name):
-    logger.info(f'Testing chart {name}...')
+    errors = list()
 
-    failed = False
     ecliptic = chart.get_ecliptical_coords()
     for body in ecliptic:
         if fabs(ecliptic[body] - fixture['Ecliptic'][body]) >= 0.5:
-            logger.warning(f"Test failed on {body} ecliptical coords: {ecliptic[body]} != {fixture['Ecliptic'][body]}")
-            failed = True
+            errors.append(f"{name} on {body} ecliptical coords: {ecliptic[body]} != {fixture['Ecliptic'][body]}")
 
-    if not failed:
-        logger.info('Ecliptical coordinates passed.')
-
-    failed = False
     mundane = chart.get_mundane_coords()
     for body in mundane:
         if fabs(mundane[body] - fixture['Mundane'][body]) >= 0.5:
-            logger.warning(f"Test failed on {body} mundane coords: {mundane[body]} != {fixture['Mundane'][body]}")
-            failed = True
+            errors.append(f"{name} on {body} mundane coords: {mundane[body]} != {fixture['Mundane'][body]}")
 
-    if not failed:
-        logger.info('Mundane coordinates passed.')
-
-    failed = False
     ra = chart.get_right_ascension_coords()
     for body in ra:
         if fabs(ra[body] - fixture['Right Ascension'][body]) >= 0.5:
-            logger.warning(f"Test failed on {body} RA coords: {ra[body]} != {fixture['Right Ascension'][body]}")
-            failed = True
+            errors.append(f"{name} on {body} RA coords: {ra[body]} != {fixture['Right Ascension'][body]}")
 
-    if not failed:
-        logger.info('RA coordinates passed. ')
 
-    failed = False
     cusps = chart.get_cusps_longitude()
     for cusp in cusps:
         if fabs(cusps[cusp] - fixture['Cusps'][cusp]) >= 0.5:
-            logger.warning(f"Test failed on cusp {cusp}: {cusps[cusp]} != {fixture['Cusps'][cusp]}")
-            failed = True
+            errors.append(f"{name} on cusp {cusp}: {cusps[cusp]} != {fixture['Cusps'][cusp]}")
 
-    if not failed:
-        logger.info('Cusps coordinates passed.')
-
-    failed = False
     angles = chart.get_angles_longitude()
     for angle in angles:
         if fabs(angles[angle] - fixture['Angles'][angle]) >= 0.5:
-            logger.warning(f"Test failed on angle {angle}: {angles[angle]} != {fixture['Angles'][angle]}")
-            failed = True
-
-    if not failed:
-        logger.info('Angle coordinates passed.')
+            errors.append(f"{name} on angle {angle}: {angles[angle]} != {fixture['Angles'][angle]}")
 
     if fabs(chart.sidereal_framework.LST - fixture['LST']) >= 0.01:
-        logger.warning(f"Test failed on LST: {chart.sidereal_framework.LST} != {fixture['LST']}")
-    else:
-        logger.info('LST passed.')
+        errors.append(f"{name} on LST: {chart.sidereal_framework.LST} != {fixture['LST']}")
 
     if fabs(chart.sidereal_framework.svp - fixture['SVP']) >= 0.01:
-        logger.warning(f"Test failed on SVP: {chart.sidereal_framework.svp} != {fixture['SVP']}")
-    else:
-        logger.info('SVP passed.')
+        errors.append(f"{name} on SVP: {chart.sidereal_framework.svp} != {fixture['SVP']}")
 
     if fabs(chart.sidereal_framework.obliquity - fixture['Obliquity']) >= 0.001:
-        logger.warning(f"Test failed on obliquity: {chart.sidereal_framework.obliquity} != {fixture['Obliquity']}")
-    else:
-        logger.info('Obliquity passed.')
+        errors.append(f"{name} on obliquity: {chart.sidereal_framework.obliquity} != {fixture['Obliquity']}")
+
+    return errors
 
 
 # ==================================================================================================================== #
