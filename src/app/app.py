@@ -4,7 +4,8 @@ import logging
 import pendulum
 from chartmanager import ChartManager
 from src.dll_tools.tests.functionality_tests import run_tests
-
+import settings
+import json
 
 from pendulum.tz.zoneinfo.exceptions import InvalidTimezone
 
@@ -22,10 +23,50 @@ manager = ChartManager()
 @app.route('/radix', methods=['POST'])
 @cross_origin()
 def radix():
-    local_datetime = request.json.get('local_datetime')
-    tz = request.json.get('tz')
+    try:
+        radix_chart = get_radix_from_json(request.json)
+        return radix_chart.jsonify_chart()
+    except Exception as ex:
+        return str(ex)
+
+
+@app.route('/returns', methods=['POST'])
+@cross_origin()
+def returns():
+    radix_data = request.json.get('radix')
+    return_planet = request.json.get('return_planet')
+    return_harmonic = request.json.get('return_harmonic')
+    return_longitude = request.json.get('return_longitude')
+    return_latitude = request.json.get('return_latitude')
+    return_start_date_raw = request.json.get('return_start_date')
+    return_quantity = request.json.get('return_quantity')
+    return_start_date = pendulum.parse(return_start_date_raw)
+
+    return_body = settings.STRING_TO_INT_PLANET_MAP[return_planet]
+
+    radix = get_radix_from_json(radix_data)
+    return_pairs = manager.generate_radix_return_pairs(radix=radix,
+                                                       geo_longitude=return_longitude,
+                                                       geo_latitude=return_latitude,
+                                                       date=return_start_date,
+                                                       body=return_body,
+                                                       harmonic=return_harmonic,
+                                                       return_quantity=return_quantity)
+
+    return_json = list()
+
+    for pair in return_pairs:
+        return_json.append([pair[0].jsonify_chart, pair[1].jsonify_chart])
+
+    return json.dumps(return_json)
+
+
+def get_radix_from_json(json):
+    local_datetime = json.get('local_datetime')
+    tz = json.get('tz')
+
     if not local_datetime:
-        return('No datetime provided')
+        raise RuntimeError('No datetime provided')
 
     pendulum_dt = pendulum.parse(local_datetime)
 
@@ -35,7 +76,7 @@ def radix():
             print(pendulum_dt)
         except InvalidTimezone as ex:
             logger.error(f"Bad timezone: {str(ex)}")
-            return str(ex)
+            raise ex
 
     longitude = request.json.get('longitude')
     latitude = request.json.get('latitude')
@@ -44,7 +85,7 @@ def radix():
                                            geo_longitude=float(longitude),
                                            geo_latitude=float(latitude))
 
-    return radix_chart.jsonify_chart()
+    return radix_chart
 
 
 if __name__ == '__main__':

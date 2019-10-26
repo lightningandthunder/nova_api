@@ -56,12 +56,12 @@ class ChartData:
         j['local_datetime'] = str(self.local_datetime)
         j['utc_datetime'] = str(self.utc_datetime)
         j['julian_day'] = self.julian_day
-        j['lst'] = self.sidereal_framework.LST or ''
-        j['ramc'] = self.sidereal_framework.ramc or ''
-        j['obliquity'] = self.sidereal_framework.obliquity or ''
-        j['svp'] = self.sidereal_framework.svp or ''
-        j['longitude'] = self.sidereal_framework.geo_longitude or ''
-        j['latitude'] = self.sidereal_framework.geo_latitude or ''
+        j['lst'] = self.sidereal_framework.LST if self.sidereal_framework else ''
+        j['ramc'] = self.sidereal_framework.ramc if self.sidereal_framework else ''
+        j['obliquity'] = self.sidereal_framework.obliquity if self.sidereal_framework else ''
+        j['svp'] = self.sidereal_framework.svp if self.sidereal_framework else ''
+        j['longitude'] = self.sidereal_framework.geo_longitude if self.sidereal_framework else ''
+        j['latitude'] = self.sidereal_framework.geo_latitude if self.sidereal_framework else ''
 
         return json.dumps(j)
 
