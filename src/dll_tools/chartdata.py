@@ -12,6 +12,7 @@ class ChartData:
         self.local_datetime = local_datetime
         self.utc_datetime = utc_datetime
         self.julian_day = julian_day
+        self.tz = local_datetime.tz
         self.sidereal_framework = None
         self.cusps_longitude = None
         self.angles_longitude = None
@@ -54,6 +55,7 @@ class ChartData:
         j['angles'] = self.get_angles_longitude()
         j['cusps'] = self.get_cusps_longitude()
         j['local_datetime'] = str(self.local_datetime)
+        j['tz'] = self.tz.name or ''
         j['utc_datetime'] = str(self.utc_datetime)
         j['julian_day'] = self.julian_day
         j['lst'] = self.sidereal_framework.LST if self.sidereal_framework else ''
