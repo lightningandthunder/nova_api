@@ -33,14 +33,24 @@ def radix():
 @app.route('/returns', methods=['POST'])
 @cross_origin()
 def returns():
+    # TODO: Add validation
     radix_data = request.json.get('radix')
-    return_planet = request.json.get('return_planet')
-    return_harmonic = request.json.get('return_harmonic')
-    return_longitude = request.json.get('return_longitude')
-    return_latitude = request.json.get('return_latitude')
-    return_start_date_raw = request.json.get('return_start_date')
-    return_quantity = request.json.get('return_quantity')
+    return_params = request.json.get('return_params')
+    print(radix_data)
+    print(return_params)
+
+    return_planet = return_params.get("return_planet")
+    return_harmonic = int(return_params.get("return_harmonic"))
+    return_longitude = float(return_params.get("return_longitude"))
+    return_latitude = float(return_params.get("return_latitude"))
+    return_start_date_raw = return_params.get("return_start_date")
+    return_quantity = int(return_params.get("return_quantity"))
+
     return_start_date = pendulum.parse(return_start_date_raw)
+    tz = return_params.get('tz')
+    return_start_date = return_start_date.in_timezone(tz)
+
+    print(return_start_date)
 
     return_body = settings.STRING_TO_INT_PLANET_MAP[return_planet]
 
@@ -56,7 +66,7 @@ def returns():
     return_json = list()
 
     for pair in return_pairs:
-        return_json.append([pair[0].jsonify_chart, pair[1].jsonify_chart])
+        return_json.append([pair[0].jsonify_chart(), pair[1].jsonify_chart()])
 
     return json.dumps(return_json)
 
@@ -78,8 +88,8 @@ def get_radix_from_json(json):
             logger.error(f"Bad timezone: {str(ex)}")
             raise ex
 
-    longitude = request.json.get('longitude')
-    latitude = request.json.get('latitude')
+    longitude = json.get('longitude')
+    latitude = json.get('latitude')
 
     radix_chart = manager.create_chartdata(local_datetime=pendulum_dt,
                                            geo_longitude=float(longitude),
