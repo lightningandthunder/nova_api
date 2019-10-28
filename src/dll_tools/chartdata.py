@@ -65,7 +65,7 @@ class ChartData:
         j['longitude'] = self.sidereal_framework.geo_longitude if self.sidereal_framework else ''
         j['latitude'] = self.sidereal_framework.geo_latitude if self.sidereal_framework else ''
 
-        return json.dumps(j)
+        return j
 
     def __str__(self):
         return str({

@@ -25,7 +25,7 @@ manager = ChartManager()
 def radix():
     try:
         radix_chart = get_radix_from_json(request.json)
-        return radix_chart.jsonify_chart()
+        return json.dumps(radix_chart.jsonify_chart())
     except Exception as ex:
         return str(ex)
 
@@ -66,7 +66,7 @@ def returns():
     return_json = list()
 
     for pair in return_pairs:
-        return_json.append([pair[0].jsonify_chart(), pair[1].jsonify_chart()])
+        return_json.append({"radix": pair[0].jsonify_chart(), "return_chart": pair[1].jsonify_chart()})
 
     return json.dumps(return_json)
 
