@@ -472,7 +472,7 @@ class ChartManager:
         # -1 is the special "planetary body" for calculating obliquity
         self.lib.calculate_planets_UT(julian_day, -1, settings.SIDEREALMODE, obliquity_array, errorstring)
         if errorstring.value:
-            print(f'Error encountered in {self._get_planet_array.__name__}: {errorstring.value}')
+            logger.warning(f'Error encountered in {self._get_planet_array.__name__}: {errorstring.value}')
         return obliquity_array[0]
 
     def _get_planet_array(self, body_number, dt):
