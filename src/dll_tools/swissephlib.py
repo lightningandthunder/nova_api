@@ -3,8 +3,6 @@ from ctypes import c_char_p, c_int, c_int32, c_double, POINTER, CDLL
 import os
 import platform
 import struct
-import pathlib
-import threading
 
 import settings
 from logging import getLogger
@@ -149,10 +147,13 @@ class SwissephLib:
                 library_name = 'swedll32.dll'
             else:
                 library_name = 'swedll64.dll'
-        elif plat == 'Linux':
-            library_name = 'libswe.so'
-        else:  # macOS
+
+        # macOS
+        elif plat == 'Darwin':
             library_name = 'libswe.dylib'
+
+        else:
+            library_name = 'libswe.so'
 
         return library_name
 
@@ -166,12 +167,13 @@ class SwissephLib:
             if plat == 'Windows':
                 swe_lib = ctypes.windll.LoadLibrary(path_to_library)
                 logger.info(msg='Loaded Swiss Ephemeris library for Windows.')
-            elif plat == 'Linux':
-                swe_lib = CDLL(path_to_library)
-                logger.info(msg='Loaded Swiss Ephemeris library for Linux.')
-            else:
+            elif plat == 'Darwin':
                 swe_lib = CDLL(path_to_library)
                 logger.info(msg='Loaded Swiss Ephemeris library for macOS.')
+            else:
+                swe_lib = CDLL(path_to_library)
+                logger.info(msg='Loaded Swiss Ephemeris library for unspecified Linux/Unix.')
+
         except OSError as e:
             logger.error(e)
         finally:

@@ -30,22 +30,25 @@ def radix():
         radix_chart = get_radix_from_json(request.json)
         return json.dumps(radix_chart.jsonify_chart())
     except Exception as ex:
-        return str(ex)
+        return json.dumps({"err": str(ex)})
 
 
 @app.route('/returns', methods=['POST'])
 @cross_origin()
 def returns():
-    radix_chart = get_radix_from_json(request.json.get('radix'))
-    return_params = get_return_params_from_json(request.json.get('return_params'))
+    try:
+        radix_chart = get_radix_from_json(request.json.get('radix'))
+        return_params = get_return_params_from_json(request.json.get('return_params'))
 
-    return_pairs = manager.generate_radix_return_pairs(radix=radix_chart, **return_params)
+        return_pairs = manager.generate_radix_return_pairs(radix=radix_chart, **return_params)
 
-    result_json = list()
-    for pair in return_pairs:
-        result_json.append({"radix": pair[0].jsonify_chart(), "return_chart": pair[1].jsonify_chart()})
+        result_json = list()
+        for pair in return_pairs:
+            result_json.append({"radix": pair[0].jsonify_chart(), "return_chart": pair[1].jsonify_chart()})
 
-    return json.dumps(result_json)
+        return json.dumps(result_json)
+    except Exception as ex:
+        return json.dumps({"err": str(ex)})
 
 
 # =============== Extraction and validation =============== #
