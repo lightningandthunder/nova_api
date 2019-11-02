@@ -45,11 +45,9 @@ def returns():
     return_latitude = float(return_params.get("return_latitude"))
     return_start_date_raw = return_params.get("return_start_date")
     return_quantity = int(return_params.get("return_quantity"))
-
-    return_start_date = pendulum.parse(return_start_date_raw)
     tz = return_params.get('tz')
-    return_start_date = return_start_date.in_timezone(tz)
 
+    return_start_date = pendulum.parse(return_start_date_raw, tz=tz)
     print(return_start_date)
 
     return_body = settings.STRING_TO_INT_PLANET_MAP[return_planet]
@@ -77,8 +75,10 @@ def get_radix_from_json(json):
 
     if not local_datetime:
         raise RuntimeError('No datetime provided')
+    if not tz:
+        raise RuntimeError('Missing timezone')
 
-    pendulum_dt = pendulum.parse(local_datetime)
+    pendulum_dt = pendulum.parse(local_datetime, tz=tz)
 
     if tz:
         try:
