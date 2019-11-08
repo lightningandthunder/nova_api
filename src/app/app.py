@@ -115,8 +115,8 @@ def get_radix_from_json(json):
         raise RuntimeError('Missing timezone')
 
     try:
-        pendulum_dt = pendulum.parse(local_datetime, tz=tz)
-        # pendulum_dt = pendulum_dt.in_timezone(tz)
+        pendulum_dt = pendulum.parse(local_datetime)
+        pendulum_dt = pendulum_dt.in_timezone(tz)
     except InvalidTimezone as ex:
         logger.error(f"Bad timezone: {str(ex)}")
         raise ex
