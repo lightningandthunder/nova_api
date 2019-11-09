@@ -3,11 +3,10 @@ from ctypes import c_char_p, c_int, c_int32, c_double, POINTER, CDLL
 import os
 import platform
 import struct
-import pathlib
 import threading
-
-import settings
 from logging import getLogger
+
+from src import settings
 
 logger = getLogger(__name__)
 

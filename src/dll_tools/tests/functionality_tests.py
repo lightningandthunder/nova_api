@@ -1,7 +1,7 @@
 import pendulum
 import logging
 
-from tests import fixtures
+from src.dll_tools.tests import fixtures
 
 
 logger = logging.getLogger(__name__)

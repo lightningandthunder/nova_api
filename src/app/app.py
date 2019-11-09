@@ -5,9 +5,9 @@ import pendulum
 import json
 from pendulum.tz.zoneinfo.exceptions import InvalidTimezone
 
-from chartmanager import ChartManager
+from src.dll_tools.chartmanager import ChartManager
 from src.dll_tools.tests.functionality_tests import run_tests
-import settings
+from src import settings
 
 app = Flask(__name__)
 CORS(app)

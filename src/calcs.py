@@ -8,8 +8,7 @@ from timezonefinder import TimezoneFinder
 from datetime import datetime, timedelta
 from geopy.geocoders import Nominatim
 
-import settings
-from dll_tools import *
+from . import settings
 
 
 def get_sign(longitude):

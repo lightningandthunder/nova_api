@@ -2,12 +2,12 @@ from ctypes import c_double, create_string_buffer
 from math import sin, cos, tan, asin, atan, degrees, radians, fabs
 import copy
 
-from chartdata import ChartData
+from src.dll_tools.chartdata import ChartData
 from logging import getLogger
-from sidereal_framework import SiderealFramework
-from swissephlib import SwissephLib
+from src.dll_tools.sidereal_framework import SiderealFramework
+from src.dll_tools.swissephlib import SwissephLib
 
-import settings
+from src import settings
 
 logger = getLogger(__name__)
 

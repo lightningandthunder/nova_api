@@ -4,7 +4,6 @@ import pendulum
 """Test dictionaries based on Solar Fire output."""
 
 
-
 def compare_return_times(chart_list, expected_date_list, name):
     errors = list()
 
@@ -33,7 +32,6 @@ def compare_charts(chart, fixture, name):
     for body in ra:
         if fabs(ra[body] - fixture['Right Ascension'][body]) >= 0.5:
             errors.append(f"{name} on {body} RA coords: {ra[body]} != {fixture['Right Ascension'][body]}")
-
 
     cusps = chart.get_cusps_longitude()
     for cusp in cusps:
