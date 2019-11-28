@@ -51,6 +51,25 @@ def returns():
         return json.dumps({"err": str(ex)})
 
 
+
+@app.route('/returns', methods=['POST'])
+@cross_origin()
+def relocate_charts():
+    try:
+        radix_chart = get_radix_from_json(request.json.get('radix'))
+        longitude = request.json.get('longitude')
+        latitude = request.json.get('latitude')
+        tz = request.json.get('tz')
+
+        return_chart = None  # TODO
+
+        manager.relocate(radix=radix_chart, geo_longitude=longitude, geo_latitude=latitude, timezone=tz)
+
+        return json.dumps(radix_chart.jsonify_chart())
+
+    except Exception as ex:
+        return json.dumps({"err": str(ex)})
+
 # =============== Extraction and validation =============== #
 
 

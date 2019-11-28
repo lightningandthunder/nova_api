@@ -49,6 +49,12 @@ class ChartManager:
         return chart
 
     def relocate(self, radix, geo_longitude, geo_latitude, timezone):
+        """Recalculate prime vertical longitude, right ascension, and ecliptical angles and cusps against a new
+         sidereal framework. Done on the radix chart in place.
+        :param radix: ChartData instance to be precessed
+        :param transit_chart: ChartData instance
+        :returns: None"""
+
         radix.sidereal_framework.geo_longitude = geo_longitude
         radix.sidereal_framework.geo_latitude = geo_latitude
         radix.local_datetime = radix.local_datetime.in_tz(timezone)
@@ -57,8 +63,8 @@ class ChartManager:
         radix.angles_longitude, radix.cusps_longitude = self._populate_ecliptical_angles_and_cusps(radix)
 
     def precess_into_sidereal_framework(self, radix, transit_chart):
-        """Recalculate prime vertical longitude, right ascension, and ecliptical angles and cusps against another
-        sidereal framework. Done on the radix chart in place.
+        """Recalculate prime vertical longitude, right ascension, and ecliptical angles and cusps against a transiting
+        chart's sidereal framework. Done on the radix chart in place.
         :param radix: ChartData instance to be precessed
         :param transit_chart: ChartData instance
         :returns: None"""
@@ -70,8 +76,12 @@ class ChartManager:
         radix.angles_longitude, radix.cusps_longitude = self._populate_ecliptical_angles_and_cusps(radix)
 
     def get_transit_sensitive_charts(self, radix, local_dt, geo_longitude, geo_latitude):
+
+        transits = self.create_chartdata(local_dt, geo_longitude, geo_latitude)
+
         local_natal = copy.deepcopy(radix)
         self.relocate(local_natal, geo_longitude, geo_latitude, local_dt.tz)
+
         ssr_dt = local_dt
         active_ssr = \
         self._generate_return_list(radix=local_natal, geo_longitude=geo_longitude, geo_latitude=geo_latitude,
@@ -84,14 +94,11 @@ class ChartManager:
                 self._generate_return_list(radix=local_natal, geo_longitude=geo_longitude, geo_latitude=geo_latitude,
                                            date=ssr_dt, body=0, harmonic=1, return_quantity=1)[0]
 
-        transits = self.create_chartdata(local_dt, geo_longitude, geo_latitude)
-
-
         # Secondary progressions
         sp_radix = self.get_progressions(radix, local_dt, geo_longitude, geo_latitude)
         sp_ssr = self.get_progressions(active_ssr, local_dt, geo_longitude, geo_latitude)
 
-        return radix, local_natal, sp_radix, active_ssr, sp_ssr, transits  # add progressed natal, progressed SSR
+        return radix, local_natal, sp_radix, active_ssr, sp_ssr, transits
         # TODO: Test me
 
     def get_progressions(self, radix, local_dt, geo_longitude, geo_latitude):
