@@ -113,7 +113,6 @@ def get_return_params_from_json(return_params):
 
     start_date = pendulum.parse(start_date_raw)
     start_date = start_date.in_timezone(tz)
-    print(start_date)
     return_body = settings.STRING_TO_INT_PLANET_MAP[planet]
 
     return {
