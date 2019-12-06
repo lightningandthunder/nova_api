@@ -6,6 +6,7 @@ from src.dll_tools.chartdata import ChartData
 from logging import getLogger
 from src.dll_tools.sidereal_framework import SiderealFramework
 from src.dll_tools.swissephlib import SwissephLib
+from src.dll_tools.tests.functionality_tests import run_tests
 
 from src import settings
 
@@ -20,6 +21,7 @@ class ChartManager:
 
     def __init__(self):
         self.lib = SwissephLib()
+        run_tests(self)
 
     def __del__(self):
         self.lib.close()
