@@ -1,3 +1,12 @@
+####
+# #####################################################################################################################
+#   This is the original set of calculations for the first version of this application - the first app I ever wrote.  #
+# Once a few remaining calculations have been translated into JS for use in the front end, this file will be removed. #
+# #####################################################################################################################
+####
+
+
+
 from ctypes import *
 from ctypes.wintypes import *
 import math
