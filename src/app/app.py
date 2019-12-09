@@ -6,7 +6,6 @@ import json
 from pendulum.tz.zoneinfo.exceptions import InvalidTimezone
 
 from src.dll_tools.chartmanager import ChartManager
-from src.dll_tools.tests.functionality_tests import run_tests
 from src import settings
 
 app = Flask(__name__)
@@ -57,15 +56,14 @@ def returns():
 def relocate_charts():
     try:
         radix_chart = get_radix_from_json(request.json.get('radix'))
-        longitude = request.json.get('longitude')
-        latitude = request.json.get('latitude')
+        longitude = float(request.json.get('longitude'))
+        latitude = float(request.json.get('latitude'))
         tz = request.json.get('tz')
+        dt = radix_chart.local_datetime.in_tz(tz)
+        return json.dumps(manager.create_chartdata(dt, longitude, latitude).jsonify_chart())
 
-        return_chart = None  # TODO
-
-        manager.relocate(radix=radix_chart, geo_longitude=longitude, geo_latitude=latitude, timezone=tz)
-
-        return json.dumps(radix_chart.jsonify_chart())
+        # return_chart = None  # TODO
+        # return json.dumps(radix_chart.jsonify_chart())
 
     except Exception as ex:
         return json.dumps({"err": str(ex)})
@@ -154,7 +152,6 @@ def get_radix_from_json(json):
 if __name__ == '__main__':
     while True:
         try:
-            run_tests(manager)
             app.run(debug=True, port=5000)
         except KeyboardInterrupt:
             exit(1)
