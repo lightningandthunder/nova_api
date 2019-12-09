@@ -50,20 +50,28 @@ def returns():
         return json.dumps({"err": str(ex)})
 
 
-
 @app.route('/relocate', methods=['POST'])
 @cross_origin()
 def relocate_charts():
     try:
-        radix_chart = get_radix_from_json(request.json.get('radix'))
         longitude = float(request.json.get('longitude'))
         latitude = float(request.json.get('latitude'))
+        radix_dt = pendulum.parse(request.json.get('radix').get('local_datetime'))
         tz = request.json.get('tz')
-        dt = radix_chart.local_datetime.in_tz(tz)
-        return json.dumps(manager.create_chartdata(dt, longitude, latitude).jsonify_chart())
+        radix_dt = radix_dt.in_tz(tz)
+        rel_radix = manager.create_chartdata(radix_dt, longitude, latitude)
 
-        # return_chart = None  # TODO
-        # return json.dumps(radix_chart.jsonify_chart())
+        rel_return = None
+        if request.json.get('return_chart') is not None:
+            return_dt = pendulum.parse(request.json.get('return_chart').get('local_datetime'))
+            return_dt = return_dt.in_tz(tz)
+            rel_return = manager.create_chartdata(return_dt, longitude, latitude)
+            manager.precess_into_sidereal_framework(radix=rel_radix, transit_chart=rel_return)
+
+        if rel_return:
+            return json.dumps({"radix": rel_radix.jsonify_chart(), "return_chart": rel_return.jsonify_chart()})
+        else:
+            return json.dumps(rel_radix.jsonify_chart())
 
     except Exception as ex:
         return json.dumps({"err": str(ex)})

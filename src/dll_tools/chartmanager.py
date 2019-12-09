@@ -63,7 +63,6 @@ class ChartManager:
         radix.planets_mundane = self._populate_mundane_values(radix)
         radix.planets_right_ascension = self._populate_right_ascension_values(radix)
         radix.angles_longitude, radix.cusps_longitude = self._populate_ecliptical_angles_and_cusps(radix)
-        print(radix)
 
     def precess_into_sidereal_framework(self, radix, transit_chart):
         """Recalculate prime vertical longitude, right ascension, and ecliptical angles and cusps against a transiting
