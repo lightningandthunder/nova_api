@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="abfc1491-3d37-4b35-83cd-e89d68c9b3e8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/astrosetup.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/calcs.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dll_tools/chartmanager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/chartmanager.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,8 +27,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/dll_tools/chartmanager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
-              <caret line="367" column="67" lean-forward="true" selection-start-line="367" selection-start-column="67" selection-end-line="367" selection-end-column="67" />
+            <state relative-caret-position="-1903">
+              <caret line="293" column="76" lean-forward="true" selection-start-line="293" selection-start-column="76" selection-end-line="293" selection-end-column="76" />
               <folding>
                 <element signature="e#0#49#0" expanded="true" />
               </folding>
@@ -124,8 +122,8 @@
         <option value="$PROJECT_DIR$/src/dll_tools/tests/fixtures.py" />
         <option value="$PROJECT_DIR$/src/calcs.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/tests/functionality_tests.py" />
-        <option value="$PROJECT_DIR$/src/dll_tools/chartmanager.py" />
         <option value="$PROJECT_DIR$/src/app/app.py" />
+        <option value="$PROJECT_DIR$/src/dll_tools/chartmanager.py" />
       </list>
     </option>
   </component>
@@ -426,7 +424,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.33705774" visible="true" weight="0.1761804" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.33705774" visible="true" weight="0.1761804" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -571,16 +569,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dll_tools/swissephlib.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="80" column="13" selection-start-line="80" selection-start-column="13" selection-end-line="80" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/functionality_tests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="229">
@@ -659,10 +647,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/dll_tools/swissephlib.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1129">
+          <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/chartmanager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="367" column="67" lean-forward="true" selection-start-line="367" selection-start-column="67" selection-end-line="367" selection-end-column="67" />
+        <state relative-caret-position="-1903">
+          <caret line="293" column="76" lean-forward="true" selection-start-line="293" selection-start-column="76" selection-end-line="293" selection-end-column="76" />
           <folding>
             <element signature="e#0#49#0" expanded="true" />
           </folding>
