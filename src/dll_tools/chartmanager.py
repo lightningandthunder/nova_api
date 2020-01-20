@@ -349,6 +349,7 @@ class ChartManager:
         # Binary search for a planetary return to a specific precision
         midpoint_dt = None
         while len(increment_list) >= 1:
+            print(f'Size of binary search list: {len(increment_list)}')
             midpoint_dt = start_dt
             midpoint_index = len(increment_list) // 2
             midpoint_dt = midpoint_dt.add(**{precision: increment_list[midpoint_index]})  # e.g. .add(hours=some_int)
