@@ -49,7 +49,7 @@ STRING_TO_INT_PLANET_MAP = {
     'Pluto': 9
 }
 
-ORBITAL_PERIODS_HOURS = [8760, 648]  # Sun, Moon
+ORBITAL_PERIODS_HOURS = [8784, 648]  # Sun, Moon
 
 TIMEZONES = {
     "Africa/Abidjan",
