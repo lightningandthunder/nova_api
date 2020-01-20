@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="abfc1491-3d37-4b35-83cd-e89d68c9b3e8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dll_tools/chartmanager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dll_tools/chartmanager.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,8 +16,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1511">
-              <caret line="157" lean-forward="true" selection-start-line="157" selection-end-line="157" />
+            <state relative-caret-position="522">
+              <caret line="157" selection-start-line="157" selection-end-line="157" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -24,14 +25,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/dll_tools/chartmanager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="351" column="71" lean-forward="true" selection-start-line="351" selection-start-column="71" selection-end-line="351" selection-end-column="71" />
+            <state relative-caret-position="417">
+              <caret line="312" column="85" lean-forward="true" selection-start-line="312" selection-start-column="85" selection-end-line="312" selection-end-column="85" />
               <folding>
                 <element signature="e#0#49#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="185">
+              <caret line="51" column="29" selection-start-line="51" selection-start-column="29" selection-end-line="51" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -47,7 +57,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>PLANETLIST</find>
       <find>getat</find>
       <find>days</find>
       <find>in_</find>
@@ -77,6 +86,7 @@
       <find>precess_into_sidereal_framework</find>
       <find>relo</find>
       <find>print</find>
+      <find>ORBITAL_PERIODS_HOURS</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -105,7 +115,6 @@
         <option value="$PROJECT_DIR$/src/dll_tools/LibThreadManager.py" />
         <option value="$PROJECT_DIR$/src/app/__init__.py" />
         <option value="$PROJECT_DIR$/src/app/garbage.py" />
-        <option value="$PROJECT_DIR$/src/settings.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/ChartData.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/ChartManager.py" />
         <option value="$PROJECT_DIR$/etc/requirements.txt" />
@@ -124,6 +133,7 @@
         <option value="$PROJECT_DIR$/src/dll_tools/tests/functionality_tests.py" />
         <option value="$PROJECT_DIR$/src/app/app.py" />
         <option value="$PROJECT_DIR$/src/dll_tools/chartmanager.py" />
+        <option value="$PROJECT_DIR$/src/settings.py" />
       </list>
     </option>
   </component>
@@ -137,6 +147,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -170,7 +181,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -428,7 +438,7 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32423207" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.32423207" />
       <window_info anchor="bottom" x="0" y="0" width="1280" height="657" id="Debug" order="2" weight="0.46075085" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
@@ -562,13 +572,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="483" column="20" selection-start-line="483" selection-start-column="12" selection-end-line="483" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/tests/functionality_tests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="229">
@@ -610,23 +613,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/astrosetup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="142" column="51" selection-start-line="142" selection-start-column="51" selection-end-line="142" selection-end-column="51" />
-          <folding>
-            <element signature="e#493#513#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/calcs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-15181">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/astrosetup.py" />
+    <entry file="file://$PROJECT_DIR$/src/calcs.py" />
     <entry file="file://$PROJECT_DIR$/src/dll_tools/swe/swepdate.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3035" />
@@ -635,16 +623,6 @@
     <entry file="file://$PROJECT_DIR$/src/dll_tools/swe/swepcalc.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-5645" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1511">
-          <caret line="157" lean-forward="true" selection-start-line="157" selection-end-line="157" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/swissephlib.py">
@@ -657,13 +635,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="157" selection-start-line="157" selection-end-line="157" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/dll_tools/chartmanager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="351" column="71" lean-forward="true" selection-start-line="351" selection-start-column="71" selection-end-line="351" selection-end-column="71" />
+        <state relative-caret-position="417">
+          <caret line="312" column="85" lean-forward="true" selection-start-line="312" selection-start-column="85" selection-end-line="312" selection-end-column="85" />
           <folding>
             <element signature="e#0#49#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="51" column="29" selection-start-line="51" selection-start-column="29" selection-end-line="51" selection-end-column="29" />
         </state>
       </provider>
     </entry>

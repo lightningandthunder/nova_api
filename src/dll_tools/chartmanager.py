@@ -291,10 +291,7 @@ class ChartManager:
             harmonic_positions.add(next_harmonic_pos)
             next_harmonic_pos = (next_harmonic_pos + coordinate_range) % 360
 
-        # return min(harmonic_positions, key=lambda x: abs(x - transit_pos))
-        h = min(harmonic_positions, key=lambda x: abs(x - transit_pos))
-        print(f'Radix pos: {radix_pos}; transit pos: {transit_pos}; harmonic: {harmonic}; Closest harmonic pos: {h}')
-        return h
+        return min(harmonic_positions, key=lambda x: abs(x - transit_pos))
 
     def _get_nearest_return(self, body, radix_position, dt, harmonic):
         """Get nearest harmonic return date to a given date, to start a list of return dates.
@@ -304,16 +301,13 @@ class ChartManager:
         :param harmonic: Int 1-36
         :returns: pendulum.datetime"""
 
-        delta = (settings.ORBITAL_PERIODS_HOURS[body] // harmonic) - 24
+        delta = (settings.ORBITAL_PERIODS_HOURS[body] // harmonic)
         earliest_dt = dt.subtract(hours=delta)
         latest_dt = dt.add(hours=delta)
         return_in_past = self._find_harmonic_in_date_range(harmonic, body, radix_position, earliest_dt, dt,
                                                            precision='hours')
         return_in_future = self._find_harmonic_in_date_range(harmonic, body, radix_position, dt, latest_dt,
                                                              precision='hours')
-
-        print(f'Return in past: {return_in_past}')
-        print(f'Return in future: {return_in_future}')
 
         if return_in_past and return_in_future:
             return min([return_in_past, return_in_future], key=lambda x: abs(x - dt))
@@ -344,26 +338,20 @@ class ChartManager:
         period = end_dt - start_dt
         dt_difference = getattr(period, settings.PENDULUM_FUNCS[precision])  # period.in_seconds(), .in_hours(), etc
         increment_list = [x for x in range(dt_difference())]
-        print(f'Period for harmonic return: {period}')
 
         # Binary search for a planetary return to a specific precision
         midpoint_dt = None
         while len(increment_list) >= 1:
-            print(f'Size of binary search list: {len(increment_list)}')
             midpoint_dt = start_dt
             midpoint_index = len(increment_list) // 2
             midpoint_dt = midpoint_dt.add(**{precision: increment_list[midpoint_index]})  # e.g. .add(hours=some_int)
             return_array = self._get_planet_array(body, midpoint_dt)
             test_pos = return_array[0]
-            print(f'Testing position {test_pos} against radix position {natal_longitude}')
             if self._is_past(test_pos, natal_longitude, harmonic) == True:
-                print(f'Too far past; searching first half of list')
                 increment_list = increment_list[: (midpoint_index - 1)]
             else:
-                print(f'Not far enough; searching second half of list')
                 increment_list = increment_list[(midpoint_index + 1):]
 
-        print(f'Settled on midpoint datetime: {midpoint_dt}')
         return midpoint_dt
 
     def _get_return_time_list(self, body, radix_position, dt, harmonic, return_quantity):
@@ -443,8 +431,6 @@ class ChartManager:
         :returns: Float"""
         decimal_hour_utc = self.convert_dms_to_decimal(dt_utc.hour, dt_utc.minute, dt_utc.second)
         time_julian_day = self.lib.get_julian_day(dt_utc.year, dt_utc.month, dt_utc.day, decimal_hour_utc, 1)
-        print(f'Calculating JD for {dt_utc} with dec hour {decimal_hour_utc}')
-        print(f'JD: {time_julian_day}')
         return time_julian_day
 
     def _calculate_LST(self, dt, decimal_longitude):
@@ -518,9 +504,6 @@ class ChartManager:
         self.lib.calculate_planets_UT(jd, body_number, settings.SIDEREALMODE, ret_array, errorstring)
         # if errorstring.value:
         #     print(f'Error encountered in {self._get_planet_array.__name__}: {errorstring.value}')
-        print(f'Calculating planets for jd: {jd} body_number: {body_number}')
-        print(f'Got return array: {ret_array}')
-        print(f'Errorstring: {errorstring.value if errorstring.value else None}')
         return ret_array
 
     def _initialize_sidereal_framework(self, utc_datetime, local_datetime, geo_longitude, geo_latitude):
