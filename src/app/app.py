@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
+from flask_restplus import Resource
 import logging
 import pendulum
 import json
