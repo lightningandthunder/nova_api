@@ -6,7 +6,7 @@ Click==7.0
 Flask==1.0.2
 Flask-Cors==3.0.7
 Flask-RESTful==0.3.7
-flask-restplus==0.13.0
+flask-restx==0.2.0
 geographiclib==1.49
 geopy==1.18.1
 idna==2.8

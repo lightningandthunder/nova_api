@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
-from flask_restplus import Resource, Api
+from flask_restx import Resource, Api
 import logging
 import pendulum
 import json
@@ -32,7 +32,13 @@ class Radix(Resource):
     @api.expect(radix_query_schema)
     def post(self):
         try:
-            radix_chart = get_radix_from_json(request.json)
+            local_dt = pendulum.parse(api.payload['local_datetime'])
+            dt_in_tz = local_dt.in_timezone(api.payload['tz'])
+
+            radix_chart = manager.create_chartdata(local_datetime=dt_in_tz,
+                                                   geo_longitude=float(api.payload['longitude']),
+                                                   geo_latitude=float(api.payload['latitude']))
+
             return json.dumps(radix_chart.jsonify_chart())
         except Exception as ex:
             return json.dumps({"err": str(ex)})
