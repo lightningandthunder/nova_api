@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
-from flask_restplus import Resource
+from flask_restplus import Resource, Api
 import logging
 import pendulum
 import json
@@ -8,9 +8,11 @@ from pendulum.tz.zoneinfo.exceptions import InvalidTimezone
 
 from src.dll_tools.chartmanager import ChartManager
 from src import settings
+from .schemas import radix_query_schema
 
 app = Flask(__name__)
 CORS(app)
+api = Api(app)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO,
@@ -23,14 +25,27 @@ manager = ChartManager()
 # ========================= Routes ======================== #
 
 
-@app.route('/radix', methods=['POST'])
 @cross_origin()
-def radix():
-    try:
-        radix_chart = get_radix_from_json(request.json)
-        return json.dumps(radix_chart.jsonify_chart())
-    except Exception as ex:
-        return json.dumps({"err": str(ex)})
+@api.route('/radix')
+class Radix(Resource):
+
+    @api.expect(radix_query_schema)
+    def post(self):
+        try:
+            radix_chart = get_radix_from_json(request.json)
+            return json.dumps(radix_chart.jsonify_chart())
+        except Exception as ex:
+            return json.dumps({"err": str(ex)})
+
+
+# @app.route('/radix', methods=['POST'])
+# @cross_origin()
+# def radix():
+#     try:
+#         radix_chart = get_radix_from_json(request.json)
+#         return json.dumps(radix_chart.jsonify_chart())
+#     except Exception as ex:
+#         return json.dumps({"err": str(ex)})
 
 
 @app.route('/returns', methods=['POST'])
