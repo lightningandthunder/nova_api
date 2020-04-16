@@ -81,9 +81,8 @@ class Relocate(Resource):
             radix_dt_in_tz = radix_dt.in_tz(tz)
             rel_radix = manager.create_chartdata(radix_dt_in_tz, longitude, latitude)
 
-            rel_return = None
-            print(api.payload)
-            if api.payload['return_chart'] is not None:
+            rel_return = api.payload.get('return_chart', None)
+            if rel_return:
                 return_dt = pendulum.parse(api.payload['return_chart']['local_datetime'])
                 return_dt_in_tz = return_dt.in_tz(tz)
                 rel_return = manager.create_chartdata(return_dt_in_tz, longitude, latitude)
@@ -96,33 +95,6 @@ class Relocate(Resource):
 
         except Exception as ex:
             return json.dumps({"err": str(ex)})
-
-
-# @app.route('/relocate', methods=['POST'])
-# @cross_origin()
-# def relocate_charts():
-#     try:
-#         longitude = float(request.json.get('longitude'))
-#         latitude = float(request.json.get('latitude'))
-#         radix_dt = pendulum.parse(request.json.get('radix').get('local_datetime'))
-#         tz = request.json.get('tz')
-#         radix_dt = radix_dt.in_tz(tz)
-#         rel_radix = manager.create_chartdata(radix_dt, longitude, latitude)
-#
-#         rel_return = None
-#         if request.json.get('return_chart') is not None:
-#             return_dt = pendulum.parse(request.json.get('return_chart').get('local_datetime'))
-#             return_dt = return_dt.in_tz(tz)
-#             rel_return = manager.create_chartdata(return_dt, longitude, latitude)
-#             manager.precess_into_sidereal_framework(radix=rel_radix, transit_chart=rel_return)
-#
-#         if rel_return:
-#             return json.dumps({"radix": rel_radix.jsonify_chart(), "return_chart": rel_return.jsonify_chart()})
-#         else:
-#             return json.dumps(rel_radix.jsonify_chart())
-#
-#     except Exception as ex:
-#         return json.dumps({"err": str(ex)})
 
 
 # =================== Utility functions =================== #
