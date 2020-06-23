@@ -20,16 +20,6 @@ SWISSEPH_LIB_PATH = 'astronova_api/src/dll_tools/swe/dll'
 Q2 = 0.002737909  # MikeStar lists this as 0.0027378030919862
 TERTIARY_RATE = 0.0366009950851544
 
-PENDULUM_FUNCS = {
-    'seconds': 'in_seconds',
-    'minutes': 'in_minutes',
-    'hours': 'in_hours',
-    'days': 'in_days',
-    'weeks': 'in_weeks',
-    'months': 'in_months',
-    'years': 'in_years'
-}
-
 # Planets
 INT_TO_STRING_PLANET_MAP = [
     'Sun',
@@ -57,7 +47,7 @@ STRING_TO_INT_PLANET_MAP = {
     'Pluto': 9
 }
 
-ORBITAL_PERIODS_HOURS = [8784, 648]  # Sun, Moon
+ORBITAL_PERIODS_HOURS = [8784, 672]  # Sun, Moon
 
 PLANETLIST = [
     "Sun",

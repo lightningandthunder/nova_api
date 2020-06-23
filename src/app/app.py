@@ -51,7 +51,7 @@ class SolunarReturns(Resource):
 
             result_json = []
             for pair in return_pairs:
-                result_json.append({"radix": pair[0].jsonify_chart(), "return_chart": pair[1].jsonify_chart()})
+                result_json.append({"radix": pair[0].jsonify_chart(), "solunar": pair[1].jsonify_chart()})
 
             return json.dumps(result_json)
         except Exception as ex:
@@ -79,19 +79,20 @@ class Relocate(Resource):
 
             tz = api.payload['tz']
             radix_dt_in_tz = radix_dt.in_tz(tz)
-            rel_radix = manager.create_chartdata(radix_dt_in_tz, longitude, latitude)
+            self.chartdata = manager.create_chartdata(radix_dt_in_tz, longitude, latitude)
+            radix = self.chartdata
 
-            rel_return = api.payload.get('return_chart', None)
-            if rel_return:
-                return_dt = pendulum.parse(api.payload['return_chart']['local_datetime'])
+            solunar = api.payload.get('solunar', None)
+            if solunar:
+                return_dt = pendulum.parse(api.payload['solunar']['local_datetime'])
                 return_dt_in_tz = return_dt.in_tz(tz)
-                rel_return = manager.create_chartdata(return_dt_in_tz, longitude, latitude)
-                manager.precess_into_sidereal_framework(radix=rel_radix, transit_chart=rel_return)
+                solunar = manager.create_chartdata(return_dt_in_tz, longitude, latitude)
+                manager.precess_into_sidereal_framework(radix=radix, transit_chart=solunar)
 
-            if rel_return:
-                return json.dumps({"radix": rel_radix.jsonify_chart(), "return_chart": rel_return.jsonify_chart()})
+            if solunar:
+                return json.dumps({"radix": radix.jsonify_chart(), "solunar": solunar.jsonify_chart()})
             else:
-                return json.dumps(rel_radix.jsonify_chart())
+                return json.dumps(radix.jsonify_chart())
 
         except Exception as ex:
             return json.dumps({"err": str(ex)})

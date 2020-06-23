@@ -19,7 +19,7 @@ class ChartData:
         # Ecliptical longitude, celestial latitude, distance, speed in long, speed in lat, speed in dist
         self.planets_ecliptic = None
 
-        # House placement, decimal longitude (out of 360*)
+        # House placement, decimal longitude (out of 360º)
         self.planets_mundane = None
 
         # Decimal longitude (out of 360*)
@@ -47,7 +47,7 @@ class ChartData:
         return self.cusps_longitude
 
     def jsonify_chart(self):
-        j = dict()
+        j = {}
         j['ecliptical'] = self.get_ecliptical_coords()
         j['mundane'] = self.get_mundane_coords()
         j['right_ascension'] = self.get_right_ascension_coords()

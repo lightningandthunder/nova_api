@@ -47,9 +47,9 @@ def run_tests(manager=None):
     lat = 40.9792
     long = -74.1169
     chart = manager.create_chartdata(ldt, long, lat)
+
     return_date = pendulum.datetime(2019, 3, 24, 10, tz='America/New_York')
     chart_list = manager._generate_return_list(chart, long, lat, return_date, 1, 4, 20)  # Next 20 quarti-lunars
-
     test_errors += fixtures.compare_return_times(chart_list, fixtures.quarti_lunar_dates_from_2019_3_18_22_30_15_Hackensack,
                                   '2019/3/18 22:30:15 Hackensack')
 
