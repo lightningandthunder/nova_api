@@ -68,7 +68,7 @@ class ChartManager:
         radix.angles_longitude, radix.cusps_longitude = self._populate_ecliptical_angles_and_cusps(radix)
 
     def get_transit_sensitive_charts(self, radix: ChartData, local_dt: pendulum.datetime, geo_longitude: float,
-                                     geo_latitude: float) -> tuple:
+                                     geo_latitude: float) -> dict:
         # TODO: Test me
 
         transits = self.create_chartdata(local_dt, geo_longitude, geo_latitude)
@@ -77,22 +77,29 @@ class ChartManager:
         self.relocate(local_natal, geo_longitude, geo_latitude, local_dt.tz)
 
         ssr_dt = local_dt
-        active_ssr = \
-            self._generate_return_list(radix=local_natal, geo_longitude=geo_longitude, geo_latitude=geo_latitude,
-                                       date=ssr_dt, body=0, harmonic=1, return_quantity=1)[0]
+        active_ssr = self._generate_return_list(radix=local_natal, geo_longitude=geo_longitude,
+                                                geo_latitude=geo_latitude, date=ssr_dt,
+                                                body=0, harmonic=1, return_quantity=1)[0]
 
         # Re-generate if the SSR identified is in the future
         if active_ssr.local_datetime > local_dt:
             ssr_dt = ssr_dt.subtract(years=1)
-            active_ssr = \
-                self._generate_return_list(radix=local_natal, geo_longitude=geo_longitude, geo_latitude=geo_latitude,
-                                           date=ssr_dt, body=0, harmonic=1, return_quantity=1)[0]
+            active_ssr = self._generate_return_list(radix=local_natal, geo_longitude=geo_longitude,
+                                                    geo_latitude=geo_latitude, date=ssr_dt,
+                                                    body=0, harmonic=1, return_quantity=1)[0]
 
         # Secondary progressions
         sp_radix = self.get_progressions(radix, local_dt, geo_longitude, geo_latitude)
         sp_ssr = self.get_progressions(active_ssr, local_dt, geo_longitude, geo_latitude)
 
-        return radix, local_natal, sp_radix, active_ssr, sp_ssr, transits
+        return {
+            "radix": radix,
+            "local_natal": local_natal,
+            "sp_radix": sp_radix,
+            "ssr": active_ssr,
+            "sp_ssr": sp_ssr,
+            "transits": transits,
+        }
 
     def get_progressions(self, radix: ChartData, local_dt: pendulum.datetime, geo_longitude: float,
                          geo_latitude: float) -> ChartData:
@@ -120,11 +127,11 @@ class ChartManager:
 
         return_list = self._generate_return_list(radix, geo_longitude, geo_latitude, date, body, harmonic,
                                                  return_quantity)
-        pairs = list()
-        for _return in return_list:
+        pairs = []
+        for solunar_return in return_list:
             radix_copy = copy.deepcopy(radix)
-            self.precess_into_sidereal_framework(radix_copy, _return)
-            pairs.append((radix_copy, _return))
+            self.precess_into_sidereal_framework(radix_copy, solunar_return)
+            pairs.append((radix_copy, solunar_return))
         return pairs
 
     @staticmethod
@@ -273,9 +280,9 @@ class ChartManager:
                             harmonic: int) -> pendulum.datetime:
         """Get nearest harmonic return date to a given date, to start a list of return dates."""
 
-        delta = (settings.ORBITAL_PERIODS_HOURS[body] // harmonic)
-        earliest_dt = dt.subtract(hours=delta)
-        latest_dt = dt.add(hours=delta)
+        delta = (settings.ORBITAL_PERIODS_MINUTES[body] // harmonic)
+        earliest_dt = dt.subtract(minutes=delta)
+        latest_dt = dt.add(minutes=delta)
 
         return_in_past = self._find_harmonic_in_date_range(harmonic, body, radix_position, earliest_dt, dt,
                                                            precision='hours')
@@ -330,25 +337,26 @@ class ChartManager:
                               return_quantity: float) -> List[pendulum.datetime]:
         """Calculate a list of harmonic return times to second precision."""
 
-        return_time_list_hour_precision = list()
+        return_time_list_hour_precision = []
         initial_return_hour = self._get_nearest_return(body, radix_position, dt, harmonic)
         return_time_list_hour_precision.append(initial_return_hour)
 
-        delta = (settings.ORBITAL_PERIODS_HOURS[body] // harmonic) - 24  # Approx how far away next return is
-        buffer = delta // 2.5  # Create a window of a few hours on either side of delta
-        period_begin = initial_return_hour.add(hours=delta - buffer)
-        period_end = initial_return_hour.add(hours=delta + buffer)
+        delta = (settings.ORBITAL_PERIODS_MINUTES[body] // harmonic) - 1440  # Approx how far away next return is
+        buffer = delta // 2  # Create a window of a few hours on either side of delta
+        period_begin = initial_return_hour.add(minutes=delta - buffer)
+        period_end = initial_return_hour.add(minutes=delta + buffer)
 
         while len(return_time_list_hour_precision) < return_quantity:
             next_return = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
-                                                            precision='hours')
+                                                            precision='seconds')
 
             if next_return:
                 return_time_list_hour_precision.append(next_return)
             else:
                 raise RuntimeError(f'Failed to find a return between {period_begin} and {period_end}')
-            period_begin = next_return.add(hours=delta - buffer)
-            period_end = next_return.add(hours=delta + buffer)
+
+            period_begin = next_return.add(minutes=delta - buffer)
+            period_end = next_return.add(minutes=delta + buffer)
 
         return_time_list_second_precision = list()
 
@@ -358,6 +366,7 @@ class ChartManager:
             match = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
                                                       precision='seconds')
             return_time_list_second_precision.append(match)
+
 
         return return_time_list_second_precision
 
@@ -375,7 +384,7 @@ class ChartManager:
         geo_latitude = radix.sidereal_framework.geo_latitude
         return_time_list = self._get_return_time_list(body, radix_position, date, harmonic, return_quantity)
 
-        return_chart_list = list()
+        return_chart_list = []
         for chart_time in return_time_list:
             chart = self.create_chartdata(chart_time, geo_longitude, geo_latitude)
             return_chart_list.append(chart)

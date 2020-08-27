@@ -47,7 +47,7 @@ STRING_TO_INT_PLANET_MAP = {
     'Pluto': 9
 }
 
-ORBITAL_PERIODS_HOURS = [8784, 672]  # Sun, Moon
+ORBITAL_PERIODS_MINUTES = [525968, 39344]  # Sun, Moon
 
 PLANETLIST = [
     "Sun",
