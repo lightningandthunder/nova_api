@@ -1,7 +1,11 @@
-from ctypes import c_int, c_int32
 import os
+from ctypes import c_int, c_int32
+from dotenv import load_dotenv
 
-VERSION_NUMBER = "0.3a"
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+
+VERSION_NUMBER = '0.3a'
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', None)
 
@@ -9,6 +13,10 @@ if ENVIRONMENT == 'Production':
     pass
 else:  # Development
     pass
+
+# Mapquest
+MAPQUEST_KEY = os.environ.get('MAPQUEST_KEY')
+MAPQUEST_ENDPOINT = os.environ.get('MAPQUEST_ENDPOINT')
 
 # DLL parameters
 SIDEREALMODE = c_int32(64 * 1024)

@@ -3,7 +3,7 @@ import pendulum
 from logging import getLogger
 from typing import Tuple, List, Union
 from ctypes import c_double, create_string_buffer
-from math import sin, cos, tan, asin, atan, degrees, radians, fabs
+from math import sin, cos, tan, asin, atan, degrees, radians, fabs, ceil
 
 from src.dll_tools.chartdata import ChartData
 from src.dll_tools.sidereal_framework import SiderealFramework
@@ -32,7 +32,7 @@ class ChartManager:
     # =============================================================================================================== #
 
     def create_chartdata(self, local_datetime: pendulum.datetime, geo_longitude: float,
-                         geo_latitude: float) -> ChartData:
+                         geo_latitude: float, place_name: str = None) -> ChartData:
         """Create a ChartData instance representing an astrological chart."""
 
         utc_datetime = local_datetime.in_tz('UTC')
@@ -43,6 +43,7 @@ class ChartManager:
         chart.planets_mundane = self._populate_mundane_values(chart)
         chart.planets_right_ascension = self._populate_right_ascension_values(chart)
         chart.angles_longitude, chart.cusps_longitude = self._populate_ecliptical_angles_and_cusps(chart)
+        chart.place_name = place_name
 
         return chart
 
@@ -57,7 +58,7 @@ class ChartManager:
         radix.planets_right_ascension = self._populate_right_ascension_values(radix)
         radix.angles_longitude, radix.cusps_longitude = self._populate_ecliptical_angles_and_cusps(radix)
 
-    def precess_into_sidereal_framework(self, radix: ChartData, transit_chart: ChartData) -> None:
+    def precess(self, radix: ChartData, transit_chart: ChartData) -> None:
         """Recalculate prime vertical longitude, right ascension, and ecliptical angles and cusps against a transiting
         chart's sidereal framework. Done on the radix chart in place."""
 
@@ -123,14 +124,15 @@ class ChartManager:
     def generate_radix_return_pairs(self, radix: ChartData, geo_longitude: float,
                                     geo_latitude: float, date: pendulum.datetime,
                                     body: int, harmonic: int,
-                                    return_quantity: int) -> List[Tuple[ChartData, ChartData]]:
+                                    return_quantity: int, place_name: str = None) -> List[Tuple[ChartData, ChartData]]:
 
         return_list = self._generate_return_list(radix, geo_longitude, geo_latitude, date, body, harmonic,
                                                  return_quantity)
         pairs = []
         for solunar_return in return_list:
             radix_copy = copy.deepcopy(radix)
-            self.precess_into_sidereal_framework(radix_copy, solunar_return)
+            solunar_return.place_name = place_name
+            self.precess(radix_copy, solunar_return)
             pairs.append((radix_copy, solunar_return))
         return pairs
 
@@ -280,7 +282,7 @@ class ChartManager:
                             harmonic: int) -> pendulum.datetime:
         """Get nearest harmonic return date to a given date, to start a list of return dates."""
 
-        delta = (settings.ORBITAL_PERIODS_MINUTES[body] // harmonic)
+        delta = ceil(settings.ORBITAL_PERIODS_MINUTES[body] / harmonic)
         earliest_dt = dt.subtract(minutes=delta)
         latest_dt = dt.add(minutes=delta)
 
@@ -361,8 +363,8 @@ class ChartManager:
         return_time_list_second_precision = list()
 
         for hour in return_time_list_hour_precision:
-            period_begin = hour.subtract(hours=2)
-            period_end = hour.add(hours=2)
+            period_begin = hour.subtract(hours=6)
+            period_end = hour.add(hours=6)
             match = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
                                                       precision='seconds')
             return_time_list_second_precision.append(match)

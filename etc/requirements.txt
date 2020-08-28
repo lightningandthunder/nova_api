@@ -20,7 +20,7 @@ numpy==1.16.1
 pendulum==2.0.4
 pyrsistent==0.16.0
 python-dateutil==2.8.0
-python-dotenv==0.10.1
+python-dotenv==0.14.0
 pytz==2019.1
 pytzdata==2018.9
 requests==2.21.0

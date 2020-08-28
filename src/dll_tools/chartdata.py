@@ -15,6 +15,7 @@ class ChartData:
         self.sidereal_framework = None
         self.cusps_longitude = None
         self.angles_longitude = None
+        self.place_name = None
 
         # Ecliptical longitude, celestial latitude, distance, speed in long, speed in lat, speed in dist
         self.planets_ecliptic = None
@@ -63,6 +64,7 @@ class ChartData:
         j['svp'] = self.sidereal_framework.svp if self.sidereal_framework else ''
         j['longitude'] = self.sidereal_framework.geo_longitude if self.sidereal_framework else ''
         j['latitude'] = self.sidereal_framework.geo_latitude if self.sidereal_framework else ''
+        j['place_name'] = self.place_name
 
         return j
 

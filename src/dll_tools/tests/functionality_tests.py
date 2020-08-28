@@ -76,7 +76,7 @@ def run_tests(manager=None):
 
     return_date = pendulum.datetime(2019, 3, 24, 10, tz='Australia/Melbourne')
     lunar_return = manager._generate_return_list(radix, 144.9666, -37.8166, return_date, 1, 1, 1)[0]
-    manager.precess_into_sidereal_framework(radix=radix, transit_chart=lunar_return)
+    manager.precess(radix=radix, transit_chart=lunar_return)
 
     test_errors += fixtures.compare_charts(radix, fixtures.slr_2019_3_19_melbourne,
                             "1989-3-18 22:30:15 Hack NJ SLR 2019-3-19 Melbourne AUS")
