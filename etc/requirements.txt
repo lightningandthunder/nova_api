@@ -17,12 +17,12 @@ Jinja2==2.10.1
 jsonschema==3.2.0
 MarkupSafe==1.1.1
 numpy==1.16.1
-pendulum==2.0.4
+pendulum==2.1.2
 pyrsistent==0.16.0
 python-dateutil==2.8.0
 python-dotenv==0.14.0
 pytz==2019.1
-pytzdata==2018.9
+pytzdata==2020.1
 requests==2.21.0
 six==1.12.0
 timezonefinder==3.4.2

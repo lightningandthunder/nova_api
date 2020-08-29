@@ -5,8 +5,8 @@ from typing import Tuple, List, Union
 from ctypes import c_double, create_string_buffer
 from math import sin, cos, tan, asin, atan, degrees, radians, fabs, ceil
 
-from app.models.chartdata import ChartData
-from app.models.sidereal_framework import SiderealFramework
+from src.models.chartdata import ChartData
+from src.models.sidereal_framework import SiderealFramework
 from src.dll_tools.swissephlib import SwissephLib
 from src.dll_tools.tests.functionality_tests import run_tests
 
@@ -444,7 +444,7 @@ class ChartManager:
         errorstring = create_string_buffer(126)
         ayanamsa_return = self.lib.get_ayanamsa_UT(julian_day, settings.SIDEREALMODE, svp, errorstring)
         if ayanamsa_return < 0:
-            logger.error("Error retrieving ayanamsa: " + str(errorstring))
+            logger.error("Error retrieving ayanamsa: " + str(errorstring.value))
         return 30 - svp.value
 
     def _calculate_obliquity(self, julian_day: float) -> float:
@@ -456,7 +456,7 @@ class ChartManager:
         # -1 is the special "planetary body" for calculating obliquity
         self.lib.calculate_planets_UT(julian_day, -1, settings.SIDEREALMODE, obliquity_array, errorstring)
         if errorstring.value:
-            logger.warning("Error calculating obliquity: " + errorstring.value)
+            logger.warning("Error calculating obliquity: " + str(errorstring.value))
         return obliquity_array[0]
 
     def _get_planet_longitude(self, body_number: int, dt: Union[float, pendulum.datetime]) -> float:

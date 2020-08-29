@@ -8,7 +8,7 @@ import requests
 from timezonefinder import TimezoneFinder
 
 from src.dll_tools.chartmanager import ChartManager
-from app.models.chartdata import ChartData
+from src.models.chartdata import ChartData
 from src import settings
 from src.app.schemas import radix_query_schema, return_chart_query_schema, relocation_query_schema
 
@@ -36,6 +36,7 @@ class Radix(Resource):
             radix_chart = get_radix_chart_from_json(api.payload)
             return json.dumps(radix_chart.jsonify_chart())
         except Exception as ex:
+            logger.exception("Error while calculating radix:")
             return json.dumps({"err": str(ex)})
 
 
@@ -56,6 +57,7 @@ class SolunarReturns(Resource):
 
             return json.dumps(result_json)
         except Exception as ex:
+            logger.exception("Error while calculating solunar:")
             return json.dumps({"err": str(ex)})
 
 
@@ -97,6 +99,7 @@ class Relocate(Resource):
                 return json.dumps(radix.jsonify_chart())
 
         except Exception as ex:
+            logger.exception("Error while relocating:")
             return json.dumps({"err": str(ex)})
 
 
