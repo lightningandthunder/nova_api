@@ -5,8 +5,8 @@ from typing import Tuple, List, Union
 from ctypes import c_double, create_string_buffer
 from math import sin, cos, tan, asin, atan, degrees, radians, fabs, ceil
 
-from src.dll_tools.chartdata import ChartData
-from src.dll_tools.sidereal_framework import SiderealFramework
+from app.models.chartdata import ChartData
+from app.models.sidereal_framework import SiderealFramework
 from src.dll_tools.swissephlib import SwissephLib
 from src.dll_tools.tests.functionality_tests import run_tests
 
@@ -282,9 +282,9 @@ class ChartManager:
                             harmonic: int) -> pendulum.datetime:
         """Get nearest harmonic return date to a given date, to start a list of return dates."""
 
-        delta = ceil(settings.ORBITAL_PERIODS_MINUTES[body] / harmonic)
-        earliest_dt = dt.subtract(minutes=delta)
-        latest_dt = dt.add(minutes=delta)
+        delta = ceil(settings.ORBITAL_PERIODS_HOURS[body] / harmonic)
+        earliest_dt = dt.subtract(hours=delta)
+        latest_dt = dt.add(hours=delta)
 
         return_in_past = self._find_harmonic_in_date_range(harmonic, body, radix_position, earliest_dt, dt,
                                                            precision='hours')
@@ -353,10 +353,10 @@ class ChartManager:
         initial_return_hour = self._get_nearest_return(body, radix_position, dt, harmonic)
         return_time_list_hour_precision.append(initial_return_hour)
 
-        delta = (settings.ORBITAL_PERIODS_MINUTES[body] // harmonic) - 1440  # Approx how far away next return is
+        delta = (settings.ORBITAL_PERIODS_HOURS[body] // harmonic) - 24  # Approx how far away next return is
         buffer = delta // 2  # Create a window of a few hours on either side of delta
-        period_begin = initial_return_hour.add(minutes=delta - buffer)
-        period_end = initial_return_hour.add(minutes=delta + buffer)
+        period_begin = initial_return_hour.add(hours=delta - buffer)
+        period_end = initial_return_hour.add(hours=delta + buffer)
 
         while len(return_time_list_hour_precision) < return_quantity:
             next_return = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
@@ -367,8 +367,8 @@ class ChartManager:
             else:
                 raise RuntimeError(f'Failed to find a return between {period_begin} and {period_end}')
 
-            period_begin = next_return.add(minutes=delta - buffer)
-            period_end = next_return.add(minutes=delta + buffer)
+            period_begin = next_return.add(hours=delta - buffer)
+            period_end = next_return.add(hours=delta + buffer)
 
         return_time_list_second_precision = list()
 

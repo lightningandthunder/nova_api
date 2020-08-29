@@ -8,7 +8,7 @@ import requests
 from timezonefinder import TimezoneFinder
 
 from src.dll_tools.chartmanager import ChartManager
-from src.dll_tools.chartdata import ChartData
+from app.models.chartdata import ChartData
 from src import settings
 from src.app.schemas import radix_query_schema, return_chart_query_schema, relocation_query_schema
 
