@@ -16,6 +16,7 @@ class ChartData:
         self.cusps_longitude = None
         self.angles_longitude = None
         self.place_name = None
+        self.solunar_type = "radix"
 
         # Ecliptical longitude, celestial latitude, distance, speed in long, speed in lat, speed in dist
         self.planets_ecliptic = None

@@ -316,6 +316,17 @@ class ChartManager:
         if precision not in pendulum_precision_map.keys():
             raise ValueError('Precision must be a unit of time as a string: \'hours\', \'seconds\', etc')
 
+        # Ensure there is a valid value in range
+        while True:
+            end_pos = self._get_planet_longitude(body, end_dt)
+            if not self._is_past(end_pos, natal_longitude, harmonic):
+                # Need to move forward in time
+                start_dt = end_dt
+                end_dt = end_dt.add(hours=1)
+
+            else:
+                break  # valid
+
         period = end_dt - start_dt
 
         # Binary search for a planetary return to a specific precision
@@ -326,8 +337,7 @@ class ChartManager:
             test_dt = start_dt
             midpoint = ((ceiling - floor) // 2) + floor
             test_dt = test_dt.add(**{precision: midpoint})  # e.g. .add(hours=some_int)
-            return_array = self._get_planet_array(body, test_dt)
-            test_pos = return_array[0]
+            test_pos = self._get_planet_longitude(body, test_dt)
             if self._is_past(test_pos, natal_longitude, harmonic):
                 ceiling = midpoint - 1
             else:
@@ -368,7 +378,6 @@ class ChartManager:
             match = self._find_harmonic_in_date_range(harmonic, body, radix_position, period_begin, period_end,
                                                       precision='seconds')
             return_time_list_second_precision.append(match)
-
 
         return return_time_list_second_precision
 
@@ -447,10 +456,10 @@ class ChartManager:
         # -1 is the special "planetary body" for calculating obliquity
         self.lib.calculate_planets_UT(julian_day, -1, settings.SIDEREALMODE, obliquity_array, errorstring)
         if errorstring.value:
-            logger.warning(f'Error encountered in {self._get_planet_array.__name__}: {errorstring.value}')
+            logger.warning("Error calculating obliquity: " + errorstring.value)
         return obliquity_array[0]
 
-    def _get_planet_array(self, body_number: int, dt: Union[float, pendulum.datetime]) -> c_double:
+    def _get_planet_longitude(self, body_number: int, dt: Union[float, pendulum.datetime]) -> float:
         """Get Swiss Ephemeris output for a given body and datetime."""
 
         if type(body_number) == str:
@@ -465,7 +474,7 @@ class ChartManager:
         ret_array = (c_double * 6)()
         err_string_buffer = create_string_buffer(126)
         self.lib.calculate_planets_UT(jd, body_number, settings.SIDEREALMODE, ret_array, err_string_buffer)
-        return ret_array
+        return ret_array[0]
 
     def _initialize_sidereal_framework(self, utc_datetime: pendulum.datetime,
                                        geo_longitude: float, geo_latitude: float) -> SiderealFramework:
