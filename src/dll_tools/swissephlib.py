@@ -183,7 +183,7 @@ class SwissephLib:
                 return swe_lib
 
     def _get_ephemeris_path(self):
-        path = os.path.join('../', settings.EPHEMERIS_PATH)
-        e_path = path.encode('utf-8')
+        path_to_ephemeris = os.path.join(os.path.dirname(__file__), settings.EPHEMERIS_PATH)
+        e_path = path_to_ephemeris.encode('utf-8')
         e_pointer = c_char_p(e_path)
         return e_pointer

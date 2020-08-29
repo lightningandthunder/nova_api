@@ -175,6 +175,8 @@ class ChartManager:
             self.lib.calculate_planets_UT(julian_day, body_number, settings.SIDEREALMODE,
                                           returnarray[body_number], errorstring)
             ecliptic_dict[body_name] = returnarray[body_number]
+            if errorstring.value:
+                logger.warning("Error calculating ecliptic values: " + str(errorstring.value))
 
         return ecliptic_dict
 
@@ -472,8 +474,10 @@ class ChartManager:
             jd = self.lib.get_julian_day(dt.year, dt.month, dt.day, decimal_hour, 1)
 
         ret_array = (c_double * 6)()
-        err_string_buffer = create_string_buffer(126)
-        self.lib.calculate_planets_UT(jd, body_number, settings.SIDEREALMODE, ret_array, err_string_buffer)
+        errorstring = create_string_buffer(126)
+        self.lib.calculate_planets_UT(jd, body_number, settings.SIDEREALMODE, ret_array, errorstring)
+        if errorstring.value:
+            logger.warning("Error calculating planet longitude: " + str(errorstring.value))
         return ret_array[0]
 
     def _initialize_sidereal_framework(self, utc_datetime: pendulum.datetime,
