@@ -35,7 +35,7 @@ class ChartManager:
                          geo_latitude: float, place_name: str = None) -> ChartData:
         """Create a ChartData instance representing an astrological chart."""
 
-        utc_datetime = local_datetime.in_tz('UTC')
+        utc_datetime = local_datetime.in_tz("UTC")
         julian_day = self._calculate_julian_day(utc_datetime)
         chart = ChartData(local_datetime, utc_datetime, julian_day)
         chart.sidereal_framework = self._initialize_sidereal_framework(utc_datetime, geo_longitude, geo_latitude)
@@ -64,6 +64,7 @@ class ChartManager:
 
         radix.sidereal_framework = transit_chart.sidereal_framework
         radix.local_datetime = radix.local_datetime.in_tz(transit_chart.local_datetime.tz)
+        radix.tz = transit_chart.local_datetime.tz
         radix.planets_mundane = self._populate_mundane_values(radix)
         radix.planets_right_ascension = self._populate_right_ascension_values(radix)
         radix.angles_longitude, radix.cusps_longitude = self._populate_ecliptical_angles_and_cusps(radix)
@@ -241,15 +242,8 @@ class ChartManager:
         angles_longitude = {
             "Asc": house_array[0],
             "MC": house_array[1],
-            "Dsc": (house_array[0] + 180) % 360,
-            "IC": (house_array[1] + 180) % 360,
             "Eq Asc": house_array[4],
-            "Eq Dsc": (house_array[4] + 180) % 360
         }
-        angles_longitude["EP (Ecliptical)"] = (angles_longitude["MC"] + 90) % 360
-        angles_longitude["Zen"] = (angles_longitude["Dsc"] + 90) % 360
-        angles_longitude["WP (Ecliptical)"] = (angles_longitude["IC"] + 90) % 360
-        angles_longitude["Ndr"] = (angles_longitude["Asc"] + 90) % 360
 
         return angles_longitude, cusps_longitude
 

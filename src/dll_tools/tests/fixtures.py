@@ -20,13 +20,15 @@ def compare_charts(chart, fixture, name):
 
     ecliptic = chart.get_ecliptical_coords()
     for body in ecliptic:
-        if fabs(ecliptic[body] - fixture['Ecliptic'][body]) >= 0.5:
-            errors.append(f"{name} on {body} ecliptical coords: {ecliptic[body]} != {fixture['Ecliptic'][body]}")
+        if fixture['Ecliptic'].get(body):
+            if fabs(ecliptic[body] - fixture['Ecliptic'][body]) >= 0.5:
+                errors.append(f"{name} on {body} ecliptical coords: {ecliptic[body]} != {fixture['Ecliptic'][body]}")
 
     mundane = chart.get_mundane_coords()
     for body in mundane:
-        if fabs(mundane[body] - fixture['Mundane'][body]) >= 0.5:
-            errors.append(f"{name} on {body} mundane coords: {mundane[body]} != {fixture['Mundane'][body]}")
+        if fixture['Mundane'].get(body):
+            if fabs(mundane[body] - fixture['Mundane'][body]) >= 0.5:
+                errors.append(f"{name} on {body} mundane coords: {mundane[body]} != {fixture['Mundane'][body]}")
 
     ra = chart.get_right_ascension_coords()
     for body in ra:

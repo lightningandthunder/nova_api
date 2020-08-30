@@ -133,10 +133,9 @@ def get_solunar_return_params_from_json(return_params: dict) -> dict:
 def get_radix_chart_from_json(payload: dict) -> ChartData:
     geo_results = geocode(payload['location'])
 
-    local_dt = pendulum.parse(payload['local_datetime'])
-    dt_in_tz = local_dt.in_timezone(geo_results['tz'])
+    local_dt = pendulum.parse(payload['local_datetime'], tz=geo_results['tz'])
 
-    radix_chart = manager.create_chartdata(local_datetime=dt_in_tz,
+    radix_chart = manager.create_chartdata(local_datetime=local_dt,
                                            geo_longitude=geo_results['longitude'],
                                            geo_latitude=geo_results['latitude'],
                                            place_name=geo_results['place_name'])
