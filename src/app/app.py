@@ -41,7 +41,7 @@ class Radix(Resource):
 
 
 @cross_origin()
-@api.route('/returns')
+@api.route('/solunar')
 class SolunarReturns(Resource):
     @api.expect(return_chart_query_schema)
     def post(self):
