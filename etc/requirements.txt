@@ -4,7 +4,7 @@ certifi==2019.6.16
 chardet==3.0.4
 Click==7.0
 Flask==1.0.2
-Flask-Cors==3.0.7
+Flask-Cors==3.0.9
 Flask-RESTful==0.3.7
 flask-restx==0.2.0
 geographiclib==1.49
