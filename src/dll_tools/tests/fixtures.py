@@ -360,3 +360,8 @@ quarti_ennead_dates_from_2019_3_18_22_30_15_Melbourne = [
     pendulum.parse("2020-03-18T04:43:11+11:00"),
     pendulum.parse("2020-03-28T06:33:06+11:00")
 ]
+
+# Nova, a free sidereal astrological tool.
+# Copyright (C) 2019  Mike Verducci
+# This project is under the GNU General Public License V3.
+# The full license may be found in LICENSE.txt
